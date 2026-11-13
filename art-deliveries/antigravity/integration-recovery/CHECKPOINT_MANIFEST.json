@@ -1,0 +1,127 @@
+{
+  "created_at": "2026-11-05T10:30:00-03:00",
+  "project_root": "/home/flow/Projetos/BoyPunk-Web",
+  "checkpoint_root": "art-deliveries/antigravity/integration-recovery",
+  "description": "Checkpoints versionados diferenciando: (01) backups originais pre-integracao, (02) estado parcialmente implementado interrompido com as duas falhas reproduziveis, e (03) estado encontrado na entrada desta verificacao.",
+  "files": [
+    {
+      "stage": "01-original-pre-integration",
+      "origin": "docs/checkpoints/parallax-distrito-neon-2026-11-04-v1/src/assets.js",
+      "destination": "art-deliveries/antigravity/integration-recovery/01-original-pre-integration/src/assets.js",
+      "bytes": 16238,
+      "sha256": "70b4c1c6049a96dbdadcf1b85ca3cad607e78674dffd65f6eb89ee879fb476fc"
+    },
+    {
+      "stage": "01-original-pre-integration",
+      "origin": "docs/checkpoints/parallax-distrito-neon-2026-11-04-v1/src/renderer.js",
+      "destination": "art-deliveries/antigravity/integration-recovery/01-original-pre-integration/src/renderer.js",
+      "bytes": 155563,
+      "sha256": "09abd00c7692079f100be073a5a8ce2ab3bd3fa759c03131ccde263a8d400208"
+    },
+    {
+      "stage": "01-original-pre-integration",
+      "origin": "docs/checkpoints/parallax-distrito-neon-2026-11-04-v1/docs/CONTINUIDADE_MECANICAS_AVANCADAS.md",
+      "destination": "art-deliveries/antigravity/integration-recovery/01-original-pre-integration/docs/CONTINUIDADE_MECANICAS_AVANCADAS.md",
+      "bytes": 10161,
+      "sha256": "e37a4309db66bd35b1ee1bc3cad48640632ebd629144e752039c4d03a6143214"
+    },
+    {
+      "stage": "02-interrupted-state-pre-fixes",
+      "origin": "docs/checkpoints/parallax-distrito-neon-2026-11-05-v2-pre-correcao/src/assets.js",
+      "destination": "art-deliveries/antigravity/integration-recovery/02-interrupted-state-pre-fixes/src/assets.js",
+      "bytes": 16570,
+      "sha256": "e6f2b8656b74ab30212f22c97b15410fc05aaf6a7b489228f15d7f42364d797d"
+    },
+    {
+      "stage": "02-interrupted-state-pre-fixes",
+      "origin": "docs/checkpoints/parallax-distrito-neon-2026-11-05-v2-pre-correcao/src/renderer.js",
+      "destination": "art-deliveries/antigravity/integration-recovery/02-interrupted-state-pre-fixes/src/renderer.js",
+      "bytes": 160459,
+      "sha256": "d9ed0682eb09cd31f1acb7cda1012f6602217a17ed415b6cdfff152144145590"
+    },
+    {
+      "stage": "02-interrupted-state-pre-fixes",
+      "origin": "docs/checkpoints/parallax-distrito-neon-2026-11-05-v2-pre-correcao/tests/district-parallax.test.mjs",
+      "destination": "art-deliveries/antigravity/integration-recovery/02-interrupted-state-pre-fixes/tests/district-parallax.test.mjs",
+      "bytes": 7882,
+      "sha256": "2390f7ed857a2b12d56a763e3e345733f27e1482b4c95c79323b189f94978c29"
+    },
+    {
+      "stage": "02-interrupted-state-pre-fixes",
+      "origin": "docs/checkpoints/parallax-distrito-neon-2026-11-05-v2-pre-correcao/tests/renderer.test.mjs",
+      "destination": "art-deliveries/antigravity/integration-recovery/02-interrupted-state-pre-fixes/tests/renderer.test.mjs",
+      "bytes": 27852,
+      "sha256": "d70a1662f91cda91268444e220d2f8bef1a8be707b9528b6d1a65f4a3d340bbf"
+    },
+    {
+      "stage": "02-interrupted-state-pre-fixes",
+      "origin": "docs/checkpoints/parallax-distrito-neon-2026-11-05-v2-pre-correcao/docs/CONTINUIDADE_MECANICAS_AVANCADAS.md",
+      "destination": "art-deliveries/antigravity/integration-recovery/02-interrupted-state-pre-fixes/docs/CONTINUIDADE_MECANICAS_AVANCADAS.md",
+      "bytes": 10161,
+      "sha256": "e37a4309db66bd35b1ee1bc3cad48640632ebd629144e752039c4d03a6143214"
+    },
+    {
+      "stage": "03-workspace-state-on-entry",
+      "origin": "src/assets.js",
+      "destination": "art-deliveries/antigravity/integration-recovery/03-workspace-state-on-entry/src/assets.js",
+      "bytes": 16570,
+      "sha256": "e6f2b8656b74ab30212f22c97b15410fc05aaf6a7b489228f15d7f42364d797d"
+    },
+    {
+      "stage": "03-workspace-state-on-entry",
+      "origin": "src/renderer.js",
+      "destination": "art-deliveries/antigravity/integration-recovery/03-workspace-state-on-entry/src/renderer.js",
+      "bytes": 160459,
+      "sha256": "d9ed0682eb09cd31f1acb7cda1012f6602217a17ed415b6cdfff152144145590"
+    },
+    {
+      "stage": "03-workspace-state-on-entry",
+      "origin": "tests/district-parallax.test.mjs",
+      "destination": "art-deliveries/antigravity/integration-recovery/03-workspace-state-on-entry/tests/district-parallax.test.mjs",
+      "bytes": 9559,
+      "sha256": "d8168ff21004456800425cefe9458e144ff29670be621c099b7237bb77dd23db"
+    },
+    {
+      "stage": "03-workspace-state-on-entry",
+      "origin": "tests/renderer.test.mjs",
+      "destination": "art-deliveries/antigravity/integration-recovery/03-workspace-state-on-entry/tests/renderer.test.mjs",
+      "bytes": 27954,
+      "sha256": "ef5b4585d0ed3e99d0d730617baccf66110e39bc1e7b10b7f331a4e32e2012d0"
+    },
+    {
+      "stage": "03-workspace-state-on-entry",
+      "origin": "docs/CONTINUIDADE_MECANICAS_AVANCADAS.md",
+      "destination": "art-deliveries/antigravity/integration-recovery/03-workspace-state-on-entry/docs/CONTINUIDADE_MECANICAS_AVANCADAS.md",
+      "bytes": 13355,
+      "sha256": "ce6f095086d6bce65d1dba352b714617b2207ff00fd4fcdb08e6c36e9d09f765"
+    },
+    {
+      "stage": "03-workspace-state-on-entry",
+      "origin": "docs/art/RELATORIO_INTEGRACAO_PARALLAX_DISTRITO_NEON.md",
+      "destination": "art-deliveries/antigravity/integration-recovery/03-workspace-state-on-entry/docs/art/RELATORIO_INTEGRACAO_PARALLAX_DISTRITO_NEON.md",
+      "bytes": 9102,
+      "sha256": "47e3714056119e733dc9762b8a36dff10799078bfda4ecb351cb12362c2fc596"
+    },
+    {
+      "stage": "03-workspace-state-on-entry",
+      "origin": "assets/images/world/distrito-neon-parallax/distrito-neon-far.png",
+      "destination": "art-deliveries/antigravity/integration-recovery/03-workspace-state-on-entry/assets/images/world/distrito-neon-parallax/distrito-neon-far.png",
+      "bytes": 118774,
+      "sha256": "18492027405ed0f64d70ccc2ffc05b166c36907c8281324f11cb5dbeb7e77371"
+    },
+    {
+      "stage": "03-workspace-state-on-entry",
+      "origin": "assets/images/world/distrito-neon-parallax/distrito-neon-mid.png",
+      "destination": "art-deliveries/antigravity/integration-recovery/03-workspace-state-on-entry/assets/images/world/distrito-neon-parallax/distrito-neon-mid.png",
+      "bytes": 212125,
+      "sha256": "dc65d227bce7a77ed214c6306c3cf8680d8b704911abbcd55ee4dbcf9edb17f7"
+    },
+    {
+      "stage": "03-workspace-state-on-entry",
+      "origin": "assets/images/world/distrito-neon-parallax/distrito-neon-near.png",
+      "destination": "art-deliveries/antigravity/integration-recovery/03-workspace-state-on-entry/assets/images/world/distrito-neon-parallax/distrito-neon-near.png",
+      "bytes": 257111,
+      "sha256": "e4afd2896815e1d26b215e768b5f7824bf96d08381688a0fe77cc7d1b5bc03bc"
+    }
+  ]
+}

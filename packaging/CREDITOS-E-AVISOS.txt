@@ -1,0 +1,22 @@
+CRÉDITOS E AVISOS — BOYPUNK!
+================================
+
+Cluster Digital
+OPJ STUDIO
+GONZAGA PRODUÇÕES
+B&T Company
+Desenvolvedor: Renan Santos
+
+“Pulso do Distrito”, música da primeira fase:
+composição instrumental original por código para BoyPunk! Web 0.2.2.
+Implementação em Web Audio, sem sample musical externo e sem runtime do Construct.
+
+Recursos herdados do projeto BoyPunk/Pumpboy:
+sprites, cenário, tiles, fonte Pixelify Sans, música do menu e efeitos sonoros.
+A autorização da migração cobre seu uso neste pacote de validação entre
+desenvolvedores. Não foram encontrados comprovantes completos de licença junto
+da fonte, das músicas/efeitos herdados ou da imagem conceitual do Distrito Neon.
+Essas proveniências devem ser consolidadas antes de distribuição pública.
+
+Nenhum mecanismo de licença foi removido ou alterado. O pacote não contém o
+runtime do Construct 3 e não executa eventos proprietários do projeto original.

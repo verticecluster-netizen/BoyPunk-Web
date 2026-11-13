@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BoyPunk! — Visualizador Isolado de Animações (Dev)</title>
+  <style>
+    :root {
+      --bg: #090714;
+      --panel: #121024;
+      --border: #282245;
+      --cyan: #37e6ee;
+      --amber: #ff7a28;
+      --purple: #ae62ff;
+      --text: #fff5dc;
+      --muted: #8c86a8;
+      --green: #4ade80;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    header {
+      width: 100%;
+      max-width: 960px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 16px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: bold;
+      background: rgba(174, 98, 255, 0.18);
+      color: var(--purple);
+      border: 1px solid var(--purple);
+      margin-bottom: 8px;
+    }
+    h1 {
+      font-size: 20px;
+      color: var(--cyan);
+      margin-bottom: 6px;
+    }
+    .disclaimer {
+      font-size: 12px;
+      color: var(--amber);
+      background: rgba(255, 122, 40, 0.1);
+      border: 1px solid rgba(255, 122, 40, 0.35);
+      padding: 8px 12px;
+      border-radius: 4px;
+      margin-top: 10px;
+    }
+    .main-layout {
+      width: 100%;
+      max-width: 960px;
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 24px;
+    }
+    .viewport-panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .canvas-container {
+      background: #06050e;
+      border: 2px solid #1c1833;
+      border-radius: 4px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 380px;
+      width: 100%;
+      overflow: hidden;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 16px 16px;
+    }
+    canvas {
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+    }
+    .controls-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+      width: 100%;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    button {
+      background: #1c1836;
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 8px 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 12px;
+      transition: all 0.15s ease;
+    }
+    button:hover {
+      background: #2b2554;
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+    button.active {
+      background: var(--cyan);
+      color: #06050e;
+      border-color: var(--cyan);
+      font-weight: bold;
+    }
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .card h2 {
+      font-size: 13px;
+      color: var(--amber);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding-bottom: 6px;
+    }
+    .select-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    label {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+    select, input[type="range"] {
+      width: 100%;
+      background: #0e0c1f;
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 8px;
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 12px;
+    }
+    .param-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      margin-bottom: 6px;
+    }
+    .param-label { color: var(--muted); }
+    .param-value { color: var(--cyan); font-weight: bold; }
+    .status-pill {
+      display: inline-block;
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 3px;
+      margin-top: 4px;
+    }
+    .status-in-use { background: rgba(74, 222, 128, 0.15); color: var(--green); border: 1px solid var(--green); }
+    .status-unused { background: rgba(255, 122, 40, 0.15); color: var(--amber); border: 1px solid var(--amber); }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="badge">AMBIENTE DE DESENVOLVIMENTO // AUDITORIA VISUAL</div>
+    <h1>BoyPunk! — Visualizador Isolado de Animações</h1>
+    <p style="font-size: 12px; color: var(--muted);">Ferramenta dedicada para teste estético, alinhamento de solo, biomecânica e contratos de asset sem interferir no gameplay.</p>
+    <div class="disclaimer">
+      <strong>Aviso de Integração:</strong> Este visualizador renderiza os assets diretamente a partir dos arquivos de arte. Estados marcados como <em>[ARTE COMPLETA // NÃO INTEGRADA AO JOGO]</em> (como a derrota do player e do perseguidor) representam arte finalizada pronta para Codex conectar à máquina de estados.
+    </div>
+  </header>
+
+  <div class="main-layout">
+    <div class="viewport-panel">
+      <div class="canvas-container">
+        <canvas id="preview-canvas" width="384" height="384"></canvas>
+      </div>
+
+      <div class="controls-row">
+        <button id="btn-play">Pausar (Espaço)</button>
+        <button id="btn-prev">◀ Quadro Anterior</button>
+        <button id="btn-next">Próximo Quadro ▶</button>
+        <button id="btn-mirror">Espelhar: Direita</button>
+        <button id="btn-ground" class="active">Linha de Solo: ON</button>
+      </div>
+
+      <div class="controls-row" style="margin-top: 10px;">
+        <span style="font-size: 11px; color: var(--muted); align-self: center;">Zoom:</span>
+        <button class="zoom-btn" data-scale="2">2×</button>
+        <button class="zoom-btn" data-scale="4">4×</button>
+        <button class="zoom-btn active" data-scale="6">6×</button>
+        <button class="zoom-btn" data-scale="8">8×</button>
+      </div>
+    </div>
+
+    <div class="sidebar">
+      <div class="card">
+        <h2>Seleção de Sequência</h2>
+        <div class="select-group">
+          <label for="char-select">Personagem / Entidade</label>
+          <select id="char-select">
+            <option value="player">BoyPunk (Protagonista)</option>
+            <option value="chaser">Perseguidor (Combat Droid)</option>
+            <option value="turret">Torreta Atiradora (Sentinela)</option>
+          </select>
+        </div>
+
+        <div class="select-group">
+          <label for="anim-select">Sequência de Animação</label>
+          <select id="anim-select"></select>
+        </div>
+
+        <div id="status-tag"></div>
+      </div>
+
+      <div class="card">
+        <h2>Parâmetros do Contrato</h2>
+        <div class="param-row"><span class="param-label">Dimensões Canvas:</span><span id="p-dim" class="param-value">-</span></div>
+        <div class="param-row"><span class="param-label">Total de Quadros:</span><span id="p-frames" class="param-value">-</span></div>
+        <div class="param-row"><span class="param-label">Taxa Configurada:</span><span id="p-fps" class="param-value">-</span></div>
+        <div class="param-row"><span class="param-label">Alinhamento de Solo:</span><span id="p-ground" class="param-value">-</span></div>
+        <div class="param-row"><span class="param-label">Quadro Atual:</span><span id="p-current" class="param-value">-</span></div>
+        <div class="param-row"><span class="param-label">Arquivo:</span><span id="p-file" class="param-value" style="font-size: 9px; max-width: 170px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">-</span></div>
+
+        <div style="margin-top: 14px;">
+          <label for="speed-slider">Ajuste de Velocidade (<span id="speed-val">12</span> FPS)</label>
+          <input type="range" id="speed-slider" min="1" max="30" value="12">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    const ANIMATIONS = {
+      player: {
+        idle: { name: "Idle (Repouso)", frames: 4, fps: 5, groundY: 63, w: 64, h: 96, path: "assets/images/player-helmet/playeranim-idle-%03d.png", status: "in-use" },
+        walk: { name: "Walk (Caminhada Articulada)", frames: 4, fps: 12, groundY: 63, w: 64, h: 96, path: "assets/images/player-helmet/playeranim-walk-%03d.png", status: "in-use" },
+        jump: { name: "Jump (Ápice de Salto)", frames: 1, fps: 1, groundY: 63, w: 64, h: 96, path: "assets/images/player-helmet/playeranim-jump-%03d.png", status: "in-use" },
+        fall: { name: "Fall (Queda Livre)", frames: 1, fps: 1, groundY: 63, w: 64, h: 96, path: "assets/images/player-helmet/playeranim-fall-%03d.png", status: "in-use" },
+        attack1: { name: "Attack (Ataque com Bastão)", frames: 4, fps: 22, groundY: 63, w: 64, h: 96, path: "assets/images/player-helmet/playeranim-attack1-%03d.png", status: "in-use" },
+        hurt: { name: "Hurt (Dano / Flash)", frames: 3, fps: 12, groundY: 63, w: 64, h: 96, path: "assets/images/player-helmet/playeranim-hurt-%03d.png", status: "in-use" },
+        die: { name: "Defeat (Derrota 64x96 Articulada)", frames: 4, fps: 10, groundY: 63, w: 64, h: 96, path: "assets/images/player-helmet/playeranim-die-%03d.png", status: "unused", loop: false }
+      },
+      chaser: {
+        idle: { name: "Idle (Prontidão Alerta)", frames: 2, fps: 3, groundY: 31, w: 16, h: 32, path: "assets/images/enemies/enemycaveira-iddle-%03d.png", status: "in-use" },
+        walk: { name: "Walk (Passada Bipedal 8 Quadros)", frames: 8, fps: 12, groundY: 31, w: 16, h: 32, path: "assets/images/enemies/enemycaveira-walk-%03d.png", status: "in-use" },
+        jump: { name: "Jump (Salto de Obstáculo)", frames: 1, fps: 1, groundY: 31, w: 16, h: 32, path: "assets/images/enemies/enemycaveira-jump-%03d.png", status: "in-use" },
+        attack: { name: "Attack (Estocada de Lâmina)", frames: 4, fps: 22, groundY: 31, w: 16, h: 32, path: "assets/images/enemies/enemycaveira-attack-%03d.png", status: "in-use" },
+        dead: { name: "Defeat (Destruição Articulada)", frames: 4, fps: 12, groundY: 31, w: 16, h: 32, path: "assets/images/enemies/enemycaveira-dead-%03d.png", status: "unused", loop: false }
+      },
+      turret: {
+        ready: { name: "Ready (Sentinela Travada)", frames: 1, fps: 1, groundY: 28, w: 32, h: 32, path: "assets/images/enemies/enemytorreta-ready-000.png", status: "in-use" },
+        shooting: { name: "Shooting (Disparo & Recuo)", frames: 4, fps: 14, groundY: 28, w: 32, h: 32, path: "assets/images/enemies/enemytorreta-shooting-%03d.png", status: "in-use" },
+        created: { name: "Created (Implantação do Pod)", frames: 5, fps: 10, groundY: 31, w: 16, h: 32, path: "assets/images/enemies/enemytorreta-created-%03d.png", status: "unused" },
+        out: { name: "Out (Retração do Pod)", frames: 5, fps: 10, groundY: 31, w: 16, h: 32, path: "assets/images/enemies/enemytorreta-out-%03d.png", status: "unused" }
+      }
+    };
+
+    const canvas = document.getElementById("preview-canvas");
+    const ctx = canvas.getContext("2d");
+    ctx.imageSmoothingEnabled = false;
+
+    let currentChar = "player";
+    let currentAnim = "die";
+    let scale = 6;
+    let playing = true;
+    let mirrored = false;
+    let showGround = true;
+    let frameIndex = 0;
+    let animTime = 0;
+    let lastTimestamp = performance.now();
+    const loadedImages = new Map();
+
+    async function getImage(url) {
+      if (loadedImages.has(url)) return loadedImages.get(url);
+      const img = new Image();
+      img.src = "../" + url;
+      await new Promise(r => { img.onload = r; img.onerror = r; });
+      loadedImages.set(url, img);
+      return img;
+    }
+
+    function populateAnimSelect() {
+      const select = document.getElementById("anim-select");
+      select.innerHTML = "";
+      const anims = ANIMATIONS[currentChar];
+      for (const [key, data] of Object.entries(anims)) {
+        const opt = document.createElement("option");
+        opt.value = key;
+        opt.textContent = data.name;
+        select.appendChild(opt);
+      }
+      select.value = currentAnim in anims ? currentAnim : Object.keys(anims)[0];
+      currentAnim = select.value;
+      updateSidebar();
+    }
+
+    function updateSidebar() {
+      const data = ANIMATIONS[currentChar][currentAnim];
+      document.getElementById("p-dim").textContent = `${data.w} × ${data.h} px`;
+      document.getElementById("p-frames").textContent = `${data.frames} quadro(s)`;
+      document.getElementById("p-fps").textContent = `${data.fps} FPS`;
+      document.getElementById("p-ground").textContent = `y = ${data.groundY} px`;
+      document.getElementById("speed-slider").value = data.fps;
+      document.getElementById("speed-val").textContent = data.fps;
+
+      const tag = document.getElementById("status-tag");
+      if (data.status === "in-use") {
+        tag.innerHTML = `<span class="status-pill status-in-use">✓ INTEGRADO AO GAMEPLAY ATIVO</span>`;
+      } else {
+        tag.innerHTML = `<span class="status-pill status-unused">★ ARTE FINALIZADA // AGUARDA CODEX</span>`;
+      }
+    }
+
+    function render() {
+      const data = ANIMATIONS[currentChar][currentAnim];
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const frameUrl = data.frames === 1 && !data.path.includes("%03d")
+        ? data.path
+        : data.path.replace("%03d", String(frameIndex).padStart(3, "0"));
+
+      document.getElementById("p-current").textContent = `${frameIndex + 1} de ${data.frames} (índice ${frameIndex})`;
+      document.getElementById("p-file").textContent = frameUrl.split("/").pop();
+
+      const img = loadedImages.get(frameUrl);
+      if (img && img.naturalWidth) {
+        const drawW = data.w * scale;
+        const drawH = data.h * scale;
+        const drawX = Math.round((canvas.width - drawW) / 2);
+        const drawY = Math.round((canvas.height - drawH) / 2);
+
+        ctx.save();
+        if (mirrored) {
+          ctx.translate(drawX + drawW, drawY);
+          ctx.scale(-1, 1);
+          ctx.drawImage(img, 0, 0, drawW, drawH);
+        } else {
+          ctx.drawImage(img, drawX, drawY, drawW, drawH);
+        }
+        ctx.restore();
+
+        // Linha de solo (y = groundY)
+        if (showGround) {
+          const groundScreenY = drawY + (data.groundY * scale) + scale - 1;
+          ctx.strokeStyle = "rgba(255, 122, 40, 0.85)";
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.moveTo(drawX - 24, groundScreenY);
+          ctx.lineTo(drawX + drawW + 24, groundScreenY);
+          ctx.stroke();
+
+          ctx.fillStyle = "#ff7a28";
+          ctx.font = "10px monospace";
+          ctx.fillText(`solo y=${data.groundY}`, drawX + drawW + 6, groundScreenY - 4);
+        }
+
+        // Bounding box
+        ctx.strokeStyle = "rgba(55, 230, 238, 0.4)";
+        ctx.lineWidth = 1;
+        ctx.strokeRect(drawX, drawY, drawW, drawH);
+      }
+    }
+
+    function tick(now) {
+      const dt = (now - lastTimestamp) / 1000;
+      lastTimestamp = now;
+
+      const data = ANIMATIONS[currentChar][currentAnim];
+      const fps = parseFloat(document.getElementById("speed-slider").value);
+
+      if (playing && data.frames > 1) {
+        animTime += dt;
+        const total = data.frames;
+        if (data.loop === false) {
+          frameIndex = Math.min(total - 1, Math.floor(animTime * fps));
+        } else {
+          frameIndex = Math.floor(animTime * fps) % total;
+        }
+      }
+
+      render();
+      requestAnimationFrame(tick);
+    }
+
+    // Eventos
+    document.getElementById("char-select").addEventListener("change", (e) => {
+      currentChar = e.target.value;
+      populateAnimSelect();
+      animTime = 0;
+      frameIndex = 0;
+      preloadCurrent();
+    });
+
+    document.getElementById("anim-select").addEventListener("change", (e) => {
+      currentAnim = e.target.value;
+      updateSidebar();
+      animTime = 0;
+      frameIndex = 0;
+      preloadCurrent();
+    });
+
+    document.getElementById("btn-play").addEventListener("click", () => {
+      playing = !playing;
+      document.getElementById("btn-play").textContent = playing ? "Pausar (Espaço)" : "Reproduzir (Espaço)";
+      document.getElementById("btn-play").classList.toggle("active", !playing);
+    });
+
+    document.getElementById("btn-prev").addEventListener("click", () => {
+      playing = false;
+      const data = ANIMATIONS[currentChar][currentAnim];
+      frameIndex = (frameIndex - 1 + data.frames) % data.frames;
+      animTime = frameIndex / data.fps;
+    });
+
+    document.getElementById("btn-next").addEventListener("click", () => {
+      playing = false;
+      const data = ANIMATIONS[currentChar][currentAnim];
+      frameIndex = (frameIndex + 1) % data.frames;
+      animTime = frameIndex / data.fps;
+    });
+
+    document.getElementById("btn-mirror").addEventListener("click", () => {
+      mirrored = !mirrored;
+      document.getElementById("btn-mirror").textContent = mirrored ? "Espelhar: Esquerda" : "Espelhar: Direita";
+      document.getElementById("btn-mirror").classList.toggle("active", mirrored);
+    });
+
+    document.getElementById("btn-ground").addEventListener("click", () => {
+      showGround = !showGround;
+      document.getElementById("btn-ground").classList.toggle("active", showGround);
+    });
+
+    document.querySelectorAll(".zoom-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".zoom-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        scale = parseInt(btn.dataset.scale);
+      });
+    });
+
+    document.getElementById("speed-slider").addEventListener("input", (e) => {
+      document.getElementById("speed-val").textContent = e.target.value;
+    });
+
+    window.addEventListener("keydown", (e) => {
+      if (e.code === "Space") {
+        e.preventDefault();
+        document.getElementById("btn-play").click();
+      } else if (e.code === "ArrowLeft") {
+        document.getElementById("btn-prev").click();
+      } else if (e.code === "ArrowRight") {
+        document.getElementById("btn-next").click();
+      }
+    });
+
+    async function preloadCurrent() {
+      const data = ANIMATIONS[currentChar][currentAnim];
+      for (let i = 0; i < data.frames; i++) {
+        const url = data.frames === 1 && !data.path.includes("%03d")
+          ? data.path
+          : data.path.replace("%03d", String(i).padStart(3, "0"));
+        await getImage(url);
+      }
+    }
+
+    // Inicialização
+    populateAnimSelect();
+    preloadCurrent().then(() => {
+      requestAnimationFrame(tick);
+    });
+  </script>
+</body>
+</html>

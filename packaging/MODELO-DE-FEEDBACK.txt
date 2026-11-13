@@ -1,0 +1,21 @@
+FEEDBACK DE TESTE — BOYPUNK! WEB
+===================================
+
+Sistema operacional:
+Navegador e versão:
+Versão do jogo (copiar do menu):
+Controle e identificação exibida pelo navegador (se aplicável):
+Conexão (USB/Bluetooth, se conhecida):
+
+Passos para reproduzir:
+1.
+2.
+3.
+
+Resultado esperado:
+
+Resultado observado:
+
+Captura de tela ou vídeo (opcional):
+
+Observações sobre música, clareza do objetivo e dificuldade (opcional):

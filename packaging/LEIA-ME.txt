@@ -1,0 +1,45 @@
+BOYPUNK! WEB — VERSÃO 0.2.2
+================================
+
+PARA JOGAR (sem instalar nada)
+
+1. Extraia todo o conteúdo do ZIP.
+2. Abra JOGAR.html com duplo clique.
+3. Use um navegador atual com JavaScript e Web Audio habilitados.
+4. Clique em Jogar. O áudio começa somente após sua interação.
+
+Não é necessário Construct 3, Node.js, Python, servidor local ou internet para jogar.
+Não mova JOGAR.html para fora desta pasta antes de testar.
+
+CONTROLES
+
+- A/D ou setas: mover
+- W, seta para cima ou Espaço: salto e salto duplo
+- J, X ou F: atacar
+- E: depositar almas quando estiver junto ao altar
+- Esc: pausar/retomar
+- Em tela de toque: botões visíveis para mover, saltar, atacar, depositar e pausar
+
+OBJETIVO
+
+Derrote inimigos, colete almas e deposite 15 almas no altar. “Carregadas” são
+as almas com o jogador; “Depositadas” são as que já contam para a vitória.
+Proteja a vida de BoyPunk e a integridade do altar.
+
+FONTES
+
+A pasta FONTES contém o projeto modular, os recursos e as ferramentas de build.
+Leia FONTES/README.md e DOCUMENTACAO/DEPENDENCIAS-E-COMANDOS.txt.
+
+LIMITAÇÕES CONHECIDAS
+
+- Artefato validado automaticamente em Google Chrome headless no Linux.
+- Não houve teste real em Windows, macOS ou aparelho móvel.
+- A qualidade musical e a sensação de jogo ainda precisam de avaliação humana.
+- A licença/proveniência de alguns recursos herdados está pendente; veja avisos.
+- Esta é somente a primeira fase. Não há fase 2, gamepad, save, APK ou executável.
+- O teste automatizado confirmou que a queda do altar com BoyPunk vivo mostra
+  “Altar destruído”, diferente de “Você foi derrotado”. A apresentação e a
+  legibilidade desse caso ainda precisam de validação humana em uma partida.
+
+Se algo falhar, use o modelo em DOCUMENTACAO/MODELO-DE-FEEDBACK.txt.

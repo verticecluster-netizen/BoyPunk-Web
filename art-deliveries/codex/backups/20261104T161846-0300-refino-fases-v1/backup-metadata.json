@@ -1,0 +1,81 @@
+{
+  "projectRoot": "/home/flow/Projetos/BoyPunk-Web",
+  "sourceVersion": "0.4.2",
+  "integrationId": "20261104T161846-0300-refino-fases-v1",
+  "deliveryRoot": "/home/flow/Projetos/BoyPunk-Web/art-deliveries/antigravity/refino-fases-v1",
+  "createdAt": "2026-11-04T16:18:46-03:00",
+  "files": [
+    {
+      "name": "distrito-neon.png",
+      "originalPath": "/home/flow/Projetos/BoyPunk-Web/assets/images/world/distrito-neon.png",
+      "candidatePath": "/home/flow/Projetos/BoyPunk-Web/art-deliveries/antigravity/refino-fases-v1/world/distrito-neon.png",
+      "backupPath": "/home/flow/Projetos/BoyPunk-Web/art-deliveries/codex/backups/20261104T161846-0300-refino-fases-v1/distrito-neon.png",
+      "originalSha256": "6c39ce5b9056a4a71974b82f705f39bbb5e7b81b751f4d405213313ce166428b",
+      "candidateSha256": "9e5abba5381ce8a729b507ffbc31d75c62d8873bf0bec9b6dbabec866435ceca",
+      "originalBytes": 2245076,
+      "candidateBytes": 460337,
+      "originalDimensions": "1672x941",
+      "candidateDimensions": "1672x941"
+    },
+    {
+      "name": "fabrica-sucata.png",
+      "originalPath": "/home/flow/Projetos/BoyPunk-Web/assets/images/world/fabrica-sucata.png",
+      "candidatePath": "/home/flow/Projetos/BoyPunk-Web/art-deliveries/antigravity/refino-fases-v1/world/fabrica-sucata.png",
+      "backupPath": "/home/flow/Projetos/BoyPunk-Web/art-deliveries/codex/backups/20261104T161846-0300-refino-fases-v1/fabrica-sucata.png",
+      "originalSha256": "df59ccbc98d6b33ddd90501658f19b969d095daf271d7c4f7b8fbf7f231722fb",
+      "candidateSha256": "68c91c21884b96d37713537356db9f9e5fa2e07ef1d9e5576b7e185d5c909b70",
+      "originalBytes": 1256695,
+      "candidateBytes": 1103992,
+      "originalDimensions": "1365x768",
+      "candidateDimensions": "1365x768"
+    },
+    {
+      "name": "camara-energia.png",
+      "originalPath": "/home/flow/Projetos/BoyPunk-Web/assets/images/world/camara-energia.png",
+      "candidatePath": "/home/flow/Projetos/BoyPunk-Web/art-deliveries/antigravity/refino-fases-v1/world/camara-energia.png",
+      "backupPath": "/home/flow/Projetos/BoyPunk-Web/art-deliveries/codex/backups/20261104T161846-0300-refino-fases-v1/camara-energia.png",
+      "originalSha256": "62a3e5412b500e3443c5b52cc8c0f7b38660837356af16ee37f71a0e277d5e84",
+      "candidateSha256": "8bc080cef0afb2a7a58c5fdba665dc5fddc94c02ba66db5bc04783376bf3d1fc",
+      "originalBytes": 1511112,
+      "candidateBytes": 1283230,
+      "originalDimensions": "1365x768",
+      "candidateDimensions": "1365x768"
+    },
+    {
+      "name": "platformtiles.png",
+      "originalPath": "/home/flow/Projetos/BoyPunk-Web/assets/images/world/platformtiles.png",
+      "candidatePath": "/home/flow/Projetos/BoyPunk-Web/art-deliveries/antigravity/refino-fases-v1/world/platformtiles.png",
+      "backupPath": "/home/flow/Projetos/BoyPunk-Web/art-deliveries/codex/backups/20261104T161846-0300-refino-fases-v1/platformtiles.png",
+      "originalSha256": "fbf9f8f0f9a1c3d45db383cda09fbcb65820303c7a4afa31a02298106ab4d585",
+      "candidateSha256": "11cfd732d97b53e1aa2371a0602080aadea5e9b96e24296e1123b9d427a1e843",
+      "originalBytes": 420,
+      "candidateBytes": 518,
+      "originalDimensions": "128x128",
+      "candidateDimensions": "128x128"
+    },
+    {
+      "name": "factory-platformtiles.png",
+      "originalPath": "/home/flow/Projetos/BoyPunk-Web/assets/images/world/factory-platformtiles.png",
+      "candidatePath": "/home/flow/Projetos/BoyPunk-Web/art-deliveries/antigravity/refino-fases-v1/world/factory-platformtiles.png",
+      "backupPath": "/home/flow/Projetos/BoyPunk-Web/art-deliveries/codex/backups/20261104T161846-0300-refino-fases-v1/factory-platformtiles.png",
+      "originalSha256": "e0388907f4639fd892620d1d457358987e36e51e0daebddc347dc2e7616ba861",
+      "candidateSha256": "996c490fb5db2ff23916013646d33c4842bf52122253eab61f8533191cd61b54",
+      "originalBytes": 598,
+      "candidateBytes": 571,
+      "originalDimensions": "128x128",
+      "candidateDimensions": "128x128"
+    },
+    {
+      "name": "energy-platformtiles.png",
+      "originalPath": "/home/flow/Projetos/BoyPunk-Web/assets/images/world/energy-platformtiles.png",
+      "candidatePath": "/home/flow/Projetos/BoyPunk-Web/art-deliveries/antigravity/refino-fases-v1/world/energy-platformtiles.png",
+      "backupPath": "/home/flow/Projetos/BoyPunk-Web/art-deliveries/codex/backups/20261104T161846-0300-refino-fases-v1/energy-platformtiles.png",
+      "originalSha256": "08672a16e057839b6e9f5b73ac8d6b0974e8a03786bcc83298edac34d1fa1c59",
+      "candidateSha256": "5a1943b461bac4f39818819f514ecee0fb797a320a4e386fd12fbcf01e7d80df",
+      "originalBytes": 721,
+      "candidateBytes": 530,
+      "originalDimensions": "128x128",
+      "candidateDimensions": "128x128"
+    }
+  ]
+}

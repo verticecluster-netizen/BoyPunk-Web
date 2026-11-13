@@ -1,0 +1,15 @@
+{
+  "name": "boypunk-web",
+  "version": "0.5.2",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "./iniciar-jogo.sh --no-open",
+    "check": "node --check src/version.js && node --check src/config.js && node --check src/bonus.js && node --check src/level-data.js && node --check src/animation.js && node --check src/music.js && node --check src/core.js && node --check src/coop.js && node --check src/assets.js && node --check src/input.js && node --check src/audio.js && node --check src/renderer.js && node --check src/demo.js && node --check src/progression.js && node --check src/gamepad.js && node --check src/save-transfer.js && node --check src/i18n.js && node --check src/main.js && node --check tools/server.mjs && node --check tools/browser-test.mjs && node --check tools/audit-hud-menu-stabilization.mjs && node --check tools/factory-model-evidence.mjs && node --check tools/inspect-runtime-attack.mjs && node --check tools/measure-bonus-route.mjs && node --check tools/build-portable.mjs && node --check tools/build-release.mjs && node --check tools/portable-test.mjs && node --check tools/record-factory-evidence.mjs && bash -n configuracao-servidor.sh && bash -n iniciar-jogo.sh && bash -n abrir-bonus.sh",
+    "test": "node --test tests/*.test.mjs",
+    "extract-level": "node tools/extract-level.mjs",
+    "build:portable": "node tools/build-portable.mjs",
+    "build:release": "node tools/build-release.mjs",
+    "test:portable": "node tools/portable-test.mjs"
+  }
+}

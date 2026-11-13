@@ -1,0 +1,14 @@
+10e2d43114b5d4cbf01c4a1ed2bf70f0060498bd0db0f9a27ee5a3f066acb53d  docs/checkpoints/survival-powerups-audio-2026-11-05-v1-pre-etapa-a/docs/CONTINUIDADE_MECANICAS_AVANCADAS.md
+f33f21f34fc48c1f2cbbc0d1817ff1e4fe5298834866d53dda7cb57fdc575c59  docs/checkpoints/survival-powerups-audio-2026-11-05-v1-pre-etapa-a/docs/STATUS_IMPLEMENTACOES_BOYPUNK.md
+0a2a24c84e83a839853f8221f023653ca145ae5a8d8154ecd214089e9b2a3e73  docs/checkpoints/survival-powerups-audio-2026-11-05-v1-pre-etapa-a/index.html
+ebc07648a8854c10fefcd393cec6493da560a84711a3c873657ddbb021e8de83  docs/checkpoints/survival-powerups-audio-2026-11-05-v1-pre-etapa-a/src/audio.js
+5c4c1e97311ac0b4e27d15a6003e0bedf6f1dc242f4f4e0251c45a8479b5de2e  docs/checkpoints/survival-powerups-audio-2026-11-05-v1-pre-etapa-a/src/config.js
+365f507e2156cb62b0ad2db0fe42baa20c2e108212953032ac44a260d9b8c247  docs/checkpoints/survival-powerups-audio-2026-11-05-v1-pre-etapa-a/src/coop.js
+da863126cc6a9dcdd395e1da5fc92370567a133078ea4e86983974564855bdc3  docs/checkpoints/survival-powerups-audio-2026-11-05-v1-pre-etapa-a/src/core.js
+2b065d55e7f51cb5d0c9d4e30c0fc558e0308031d0741d5794c1229c6fee7424  docs/checkpoints/survival-powerups-audio-2026-11-05-v1-pre-etapa-a/src/i18n.js
+ce530459a9962e950ef72b2c67100e2edfeab66d0228f32bb7f26e020cf9f026  docs/checkpoints/survival-powerups-audio-2026-11-05-v1-pre-etapa-a/src/main.js
+a6a298ded8dc75ade795304d6f3bf8e2a9ba2e1fd3c24047ee8cfc6a62a443d3  docs/checkpoints/survival-powerups-audio-2026-11-05-v1-pre-etapa-a/src/renderer.js
+f97bd73748b489c0703e45b9178c47918e6a9131b2defedfa16ad77c647aa434  docs/checkpoints/survival-powerups-audio-2026-11-05-v1-pre-etapa-a/tests/audio-webkit.test.mjs
+cde570c18f82812082668e006d2d779b97dfc362e287dbfa3b65a7ca6b2085e0  docs/checkpoints/survival-powerups-audio-2026-11-05-v1-pre-etapa-a/tests/coop.test.mjs
+afa8665b26d621100db8722c3d3bf8f251f2205c9fc7f6eb089b8685d6537664  docs/checkpoints/survival-powerups-audio-2026-11-05-v1-pre-etapa-a/tests/powerups.test.mjs
+8fa4fef2c453eb8203c8da706911adfc3dcc2f5fdd7feb8d1c06b6427336ff68  docs/checkpoints/survival-powerups-audio-2026-11-05-v1-pre-etapa-a/tests/renderer.test.mjs

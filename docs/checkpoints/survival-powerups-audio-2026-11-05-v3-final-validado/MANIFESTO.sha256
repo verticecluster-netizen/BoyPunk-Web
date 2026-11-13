@@ -1,0 +1,16 @@
+7345f3706db166d95fd0a47597a683391e32f02fd24b71633a1697742afd7ff1  docs/checkpoints/survival-powerups-audio-2026-11-05-v3-final-validado/docs/CONTINUIDADE_MECANICAS_AVANCADAS.md
+1cd6d03209c2791e6016b11fea5fa4721412e47c507dd9183831f4c4427d43ab  docs/checkpoints/survival-powerups-audio-2026-11-05-v3-final-validado/docs/RELATORIO_POWERUPS_SOBREVIVENCIA.md
+7f5a3549a4df8b7e9174a49b4fe2f4643dd0a9812c6f07ba1c4b247c2bee1b09  docs/checkpoints/survival-powerups-audio-2026-11-05-v3-final-validado/docs/RELATORIO_SOM_TIROS_FUTURISTAS.md
+422d305f2b1604e52603714fa24b30a88720b6895ae7e7a4510eccd7c7fef1e1  docs/checkpoints/survival-powerups-audio-2026-11-05-v3-final-validado/docs/STATUS_IMPLEMENTACOES_BOYPUNK.md
+2d41fcd56a2036acef6f754080ff81e6278f0d633eb01b9c4a181d673fa2d58a  docs/checkpoints/survival-powerups-audio-2026-11-05-v3-final-validado/index.html
+114e6e170629856f492db8ec74434c4758624d3240fae6a14578fd3599cd9367  docs/checkpoints/survival-powerups-audio-2026-11-05-v3-final-validado/src/audio.js
+3658f2f654d116551f62c2a49049f2342da117bbc95bee49920fe1462bf872ab  docs/checkpoints/survival-powerups-audio-2026-11-05-v3-final-validado/src/config.js
+98b5e7375dd7006344e0194a65f3224d78f2a99d84ea84ae982a0b19795fe18a  docs/checkpoints/survival-powerups-audio-2026-11-05-v3-final-validado/src/coop.js
+a667536d182c7f29267d537b03581f39bea541e20276cb4e1c656c2712f31944  docs/checkpoints/survival-powerups-audio-2026-11-05-v3-final-validado/src/core.js
+86358672c4a178e17461ef1b8bf708011ac2afb274d7d681981765ba3b7e0614  docs/checkpoints/survival-powerups-audio-2026-11-05-v3-final-validado/src/i18n.js
+f9626cf7a963dc094ddb0321bb07f8bc41e3ae05b6c94deb4a807753817cc539  docs/checkpoints/survival-powerups-audio-2026-11-05-v3-final-validado/src/main.js
+86fbea49b8da1d45effdca826c9052080f18043d1b8dd193950f14f19f0b9efb  docs/checkpoints/survival-powerups-audio-2026-11-05-v3-final-validado/src/renderer.js
+800371ebc4f26d4b7d468e4dc1a074995b8a2d23f1e699a590db216f039dc44c  docs/checkpoints/survival-powerups-audio-2026-11-05-v3-final-validado/tests/character-shot-audio.test.mjs
+abc921868a5ede12bb502edbd24d3d92102f7e0f7470a4512f37119d327eca76  docs/checkpoints/survival-powerups-audio-2026-11-05-v3-final-validado/tests/core.test.mjs
+9ceacf28f92da09fc069401c1e826b8df96638df6ac1b4da7a75ac97ed2bea8f  docs/checkpoints/survival-powerups-audio-2026-11-05-v3-final-validado/tests/powerups.test.mjs
+4d5d2adb2f99faaf0582f38a96e7c00e260805293d9e45a81dc2e5c0e85656b3  docs/checkpoints/survival-powerups-audio-2026-11-05-v3-final-validado/tests/survival-powerups.test.mjs

@@ -1,0 +1,17 @@
+70b4c1c6049a96dbdadcf1b85ca3cad607e78674dffd65f6eb89ee879fb476fc  art-deliveries/antigravity/integration-recovery/01-original-pre-integration/src/assets.js
+09abd00c7692079f100be073a5a8ce2ab3bd3fa759c03131ccde263a8d400208  art-deliveries/antigravity/integration-recovery/01-original-pre-integration/src/renderer.js
+e37a4309db66bd35b1ee1bc3cad48640632ebd629144e752039c4d03a6143214  art-deliveries/antigravity/integration-recovery/01-original-pre-integration/docs/CONTINUIDADE_MECANICAS_AVANCADAS.md
+e6f2b8656b74ab30212f22c97b15410fc05aaf6a7b489228f15d7f42364d797d  art-deliveries/antigravity/integration-recovery/02-interrupted-state-pre-fixes/src/assets.js
+d9ed0682eb09cd31f1acb7cda1012f6602217a17ed415b6cdfff152144145590  art-deliveries/antigravity/integration-recovery/02-interrupted-state-pre-fixes/src/renderer.js
+2390f7ed857a2b12d56a763e3e345733f27e1482b4c95c79323b189f94978c29  art-deliveries/antigravity/integration-recovery/02-interrupted-state-pre-fixes/tests/district-parallax.test.mjs
+d70a1662f91cda91268444e220d2f8bef1a8be707b9528b6d1a65f4a3d340bbf  art-deliveries/antigravity/integration-recovery/02-interrupted-state-pre-fixes/tests/renderer.test.mjs
+e37a4309db66bd35b1ee1bc3cad48640632ebd629144e752039c4d03a6143214  art-deliveries/antigravity/integration-recovery/02-interrupted-state-pre-fixes/docs/CONTINUIDADE_MECANICAS_AVANCADAS.md
+e6f2b8656b74ab30212f22c97b15410fc05aaf6a7b489228f15d7f42364d797d  art-deliveries/antigravity/integration-recovery/03-workspace-state-on-entry/src/assets.js
+d9ed0682eb09cd31f1acb7cda1012f6602217a17ed415b6cdfff152144145590  art-deliveries/antigravity/integration-recovery/03-workspace-state-on-entry/src/renderer.js
+d8168ff21004456800425cefe9458e144ff29670be621c099b7237bb77dd23db  art-deliveries/antigravity/integration-recovery/03-workspace-state-on-entry/tests/district-parallax.test.mjs
+ef5b4585d0ed3e99d0d730617baccf66110e39bc1e7b10b7f331a4e32e2012d0  art-deliveries/antigravity/integration-recovery/03-workspace-state-on-entry/tests/renderer.test.mjs
+ce6f095086d6bce65d1dba352b714617b2207ff00fd4fcdb08e6c36e9d09f765  art-deliveries/antigravity/integration-recovery/03-workspace-state-on-entry/docs/CONTINUIDADE_MECANICAS_AVANCADAS.md
+47e3714056119e733dc9762b8a36dff10799078bfda4ecb351cb12362c2fc596  art-deliveries/antigravity/integration-recovery/03-workspace-state-on-entry/docs/art/RELATORIO_INTEGRACAO_PARALLAX_DISTRITO_NEON.md
+18492027405ed0f64d70ccc2ffc05b166c36907c8281324f11cb5dbeb7e77371  art-deliveries/antigravity/integration-recovery/03-workspace-state-on-entry/assets/images/world/distrito-neon-parallax/distrito-neon-far.png
+dc65d227bce7a77ed214c6306c3cf8680d8b704911abbcd55ee4dbcf9edb17f7  art-deliveries/antigravity/integration-recovery/03-workspace-state-on-entry/assets/images/world/distrito-neon-parallax/distrito-neon-mid.png
+e4afd2896815e1d26b215e768b5f7824bf96d08381688a0fe77cc7d1b5bc03bc  art-deliveries/antigravity/integration-recovery/03-workspace-state-on-entry/assets/images/world/distrito-neon-parallax/distrito-neon-near.png

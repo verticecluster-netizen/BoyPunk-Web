@@ -1,0 +1,316 @@
+{
+  "package_name": "distrito-neon-premium-v1",
+  "package_path": "/home/flow/Projetos/BoyPunk-Web/art-deliveries/antigravity/distrito-neon-premium-v1",
+  "status": "ready_for_codex_review_not_integrated",
+  "project_root": "/home/flow/Projetos/BoyPunk-Web",
+  "verified_source_version": "0.4.2",
+  "reference_files_tracked": {
+    "src/renderer.js": {
+      "bytes": 164700,
+      "sha256": "39a5ba9c5ffd4773c9c177ba9e4a726fdf8bb4c024a96394b505df53b7f30f7e"
+    },
+    "src/assets.js": {
+      "bytes": 16570,
+      "sha256": "e6f2b8656b74ab30212f22c97b15410fc05aaf6a7b489228f15d7f42364d797d"
+    },
+    "src/config.js": {
+      "bytes": 9346,
+      "sha256": "3658f2f654d116551f62c2a49049f2342da117bbc95bee49920fe1462bf872ab"
+    },
+    "src/level-data.js": {
+      "bytes": 8616,
+      "sha256": "92f78742eea47b697a7b8f9af28da73a54704993da4e154bdd3553639cfb3812"
+    },
+    "assets/images/world/distrito-neon.png": {
+      "bytes": 460337,
+      "sha256": "9e5abba5381ce8a729b507ffbc31d75c62d8873bf0bec9b6dbabec866435ceca"
+    }
+  },
+  "logical_resolution": {
+    "width": 480,
+    "height": 270,
+    "aspect_ratio": "16:9"
+  },
+  "inventory_and_decisions": [
+    {
+      "effect": "Foreground Decorativo",
+      "current_implementation": "Apenas distrito-neon-near.png (fundo próximo 1672x941 sob atmosfera e plataformas). Não há primeiro plano na frente do mundo.",
+      "necessity": "Adicionar profundidade periférica sem poluir arena de combate central (x=30..450, y=30..240 livres).",
+      "proposed_delivery": "foreground/foreground-distrito-neon.png (480x270 RGBA estático, 2.406 bytes).",
+      "replacement_target": "Nenhum; novo passe de camada pós-entidades ou pós-cenário."
+    },
+    {
+      "effect": "Chuva Cyberpunk",
+      "current_implementation": "Procedural em Canvas 2D (drawCyberpunkRain, 65 linhas rotativas a cada frame).",
+      "necessity": "Alternativa texturizada sem sobrecarga procedural para aparelhos de baixo custo e consistência estética pixel-art.",
+      "proposed_delivery": "weather/rain-far.png, weather/rain-mid.png, weather/rain-near.png (480x270 com repetição vertical comprovada) e rain-splash.png (24x8).",
+      "replacement_target": "Substituiria ou complementaria drawCyberpunkRain no renderer caso ativado."
+    },
+    {
+      "effect": "Muzzle Flashes dos Protagonistas",
+      "current_implementation": "Procedural no renderer (drawPlayer, fillRect/arc geométrico em progress < 0.28).",
+      "necessity": "Substituir desenho vetorial procedural por pixel-art de alta fidelidade com identidades visuais ricas para BoyPunk e Nilo.",
+      "proposed_delivery": "combat/muzzle-boypunk.png (128x32, 4 frames 32x32) e combat/muzzle-nilo.png (128x32, 4 frames 32x32).",
+      "replacement_target": "Substitui bloco procedural de muzzle flash em Renderer.drawPlayer."
+    },
+    {
+      "effect": "Faíscas de Impacto e Coleta",
+      "current_implementation": "Procedural em drawEffects (arcos e linhas traçadas dinamicamente).",
+      "necessity": "Substituir faíscas geométricas simples por sprite-sheets de dispersão direcional de impacto e captação energética.",
+      "proposed_delivery": "combat/hit-spark.png (64x16, 4 frames 16x16) e combat/pickup-spark.png (48x16, 3 frames 16x16).",
+      "replacement_target": "Substitui/complementa arcos procedurais em drawEffects para hits e coletas."
+    }
+  ],
+  "assets": {
+    "foreground": [
+      {
+        "file": "foreground/foreground-distrito-neon.png",
+        "width": 480,
+        "height": 270,
+        "mode": "RGBA",
+        "bytes": 2406,
+        "decoded_rgba_bytes": 518400,
+        "sha256": "c245c5398e874b6f46eaa6ad6a2b94b083b197e6cb8e78d5d55436b4f6c0d84d",
+        "purpose": "Moldura de primeiro plano decorativo periférico (cantoneiras, vigas superiores, feixes de cabos suspensos e drenos de canto).",
+        "alpha_contract": "Transparência binária no miolo e nas rotas; alpha verdadeiro com leve gradiente nos cantos.",
+        "suggested_renderer_opacity": 0.92,
+        "drawing_order": "Pós-entidades e projéteis, antes do HUD authoritative (ou pré-projéteis se desejado que tiros passem por cima).",
+        "origin_alignment": "Top-left [0, 0] no viewport lógico 480x270."
+      }
+    ],
+    "weather": [
+      {
+        "file": "weather/rain-far.png",
+        "width": 480,
+        "height": 270,
+        "mode": "RGBA",
+        "bytes": 3542,
+        "decoded_rgba_bytes": 518400,
+        "sha256": "709c7f73cc780638a5d24b4b71eec4726ec904bb5e9c84ad3919fcee4f77373f",
+        "purpose": "Plano distante de chuva densa e fina.",
+        "speed_px_per_sec": 480,
+        "horizontal_drift_px_per_sec": 60,
+        "suggested_renderer_opacity": 0.4,
+        "wrap_seamless_vertical": true,
+        "drawing_order": "Atrás de plataformas e entidades (diretamente após background)."
+      },
+      {
+        "file": "weather/rain-mid.png",
+        "width": 480,
+        "height": 270,
+        "mode": "RGBA",
+        "bytes": 3929,
+        "decoded_rgba_bytes": 518400,
+        "sha256": "8c057ddbe75ead882fa3df02012b7b023c23019a2e217a68014a9f7006309c75",
+        "purpose": "Plano médio de chuva com gotas ciano/violeta intermediárias.",
+        "speed_px_per_sec": 650,
+        "horizontal_drift_px_per_sec": 80,
+        "suggested_renderer_opacity": 0.65,
+        "wrap_seamless_vertical": true,
+        "drawing_order": "Após background e atmosfera, atrás das entidades."
+      },
+      {
+        "file": "weather/rain-near.png",
+        "width": 480,
+        "height": 270,
+        "mode": "RGBA",
+        "bytes": 5505,
+        "decoded_rgba_bytes": 518400,
+        "sha256": "4e3035cbb95c2900d7723ec333015241c2b895f2ce76b7b5b43d4e7bc3e12a96",
+        "purpose": "Plano frontal esparso de gotas velozes destacadas.",
+        "speed_px_per_sec": 850,
+        "horizontal_drift_px_per_sec": 110,
+        "suggested_renderer_opacity": 0.8,
+        "wrap_seamless_vertical": true,
+        "drawing_order": "Frente das entidades, atrás do HUD."
+      },
+      {
+        "file": "weather/rain-splash.png",
+        "width": 24,
+        "height": 8,
+        "mode": "RGBA",
+        "bytes": 140,
+        "decoded_rgba_bytes": 768,
+        "sha256": "e77a62884ba67d943d6c857a37acdda3f52381ead9d4c7362eb106ca4194fbff",
+        "purpose": "Micro-respingo de impacto de gota no solo e plataformas sólidas.",
+        "frame_count": 3,
+        "frame_width": 8,
+        "frame_height": 8,
+        "anchor": {
+          "x": 4,
+          "y": 7
+        },
+        "frame_duration_ms": 40,
+        "loop": false,
+        "drawing_order": "Na superfície das plataformas com oneWay=false e solo."
+      }
+    ],
+    "combat": [
+      {
+        "file": "combat/muzzle-boypunk.png",
+        "width": 128,
+        "height": 32,
+        "mode": "RGBA",
+        "bytes": 284,
+        "decoded_rgba_bytes": 16384,
+        "sha256": "30058f1c9fed413ebfde92cac45775cde27079f6d8e3b30c897036a5d1568c06",
+        "purpose": "Muzzle flash do rifle de plasma de BoyPunk (plasma ciano #2ee6ff, núcleo branco e confinamento laranja #ff7a28).",
+        "frame_count": 4,
+        "frame_width": 32,
+        "frame_height": 32,
+        "anchor": {
+          "local_cell_x": 6,
+          "local_cell_y": 16
+        },
+        "frame_duration_ms": 50,
+        "total_duration_ms": 200,
+        "loop": false,
+        "mirroring": "Inverter horizontalmente (flipX) quando player.facing < 0, ancorando na ponta do cano (forward: 27, y: 16)."
+      },
+      {
+        "file": "combat/muzzle-nilo.png",
+        "width": 128,
+        "height": 32,
+        "mode": "RGBA",
+        "bytes": 273,
+        "decoded_rgba_bytes": 16384,
+        "sha256": "3de64697dc493bcbae8aaa4b3bbe1b75fdf9856405254f8eb92feb5a09f3606f",
+        "purpose": "Muzzle flash do canhão de pulso de Nilo (verde esmeralda #2ee6a8, anéis harmônicos violeta #ae62ff e núcleo branco).",
+        "frame_count": 4,
+        "frame_width": 32,
+        "frame_height": 32,
+        "anchor": {
+          "local_cell_x": 6,
+          "local_cell_y": 16
+        },
+        "frame_duration_ms": 50,
+        "total_duration_ms": 200,
+        "loop": false,
+        "mirroring": "Inverter horizontalmente quando facing < 0, ancorando na ponta do emissor (forward: 21, y: 12)."
+      },
+      {
+        "file": "combat/hit-spark.png",
+        "width": 64,
+        "height": 16,
+        "mode": "RGBA",
+        "bytes": 228,
+        "decoded_rgba_bytes": 4096,
+        "sha256": "4d6c8a2aac5fcd52c0742a9534144db46438c1fb5d26cc65f93fca2ee11b9755",
+        "purpose": "Faísca de impacto cinético/energético em inimigos ou superfícies.",
+        "frame_count": 4,
+        "frame_width": 16,
+        "frame_height": 16,
+        "anchor": {
+          "local_cell_x": 8,
+          "local_cell_y": 8
+        },
+        "frame_duration_ms": 40,
+        "total_duration_ms": 160,
+        "loop": false
+      },
+      {
+        "file": "combat/pickup-spark.png",
+        "width": 48,
+        "height": 16,
+        "mode": "RGBA",
+        "bytes": 205,
+        "decoded_rgba_bytes": 3072,
+        "sha256": "f2172e3752ef8fcd5ad0b5954e9a3a1bfd61e2b76f6351c3ce73ee0e5f1a68fa",
+        "purpose": "Faísca de coleta para almas e power-ups (cristalização dourada e dispersão violeta/ciano).",
+        "frame_count": 3,
+        "frame_width": 16,
+        "frame_height": 16,
+        "anchor": {
+          "local_cell_x": 8,
+          "local_cell_y": 8
+        },
+        "frame_duration_ms": 45,
+        "total_duration_ms": 135,
+        "loop": false
+      }
+    ]
+  },
+  "previews": [
+    {
+      "file": "previews/01-foreground-comparison.png",
+      "width": 980,
+      "height": 310,
+      "mode": "RGBA",
+      "bytes": 151192,
+      "decoded_rgba_bytes": 1215200,
+      "sha256": "d13fef787699e8c6302cbff42b509de2736a577dc2f76505b3b4a5fa006e78c2"
+    },
+    {
+      "file": "previews/02-weather-layers-comparison.png",
+      "width": 980,
+      "height": 310,
+      "mode": "RGBA",
+      "bytes": 178455,
+      "decoded_rgba_bytes": 1215200,
+      "sha256": "9d3e99c8f72a3ae2c758f18d0b23637a81776862102e10a83b68bbfdcf12d792"
+    },
+    {
+      "file": "previews/03-muzzle-flashes-and-anchors.png",
+      "width": 980,
+      "height": 340,
+      "mode": "RGBA",
+      "bytes": 51350,
+      "decoded_rgba_bytes": 1332800,
+      "sha256": "aaff1c675c55bd9463b7aa009cf1e855833731ad7a3d785822e077b38354d374"
+    },
+    {
+      "file": "previews/04-full-combat-composite-480x270.png",
+      "width": 480,
+      "height": 270,
+      "mode": "RGBA",
+      "bytes": 129246,
+      "decoded_rgba_bytes": 518400,
+      "sha256": "05851581fe03aa60a61751c5ffca9b6f9e3e1d452539a710cab05267503d852d"
+    },
+    {
+      "file": "previews/05-full-combat-composite-scale2-960x540.png",
+      "width": 960,
+      "height": 540,
+      "mode": "RGBA",
+      "bytes": 162813,
+      "decoded_rgba_bytes": 2073600,
+      "sha256": "5742a9d1bd9d2dc70bdc9a541c81af5bebb2b6e862861cf620a69fee7cc1b504"
+    },
+    {
+      "file": "previews/anim-muzzle-boypunk.gif",
+      "width": 64,
+      "height": 64,
+      "mode": "P",
+      "bytes": 528,
+      "decoded_rgba_bytes": 16384,
+      "sha256": "ac03c8abc95cdb963f6fa6a5622d8cc080bc3878251d61db3252694bbdd12136"
+    },
+    {
+      "file": "previews/anim-muzzle-nilo.gif",
+      "width": 64,
+      "height": 64,
+      "mode": "P",
+      "bytes": 524,
+      "decoded_rgba_bytes": 16384,
+      "sha256": "06290022407a4f5760d11939ca8be597e3bbd212329cad2dfd1371ec3c6b2f1d"
+    },
+    {
+      "file": "previews/anim-hit-spark.gif",
+      "width": 64,
+      "height": 64,
+      "mode": "P",
+      "bytes": 832,
+      "decoded_rgba_bytes": 16384,
+      "sha256": "def9c933cc20f5a4e41cc8e2d3f7a5de38c7d7c0fdc5b58b48a9d46cf39dab8d"
+    },
+    {
+      "file": "previews/anim-rain-loop.gif",
+      "width": 240,
+      "height": 135,
+      "mode": "P",
+      "bytes": 58655,
+      "decoded_rgba_bytes": 129600,
+      "sha256": "f0ad736782cc8b80aa83712c6bf36b189b0bbc8c1682d2a367a5fab1fd7186cc"
+    }
+  ]
+}

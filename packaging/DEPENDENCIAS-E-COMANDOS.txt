@@ -1,0 +1,39 @@
+DEPENDÊNCIAS E COMANDOS — BOYPUNK! WEB 0.2.2
+================================================
+
+PARA JOGAR JOGAR.html
+
+- Nenhuma instalação.
+- Navegador atual com Canvas 2D, Web Audio e JavaScript habilitados.
+- Não requer internet, localhost, service worker, Construct, Node ou Python.
+
+PARA DESENVOLVER OS FONTES
+
+- Node.js 18 ou superior (somente ferramentas locais; zero pacotes npm externos).
+- Bash e xdg-open para o launcher Linux.
+- Google Chrome/Chromium para a automação de navegador.
+- zip e unzip para gerar e conferir o pacote compartilhável.
+- ffmpeg/ffprobe foram usados apenas na análise técnica do áudio original.
+
+COMANDOS (executar dentro de FONTES)
+
+  npm run check
+  npm test
+  npm run build:portable
+  npm run build:release
+  ./iniciar-jogo.sh
+  ./iniciar-jogo.sh --stop
+
+O servidor normal fica restrito a 127.0.0.1 e escolhe uma porta livre.
+JOGAR.html é gerado por tools/build-portable.mjs a partir de index.html,
+styles.css, módulos de src/ e recursos locais. Não o edite como uma segunda base.
+
+ARQUITETURA
+
+- src/core.js: regras, estados, física, encontros, objetivo e reinício.
+- src/music.js: composição procedural original da fase.
+- src/audio.js: transições, volume, mudo, música e efeitos.
+- src/renderer.js: Canvas, HUD e feedback visual.
+- src/input.js: teclado/toque e limpeza de entrada.
+- tools/build-portable.mjs: bundle e incorporação de CSS/dados/recursos.
+- tools/build-release.mjs: pasta versionada e ZIP.

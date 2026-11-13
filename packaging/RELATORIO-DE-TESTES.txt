@@ -1,0 +1,85 @@
+RELATÓRIO DE TESTES — BOYPUNK! WEB 0.2.3
+==========================================
+
+ADENDO DE GAMEPAD — FONTE 0.2.3-studio.20261026
+
+- Gamepad API nativa, mapa standard e perfis genéricos configuráveis.
+- 146/146 testes aprovados; controles usados na automação são mocks.
+- Hotplug, desconexão, índice reutilizado, dead-zone, bordas, simultaneidade,
+  navegação, transições e save v1/v2 cobertos.
+- Nenhum controle USB ou navegador atual foi testado neste ambiente; o bind
+  loopback foi recusado com EPERM. Releases 0.2.2 permanecem intactas.
+
+ADENDO DA FONTE DE ESTÚDIO — 2026-10-26
+
+- Identificador da fonte: 0.2.2-studio.20261026, exibido no menu.
+- npm run check aprovado; 129/129 testes automatizados aprovados.
+- Rota simulada da Câmara: 30/30, 350 pontos, 17,408 s, canhão ativo.
+- Cobertos: saves/merge/falhas, touch multiponteiro, fluxos de campanha e bônus,
+  derrotas/retry, pausa/foco, demo/prévia isoladas e limpeza de transições.
+- Os launchers normal e bônus tentaram somente 127.0.0.1:47831; o sandbox
+  recusou o bind com EPERM. Não houve inspeção em browser desta fonte, migração
+  do save real ou teste físico Android/iOS.
+- Releases 0.2.x e portátil histórico não foram regenerados. O restante deste
+  documento registra as validações históricas das releases, não desta fonte.
+
+Data: 2026-10-22
+Ambiente validado até aqui: Linux, Google Chrome headless, Node local.
+
+APROVADO — VERIFICAÇÕES ESTÁTICAS E SIMULAÇÃO
+
+- npm run check; bash -n iniciar-jogo.sh.
+- npm test: 20 testes aprovados.
+- Movimento, colisões, salto duplo, ataque e objetivo de 15 almas.
+- Tiros em ambos os sentidos contra alvos parados/em movimento, varredura de
+  projétil rápido, parede anterior ao alvo e ausência de acerto em alturas
+  diferentes.
+- Dano por projétil/contato com causa e caixas, sem colisão, cooldown de contato,
+  invulnerabilidade, pausa, alvo jogador/altar, derrotas distintas, dano
+  simultâneo e cinco ciclos de morte real por projétil/reinício do estado.
+
+APROVADO — NAVEGADOR HTTP
+
+- Página e recursos servidos em 127.0.0.1; menu, Canvas, teclado, movimento,
+  salto duplo, ataque, feedback “BLOQUEADO”, pausa e retomada.
+- Cinco derrotas via contato físico simulado pela rotina real e cinco cliques em
+  Tentar novamente; retorno ao menu e início de nova partida.
+- Volume/mudo, única fonte de música e console sem exceções/rejeições/avisos
+  severos.
+- Teste executado no Chrome headless Linux; nenhum Windows/macOS/mobile foi
+  testado. Não é avaliação humana de diversão, música ou arte.
+
+APROVADO — ARTEFATO PORTÁTIL EXTRAÍDO
+
+- ZIP 0.2.1 extraído em pasta temporária fora do projeto e JOGAR.html aberto por
+  file:// no Chrome; mesmas 22 asserções passaram, incluindo foco/teclas e cinco ciclos de
+  Game Over/reinício, controles, pausa e áudio.
+- 52 URLs de recursos foram vistos no navegador; zero eram HTTP/HTTPS/localhost/
+  internet. Imagens, fonte e áudio vieram do documento/dados incorporados.
+- ZIP final: releases/BoyPunk-Web-v0.2.1.zip, aproximadamente 6,1 MiB; o hash
+  exato consta no arquivo .zip.sha256 ao lado do pacote.
+
+ESTA REPUBLICAÇÃO (0.2.2)
+
+- Somente versão e documentação de empacotamento foram atualizadas; o código de
+  gameplay não foi modificado em relação a 0.2.1.
+- A queda do altar com o personagem vivo foi coberta por teste automatizado da
+  razão terminal distinta. Avaliação humana da clareza dessa situação segue
+  pendente; não se declara uma partida humana validada.
+- O ZIP 0.2.2 foi extraído em `/tmp/boypunk-022-HFg42L`, fora da árvore de
+  desenvolvimento. A tentativa da automação Chrome por `file://` falhou antes
+  de abrir a página: o Chrome não criou `DevToolsActivePort` no sandbox. A
+  tentativa de captura com Firefox headless também não concluiu neste ambiente.
+- Portanto, para 0.2.2 ficam confirmados build, conteúdo e integridade do ZIP,
+  mas não se declara teste real de navegador do artefato desta versão. A última
+  execução completa file:// foi a release 0.2.1, documentada acima.
+- Inspeção estática do JOGAR.html extraído: bundle/CSS e recursos incorporados;
+  sem dependência de URL HTTP, localhost, CDN ou import externo. Isso não
+  substitui abrir e jogar o arquivo no navegador da equipe.
+
+LIMITAÇÕES
+
+- Audição humana, partida manual completa, navegador diferente e dispositivo
+  móvel não foram testados.
+- Consolidar evidências de licenças dos recursos herdados antes de distribuição
+  pública.

@@ -1,0 +1,343 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-11-04",
+  "project": {
+    "root": "/home/flow/Projetos/BoyPunk-Web",
+    "name": "boypunk-web",
+    "sourceVersion": "0.4.2",
+    "versionSources": [
+      "package.json",
+      "src/version.js"
+    ],
+    "gitValidationAvailable": false,
+    "applicableAgentsFile": null
+  },
+  "scope": {
+    "operation": "copy-and-document",
+    "runtimeAssetsModified": false,
+    "gameplayModified": false,
+    "characterIntegrationPerformed": false,
+    "releaseGenerated": false
+  },
+  "createdReferenceDirectories": [
+    "art-deliveries/references/environments",
+    "art-deliveries/references/characters/boypunk",
+    "art-deliveries/references/characters/nilo"
+  ],
+  "reservedButNotCreated": [
+    {
+      "path": "art-deliveries/references/html",
+      "reason": "Nenhum HTML de referência foi confirmado dentro do projeto; index.html é runtime, tools/animation-viewer.html é ferramenta e BoyPunk-Studio-v0.4.0.html é standalone histórico."
+    }
+  ],
+  "createdDocumentation": [
+    "art-deliveries/README.md",
+    "art-deliveries/ASSET_INDEX.md",
+    "art-deliveries/ORGANIZACAO_MANIFESTO.json",
+    "docs/art/PLANO_PERSONAGENS_BOYPUNK_NILO.md"
+  ],
+  "activeAssets": {
+    "environments": [
+      {
+        "name": "Distrito Neon",
+        "role": "campaign-1",
+        "backgroundKey": "world.background",
+        "backgroundPath": "assets/images/world/distrito-neon.png",
+        "tilesKey": "world.tiles",
+        "tilesPath": "assets/images/world/platformtiles.png",
+        "status": "integrated"
+      },
+      {
+        "name": "Fábrica de Sucata",
+        "role": "campaign-2",
+        "backgroundKey": "world.background.factory",
+        "backgroundPath": "assets/images/world/fabrica-sucata.png",
+        "tilesKey": "world.tiles.factory",
+        "tilesPath": "assets/images/world/factory-platformtiles.png",
+        "status": "integrated"
+      },
+      {
+        "name": "Câmara de Energia",
+        "role": "bonus",
+        "backgroundKey": "world.background.bonus",
+        "backgroundPath": "assets/images/world/camara-energia.png",
+        "tilesKey": "world.tiles.bonus",
+        "tilesPath": "assets/images/world/energy-platformtiles.png",
+        "status": "integrated"
+      },
+      {
+        "name": "Cyber Lab",
+        "role": "optional-art-without-level",
+        "backgroundKey": "world.background.cyberlab",
+        "backgroundPath": "assets/images/world/cyber-lab.png",
+        "tilesKey": "world.tiles.cyberlab",
+        "tilesPath": "assets/images/world/cyber-lab-platformtiles.png",
+        "status": "registered-pending-runtime-activation"
+      }
+    ],
+    "characters": [
+      {
+        "name": "BoyPunk",
+        "id": "boypunk",
+        "classicNamespace": "player",
+        "classicPath": "assets/images/player-helmet",
+        "illustratedNamespace": "player.illustrated",
+        "illustratedPath": "assets/images/characters/boypunk-illustrated",
+        "portraitPath": "assets/images/player-helmet/player-portrait-000.png"
+      },
+      {
+        "name": "Nilo",
+        "id": "support",
+        "classicNamespace": "nilo",
+        "classicPath": "assets/images/characters/nilo",
+        "illustratedNamespace": "nilo.illustrated",
+        "illustratedPath": "assets/images/characters/nilo-illustrated",
+        "portraitPath": "assets/images/characters/nilo/nilo-portrait-000.png",
+        "fallbackNamespace": "player"
+      }
+    ]
+  },
+  "deliveries": [
+    {
+      "location": "art-deliveries/antigravity/refino-fases-v1",
+      "owner": "Antigravity",
+      "content": "Três backgrounds, três tilesets, previews e manifesto",
+      "state": "integrated",
+      "report": "art-deliveries/codex/integrations/20261104T161846-0300-refino-fases-v1/RELATORIO_INTEGRACAO.md",
+      "backup": "art-deliveries/codex/backups/20261104T161846-0300-refino-fases-v1"
+    },
+    {
+      "location": "art-deliveries/antigravity/personagens-v1/boypunk/classic",
+      "owner": "Antigravity",
+      "content": "Quatro frames idle e quatro frames walk de BoyPunk clássico",
+      "state": "candidate-pending-animated-review",
+      "report": null,
+      "backup": null
+    },
+    {
+      "location": "art-deliveries/codex/integrations/20261104T161846-0300-refino-fases-v1",
+      "owner": "Codex",
+      "content": "Integração e evidências dos seis assets de ambiente",
+      "state": "integrated-and-browser-verified",
+      "report": "art-deliveries/codex/integrations/20261104T161846-0300-refino-fases-v1/RELATORIO_INTEGRACAO.md",
+      "backup": "art-deliveries/codex/backups/20261104T161846-0300-refino-fases-v1"
+    },
+    {
+      "location": "assets/images/world/cyber-lab.png + assets/images/world/cyber-lab-platformtiles.png",
+      "owner": "historical-package-documented-by-handoff",
+      "content": "Arte candidata Cyber Lab registrada no manifesto e previews em evidencias/art/cyber-lab",
+      "state": "reviewed-art-pending-level-and-renderer-consumer",
+      "report": "docs/art/CYBER_LAB_ART_HANDOFF.md",
+      "backup": null
+    },
+    {
+      "location": null,
+      "owner": null,
+      "content": "Entrega nilo-idle-v*",
+      "state": "not-found",
+      "report": null,
+      "backup": null
+    }
+  ],
+  "copies": [
+    {
+      "source": "Boypunkplayer1.jpeg",
+      "destination": "art-deliveries/references/characters/boypunk/boypunk-visual-board-v1.jpeg",
+      "sha256": "85c899a852577ac7db5640df12e4b611687eb8b3c07df6c953d6ad18859a99b8",
+      "reason": "Prancha visual confirmada de BoyPunk: armadura clara, metal escuro, ciano e laranja."
+    },
+    {
+      "source": "art-deliveries/references/personagens/boypunk-reference-v1.jpeg.png",
+      "destination": "art-deliveries/references/characters/boypunk/boypunk-idle-source-v1.png",
+      "sha256": "4e2392c7d9a2c6dae3d597a3d5df1188ae400be71d31d6710d0700b312d3a217",
+      "reason": "PNG confirmado com quatro poses grandes de idle de BoyPunk; imagem-fonte, não sprite pronta."
+    },
+    {
+      "source": "Boypunkplayer2.jpeg",
+      "destination": "art-deliveries/references/characters/nilo/nilo-visual-board-v1.jpeg",
+      "sha256": "425353089c3353e3434f84bf37f9c42ddf5358b63ed1c9a13abe68929d8f7ab2",
+      "reason": "Prancha visual confirmada do segundo protagonista: homem negro, grafite, verde/violeta e arma distinta."
+    },
+    {
+      "source": "art-deliveries/references/personagens/nilo-idle-source-v1.png\n\n4..png",
+      "destination": "art-deliveries/references/characters/nilo/nilo-idle-source-v1.png",
+      "sha256": "32d6007300211146fe10758769fa9046d46271621e9fcfb60b54fb2dc80e884b",
+      "reason": "PNG confirmado com quatro poses de Nilo; cópia com nome utilizável, preservando o original malformado."
+    },
+    {
+      "source": "docs/art/references/boypunk-neon-reference.png",
+      "destination": "art-deliveries/references/environments/boypunk-neon-gameplay-reference-v1.png",
+      "sha256": "7730bef1c4edacff84fd42331fd0014a1deb94aeb5c6c7588ef5802cf28a0e4b",
+      "reason": "Composição de referência para leitura de cenário, plataformas, personagem, inimigos e altar."
+    },
+    {
+      "source": "WhatsApp Image 2026-10-31 at 20.27.00.jpeg",
+      "destination": "art-deliveries/references/environments/environment-overview-cyberpunk-pack-v1.jpeg",
+      "sha256": "013ef11fdd4ba30282c350cdc11b21ff20f8293ee3e9dbd6fbdae3d081808c62",
+      "reason": "Prancha geral de ambientes cyberpunk."
+    },
+    {
+      "source": "WhatsApp Image 2026-10-31 at 20.27.00 (1).jpeg",
+      "destination": "art-deliveries/references/environments/cyber-lab-ai-core-v1.jpeg",
+      "sha256": "53032288783cc854be22d9352208d9c8e707c85bd900fd2ae7bc307ddadda13e",
+      "reason": "Conceito de laboratório com núcleo/câmara de IA."
+    },
+    {
+      "source": "WhatsApp Image 2026-10-31 at 20.27.00 (2).jpeg",
+      "destination": "art-deliveries/references/environments/cyber-lab-server-room-v1.jpeg",
+      "sha256": "f081fdeb36071a69013edc07e382aa7ac65016a3a5d6a72edfba6085b92f7211",
+      "reason": "Conceito de sala de servidores Cyber Lab."
+    },
+    {
+      "source": "WhatsApp Image 2026-10-31 at 20.27.00 (3).jpeg",
+      "destination": "art-deliveries/references/environments/cyber-lab-robotics-workshop-v1.jpeg",
+      "sha256": "2d5b574b0987402667a8d20064873b8be9f95be41c6c566fd57f2f1581b3f3a8",
+      "reason": "Conceito de oficina robótica/laboratório."
+    },
+    {
+      "source": "WhatsApp Image 2026-10-31 at 20.27.00 (4).jpeg",
+      "destination": "art-deliveries/references/environments/neon-industrial-city-v1.jpeg",
+      "sha256": "0e576800ea439f3091b903ef7b48ac47ee18a5cbcc29018f6f9b3d03eb0d9c31",
+      "reason": "Conceito urbano-industrial neon."
+    },
+    {
+      "source": "WhatsApp Image 2026-10-31 at 20.27.00 (5).jpeg",
+      "destination": "art-deliveries/references/environments/cyber-lab-security-core-v1.jpeg",
+      "sha256": "13261300d4e1b3cc1156fede40368b4fdf9311b018bb5d2d29aebd7911b6f5e7",
+      "reason": "Conceito de núcleo de segurança/dados."
+    },
+    {
+      "source": "WhatsApp Image 2026-10-31 at 20.27.01.jpeg",
+      "destination": "art-deliveries/references/environments/energy-core-facility-v1.jpeg",
+      "sha256": "98fc84fa4f2f9d8c7784f94fc377d9aa90bbde27341ebc6912257e071b1c887d",
+      "reason": "Conceito de instalação com núcleo energético."
+    },
+    {
+      "source": "WhatsApp Image 2026-10-31 at 20.27.01 (1).jpeg",
+      "destination": "art-deliveries/references/environments/orbital-observatory-v1.jpeg",
+      "sha256": "75e4b35d4f7c6594ddf14a92d9c4f2e231e91b302b280bbef728162eec5ec5f9",
+      "reason": "Conceito de observatório/orbital tecnológico."
+    },
+    {
+      "source": "WhatsApp Image 2026-10-31 at 20.27.01 (2).jpeg",
+      "destination": "art-deliveries/references/environments/planetary-outpost-v1.jpeg",
+      "sha256": "30869a7ad2df12748863e7dc81889aaa44a5fe761c0adbbfdd52762002fe7fa0",
+      "reason": "Conceito de posto avançado planetário."
+    },
+    {
+      "source": "WhatsApp Image 2026-10-31 at 20.27.01 (3).jpeg",
+      "destination": "art-deliveries/references/environments/corporate-neon-tower-v1.jpeg",
+      "sha256": "f59c13d1c83c601ed0b7ac29b8f2bef1b124c2e7d0779db8c128658e0ce1a9b2",
+      "reason": "Conceito de torre corporativa neon."
+    },
+    {
+      "source": "WhatsApp Image 2026-10-31 at 20.27.01 (4).jpeg",
+      "destination": "art-deliveries/references/environments/virtual-test-zone-v1.jpeg",
+      "sha256": "585afcece8662d3e9f9e1389d84b40b63cc7bcd469870ffa7d125571623d3913",
+      "reason": "Conceito de zona virtual de testes."
+    },
+    {
+      "source": "WhatsApp Image 2026-10-31 at 20.27.02.jpeg",
+      "destination": "art-deliveries/references/environments/neon-city-platforms-v1.jpeg",
+      "sha256": "0254b5769e728f93bcd3fabd549a07390a4629f97e4ff25f4b4c7c2be3d5c4f7",
+      "reason": "Conceito de plataformas em cidade neon."
+    },
+    {
+      "source": "WhatsApp Image 2026-10-31 at 20.27.02 (1).jpeg",
+      "destination": "art-deliveries/references/environments/orbital-lab-v1.jpeg",
+      "sha256": "b2283ba3598407b01b6139698497df0c30514989fbee712c657a1ac1cb9a0c39",
+      "reason": "Conceito de laboratório orbital."
+    },
+    {
+      "source": "WhatsApp Image 2026-10-31 at 20.27.02 (2).jpeg",
+      "destination": "art-deliveries/references/environments/scrap-factory-red-v1.jpeg",
+      "sha256": "b97eeca5fad34856c1ccc50d32bf22bf551fe53e172ae7e3bc81b531c1df9192",
+      "reason": "Conceito industrial quente para Fábrica de Sucata."
+    },
+    {
+      "source": "WhatsApp Image 2026-10-31 at 20.27.02 (3).jpeg",
+      "destination": "art-deliveries/references/environments/arctic-tech-base-v1.jpeg",
+      "sha256": "e2ef962411d7b8fe7c0c52a6bde1f00e7cf40f5397964749a37c66fcf5d7b898",
+      "reason": "Conceito de base tecnológica ártica."
+    },
+    {
+      "source": "WhatsApp Image 2026-10-31 at 20.27.02 (4).jpeg",
+      "destination": "art-deliveries/references/environments/skull-neon-district-v1.jpeg",
+      "sha256": "5fa0bab989ef84f6f175615db264ebd8c8867fcbdb25a3b80d5434ed6b647f65",
+      "reason": "Conceito de distrito neon com marco de caveira."
+    },
+    {
+      "source": "WhatsApp Image 2026-10-31 at 20.27.02 (5).jpeg",
+      "destination": "art-deliveries/references/environments/underwater-cyber-lab-v1.jpeg",
+      "sha256": "5e98f4e4e7f4c589920e930be976e257f6102339bba2f0dadf4db60b60989666",
+      "reason": "Conceito de laboratório submarino."
+    }
+  ],
+  "contentComparisons": [
+    {
+      "finding": "Os três tilesets da pasta pass1 são idênticos aos finais e aos ativos.",
+      "method": "SHA-256",
+      "hashes": [
+        "11cfd732d97b53e1aa2371a0602080aadea5e9b96e24296e1123b9d427a1e843",
+        "996c490fb5db2ff23916013646d33c4842bf52122253eab61f8533191cd61b54",
+        "5a1943b461bac4f39818819f514ecee0fb797a320a4e386fd12fbcf01e7d80df"
+      ]
+    },
+    {
+      "finding": "Os três backgrounds pass1 diferem dos finais; os finais coincidem com os ativos.",
+      "method": "SHA-256"
+    },
+    {
+      "finding": "Os oito candidatos de personagens-v1 diferem dos oito frames ativos correspondentes.",
+      "method": "SHA-256"
+    },
+    {
+      "finding": "As 22 origens copiadas possuem hashes distintos entre si.",
+      "method": "SHA-256"
+    }
+  ],
+  "missingOrAmbiguous": [
+    {
+      "expected": "art-deliveries/references/html/",
+      "status": "not-created-no-confirmed-project-local-reference-html"
+    },
+    {
+      "expected": "boypunk-idle-source-v1.png",
+      "status": "organized-copy-created-from-confirmed-legacy-png",
+      "destination": "art-deliveries/references/characters/boypunk/boypunk-idle-source-v1.png"
+    },
+    {
+      "expected": "nilo-idle-source-v1.png",
+      "status": "organized-copy-created-from-malformed-legacy-name",
+      "destination": "art-deliveries/references/characters/nilo/nilo-idle-source-v1.png"
+    },
+    {
+      "expected": "art-deliveries/antigravity/nilo-idle-v*",
+      "status": "not-found"
+    },
+    {
+      "expected": "bg_distrito_neon_candidate_raw_1793815853722.jpg",
+      "status": "referenced-by-delivery-manifest-but-not-found-in-project"
+    }
+  ],
+  "futureDeliveryConventions": {
+    "characters": "art-deliveries/antigravity/<pacote-versionado>/{boypunk,nilo}/{classic,illustrated,portraits} plus previews, documentation and README.md; create only populated directories",
+    "environments": "art-deliveries/antigravity/<pacote-versionado>/{world,previews,documentation} plus README.md"
+  },
+  "undoCopies": {
+    "rule": "Remove only copies[].destination after verifying its SHA-256 still equals copies[].sha256. Preserve every source and all pre-existing deliveries/backups.",
+    "copyCount": 22
+  },
+  "protectedIntegrity": {
+    "baselineFileCount": 985,
+    "verifiedAfterOrganization": true,
+    "standardSha256sumVerifiedCount": 984,
+    "separatelyVerifiedCount": 1,
+    "separateVerification": {
+      "path": "art-deliveries/references/personagens/nilo-idle-source-v1.png\n\n4..png",
+      "sha256": "32d6007300211146fe10758769fa9046d46271621e9fcfb60b54fb2dc80e884b",
+      "reason": "O nome contém quebras de linha e não pode ser relido com segurança pelo formato textual de sha256sum; origem e cópia foram verificadas por leitura binária."
+    },
+    "changedProtectedFiles": []
+  }
+}

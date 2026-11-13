@@ -1,0 +1,52 @@
+{
+  "projectRoot": "/home/flow/Projetos/BoyPunk-Web",
+  "sourceVersion": "0.4.2",
+  "resumeId": "20261104T201615-0300-retomada-personagens-v2_1",
+  "priorIntegrationId": "20261104T190547-0300-personagens-v2_1",
+  "deliveryRoot": "art-deliveries/antigravity/personagens-v2.1",
+  "initialClassification": {
+    "A": 86,
+    "B": 0,
+    "C": 0,
+    "D": 0
+  },
+  "changedDuringResume": 0,
+  "finalClassification": {
+    "A": 86,
+    "B": 0,
+    "C": 0,
+    "D": 0
+  },
+  "finalActiveDecodes": 86,
+  "originalBackupVerified": 86,
+  "resumeCheckpointVerified": 86,
+  "protectedHashesVerified": 488,
+  "checks": {
+    "npmRunCheck": "passed",
+    "npmTest": "passed (28/28 files)"
+  },
+  "browser": {
+    "canonicalRoot": "/home/flow/Projetos/BoyPunk-Web",
+    "version": "0.4.2",
+    "urlClassic": "http://127.0.0.1:47831/?scale=1",
+    "urlIllustrated": "http://127.0.0.1:47831/?scale=2",
+    "isolatedProfileRemoved": true,
+    "cacheDisabled": true,
+    "assetsLoadedByGame": 86,
+    "assetsFetchedHashedDecoded": 86,
+    "assetMismatches": 0,
+    "frameSamples": 84,
+    "leftAttackSamples": 4,
+    "screenshots": 39,
+    "consoleErrors": 0,
+    "httpErrors": 0,
+    "canceledMediaOnNavigation": 3,
+    "demoObserved": true,
+    "coopObserved": true
+  },
+  "limitations": [
+    "Os PNGs de retrato são carregados e decodificados, mas a UI atual usa avatares HTML/CSS e não os desenha.",
+    "Os VFX atuais cobrem parcialmente os sprites nos instantes de dano e derrota.",
+    "Coop foi iniciado pela API de teste existente; controles físicos não foram testados."
+  ]
+}

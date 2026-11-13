@@ -1,0 +1,185 @@
+{
+  "package_name": "distrito-neon-parallax-v1",
+  "package_path": "/home/flow/Projetos/BoyPunk-Web/art-deliveries/antigravity/distrito-neon-parallax-v1",
+  "status": "ready_for_codex_review_not_integrated",
+  "project_root": "/home/flow/Projetos/BoyPunk-Web",
+  "verified_source_version": "0.4.2",
+  "active_reference_asset": {
+    "path": "assets/images/world/distrito-neon.png",
+    "manifest_key": "world.background",
+    "width": 1672,
+    "height": 941,
+    "mode": "RGB",
+    "bytes": 460337,
+    "sha256": "9e5abba5381ce8a729b507ffbc31d75c62d8873bf0bec9b6dbabec866435ceca"
+  },
+  "camera_verification": {
+    "logical_world_size": [
+      480,
+      270
+    ],
+    "logical_viewport_size": [
+      480,
+      270
+    ],
+    "has_mobile_camera": false,
+    "world_scroll_or_camera_xy": false,
+    "only_world_displacement": "Temporary screenShake on drawWorld (not applied to drawBackground or drawHud)",
+    "renderer_cover_crop": {
+      "sx": 0,
+      "sy": 0.25,
+      "sw": 1672,
+      "sh": 940.5,
+      "dest": [
+        0,
+        0,
+        480,
+        270
+      ]
+    },
+    "infinite_horizontal_wrap_compatible": false,
+    "note": "A arena atual possui camera fixa (480x270). As camadas nao produzirao parallax de camera sem uma decisao adicional de implementacao no renderer/camera."
+  },
+  "composite_fidelity_at_zero_offset": {
+    "rmse_4_layer_vs_active": 0.0,
+    "rmse_3_layer_vs_active": 0.0,
+    "max_channel_difference": 0
+  },
+  "layers_4_plane_set": [
+    {
+      "file": "layers/distrito-neon-sky.png",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "bytes": 78642,
+      "sha256": "006130e288f3013439aa5a23110a164eb1ce22b7dd965e2f3348f52cc60ad631",
+      "opaque_pixels": 1573352,
+      "transparent_pixels": 0,
+      "semitransparent_fringe_pixels": 0,
+      "opaque_ratio_percent": 100.0,
+      "transparent_ratio_percent": 0.0
+    },
+    {
+      "file": "layers/distrito-neon-skyline.png",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGBA",
+      "bytes": 67656,
+      "sha256": "c353e5e42a959e882beda3dca6819f91afe3680df0323378e0a728dfff2ed73f",
+      "opaque_pixels": 352590,
+      "transparent_pixels": 1220762,
+      "semitransparent_fringe_pixels": 0,
+      "opaque_ratio_percent": 22.41,
+      "transparent_ratio_percent": 77.59
+    },
+    {
+      "file": "layers/distrito-neon-industrial.png",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGBA",
+      "bytes": 212125,
+      "sha256": "dc65d227bce7a77ed214c6306c3cf8680d8b704911abbcd55ee4dbcf9edb17f7",
+      "opaque_pixels": 910686,
+      "transparent_pixels": 662666,
+      "semitransparent_fringe_pixels": 0,
+      "opaque_ratio_percent": 57.88,
+      "transparent_ratio_percent": 42.12
+    },
+    {
+      "file": "layers/distrito-neon-foreground.png",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGBA",
+      "bytes": 257111,
+      "sha256": "e4afd2896815e1d26b215e768b5f7824bf96d08381688a0fe77cc7d1b5bc03bc",
+      "opaque_pixels": 680638,
+      "transparent_pixels": 892714,
+      "semitransparent_fringe_pixels": 0,
+      "opaque_ratio_percent": 43.26,
+      "transparent_ratio_percent": 56.74
+    }
+  ],
+  "layers_3_plane_handoff_set": [
+    {
+      "file": "layers/distrito-neon-far.png",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "bytes": 118774,
+      "sha256": "18492027405ed0f64d70ccc2ffc05b166c36907c8281324f11cb5dbeb7e77371",
+      "opaque_pixels": 1573352,
+      "transparent_pixels": 0,
+      "semitransparent_fringe_pixels": 0,
+      "opaque_ratio_percent": 100.0,
+      "transparent_ratio_percent": 0.0
+    },
+    {
+      "file": "layers/distrito-neon-mid.png",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGBA",
+      "bytes": 212125,
+      "sha256": "dc65d227bce7a77ed214c6306c3cf8680d8b704911abbcd55ee4dbcf9edb17f7",
+      "opaque_pixels": 910686,
+      "transparent_pixels": 662666,
+      "semitransparent_fringe_pixels": 0,
+      "opaque_ratio_percent": 57.88,
+      "transparent_ratio_percent": 42.12
+    },
+    {
+      "file": "layers/distrito-neon-near.png",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGBA",
+      "bytes": 257111,
+      "sha256": "e4afd2896815e1d26b215e768b5f7824bf96d08381688a0fe77cc7d1b5bc03bc",
+      "opaque_pixels": 680638,
+      "transparent_pixels": 892714,
+      "semitransparent_fringe_pixels": 0,
+      "opaque_ratio_percent": 43.26,
+      "transparent_ratio_percent": 56.74
+    }
+  ],
+  "previews": [
+    {
+      "file": "previews/01-layers-decomposition-sheet.png",
+      "width": 1820,
+      "height": 1140,
+      "mode": "RGBA",
+      "bytes": 737002,
+      "sha256": "5bca1a4ef512ec3737192320c8ba66302bec034afe5f204e6b11c8c506b1f25f"
+    },
+    {
+      "file": "previews/02-full-composite-1672x941.png",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "bytes": 485862,
+      "sha256": "0543f5ca0f7028f1d6a143c0958ab01e66ce845eb6aa6de664bf53577b6330ed"
+    },
+    {
+      "file": "previews/03-active-vs-candidate-comparison.png",
+      "width": 1720,
+      "height": 560,
+      "mode": "RGBA",
+      "bytes": 453644,
+      "sha256": "8212e0b62be3d6cff9c252e2e60bccfa6606325cbbfaf70cde06d3574e1b7369"
+    },
+    {
+      "file": "previews/04-logical-480x270-and-grayscale.png",
+      "width": 1500,
+      "height": 620,
+      "mode": "RGBA",
+      "bytes": 307547,
+      "sha256": "b9ef732c47b090b93bd3eb8a18cc316741a7636f96c36175b78c5f7b62e62e93"
+    },
+    {
+      "file": "previews/05-zoomed-inspection-and-occlusion-reconstruction.png",
+      "width": 1620,
+      "height": 820,
+      "mode": "RGBA",
+      "bytes": 182670,
+      "sha256": "1748feb318dca5d19a3c7f62c2398607c9f5ea95fb82166ae55245194e8f329b"
+    }
+  ]
+}

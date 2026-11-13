@@ -1,0 +1,3130 @@
+{
+  "package_name": "personagens-v2",
+  "package_path": "/home/flow/Projetos/BoyPunk-Web/art-deliveries/antigravity/personagens-v2",
+  "status": "complete_ready_for_codex_integration",
+  "project_root": "/home/flow/Projetos/BoyPunk-Web",
+  "characters": {
+    "boypunk": {
+      "label": "BoyPunk (AX-7)",
+      "prefix": "playeranim",
+      "classic_count": 21,
+      "illustrated_count": 21,
+      "portrait_count": 1,
+      "states": {
+        "classic:idle": {
+          "frame_count": 4,
+          "fps": 5,
+          "loop": true,
+          "frames": [
+            {
+              "file": "boypunk/classic/playeranim-idle-000.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 923,
+              "sha256": "200d51a4071322e9e8e4222d43a64186dd5bf266890359c423cd315b81a87240",
+              "alpha_bbox": [
+                8,
+                34,
+                30,
+                63
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "boypunk/classic/playeranim-idle-001.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 910,
+              "sha256": "3f295d050b657e173d30aa28061bddb9d1b625f5e93b8b92f3cd6b625b7ff21b",
+              "alpha_bbox": [
+                8,
+                35,
+                30,
+                63
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "boypunk/classic/playeranim-idle-002.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 922,
+              "sha256": "80415db62cbf16dc7302860cbc8662521db5382831f3f2cc94c1896517877d7f",
+              "alpha_bbox": [
+                8,
+                34,
+                30,
+                63
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "boypunk/classic/playeranim-idle-003.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 930,
+              "sha256": "8832428beeed7755972e48a5baaace8fcc91bc9ae7c5218eefe5532d542db655",
+              "alpha_bbox": [
+                8,
+                34,
+                30,
+                63
+              ],
+              "below_ground_opaque_pixels": 0
+            }
+          ]
+        },
+        "classic:walk": {
+          "frame_count": 4,
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "file": "boypunk/classic/playeranim-walk-000.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 907,
+              "sha256": "6d427b84162f60888571449ed2f3fc0a6ebb803c8000da3340ca77acce5fc0ad",
+              "alpha_bbox": [
+                7,
+                35,
+                31,
+                63
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "boypunk/classic/playeranim-walk-001.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 917,
+              "sha256": "67dbaabf4a01149c822136d96abf938f7bed838953e0510f3e352d41dafdbb64",
+              "alpha_bbox": [
+                8,
+                34,
+                31,
+                63
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "boypunk/classic/playeranim-walk-002.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 909,
+              "sha256": "e79934dd31ad505ff975cd4ab6057a3e949f109c3e30e7095f5db687ceb61c45",
+              "alpha_bbox": [
+                7,
+                35,
+                30,
+                63
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "boypunk/classic/playeranim-walk-003.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 929,
+              "sha256": "c887d2b5901bdd93c36b94e3888ed86f74963cae8b2efa44c24ebd258decd0ad",
+              "alpha_bbox": [
+                8,
+                34,
+                30,
+                63
+              ],
+              "below_ground_opaque_pixels": 0
+            }
+          ]
+        },
+        "classic:jump": {
+          "frame_count": 1,
+          "fps": 1,
+          "loop": false,
+          "frames": [
+            {
+              "file": "boypunk/classic/playeranim-jump-000.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 917,
+              "sha256": "f5cb9e98a8e9a1167e5e839d1897c1939c7fbef17fbf4dead4500bbb7379a498",
+              "alpha_bbox": [
+                8,
+                32,
+                30,
+                59
+              ],
+              "below_ground_opaque_pixels": 0
+            }
+          ]
+        },
+        "classic:fall": {
+          "frame_count": 1,
+          "fps": 1,
+          "loop": false,
+          "frames": [
+            {
+              "file": "boypunk/classic/playeranim-fall-000.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 914,
+              "sha256": "2f2b024949eb307a464faf7950a8cd15aa916dba55e0b5fb7a76a0034e81e629",
+              "alpha_bbox": [
+                7,
+                33,
+                30,
+                60
+              ],
+              "below_ground_opaque_pixels": 0
+            }
+          ]
+        },
+        "classic:attack1": {
+          "frame_count": 4,
+          "fps": 22,
+          "loop": true,
+          "frames": [
+            {
+              "file": "boypunk/classic/playeranim-attack1-000.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 904,
+              "sha256": "f7befcfaa42ada75df0ec1d61eb1532184e2cd86516430f92b951122a8688b6c",
+              "alpha_bbox": [
+                8,
+                34,
+                37,
+                63
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "boypunk/classic/playeranim-attack1-001.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 915,
+              "sha256": "2bdf33742daa8e973042794ddf7e08cde55da323016d0d48079be6659f95aeaf",
+              "alpha_bbox": [
+                8,
+                34,
+                44,
+                63
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "boypunk/classic/playeranim-attack1-002.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 965,
+              "sha256": "cbcfd69128a925e8ddfd0161b36e7821470bd300b4463430b1d707a87efe21a7",
+              "alpha_bbox": [
+                8,
+                34,
+                47,
+                63
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "boypunk/classic/playeranim-attack1-003.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 911,
+              "sha256": "89fac5e54c645622672d071fadd2bdeb77bba8a055198da1fbc2e05d40ece116",
+              "alpha_bbox": [
+                8,
+                34,
+                37,
+                63
+              ],
+              "below_ground_opaque_pixels": 0
+            }
+          ]
+        },
+        "classic:hurt": {
+          "frame_count": 3,
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "file": "boypunk/classic/playeranim-hurt-000.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 927,
+              "sha256": "6704eaa842735ee6087050af4e8e519e7c27414ab26df9561af95d9991c7c6a4",
+              "alpha_bbox": [
+                6,
+                34,
+                26,
+                63
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "boypunk/classic/playeranim-hurt-001.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 899,
+              "sha256": "ba9a1d1652bc4029b26d5f612c141ae164c7fbf6aaae140a61869ef251faf6ba",
+              "alpha_bbox": [
+                6,
+                34,
+                26,
+                63
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "boypunk/classic/playeranim-hurt-002.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 924,
+              "sha256": "829be41bb809d960a1f791580e53887d1e37aedbb529d944e1800fd010f5b24a",
+              "alpha_bbox": [
+                7,
+                34,
+                29,
+                63
+              ],
+              "below_ground_opaque_pixels": 0
+            }
+          ]
+        },
+        "classic:die": {
+          "frame_count": 4,
+          "fps": 10,
+          "loop": false,
+          "frames": [
+            {
+              "file": "boypunk/classic/playeranim-die-000.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 927,
+              "sha256": "6704eaa842735ee6087050af4e8e519e7c27414ab26df9561af95d9991c7c6a4",
+              "alpha_bbox": [
+                6,
+                34,
+                26,
+                63
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "boypunk/classic/playeranim-die-001.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 818,
+              "sha256": "4c676ecfc2b263558c56395c6bb8ac34eb9c2b88adaac53c7366945c32b89004",
+              "alpha_bbox": [
+                7,
+                40,
+                30,
+                63
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "boypunk/classic/playeranim-die-002.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 713,
+              "sha256": "b9836c7498cadfd890556069041079cd671386300a64f6a7602fe73476559a4a",
+              "alpha_bbox": [
+                8,
+                47,
+                31,
+                63
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "boypunk/classic/playeranim-die-003.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 658,
+              "sha256": "e6b20f677a91841be49f8bef78ecd9ae2b5fa1900ce7389567bf49b749ef52e7",
+              "alpha_bbox": [
+                6,
+                53,
+                41,
+                63
+              ],
+              "below_ground_opaque_pixels": 0
+            }
+          ]
+        },
+        "illustrated:idle": {
+          "frame_count": 4,
+          "fps": 5,
+          "loop": true,
+          "frames": [
+            {
+              "file": "boypunk/illustrated/playeranim-idle-000.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 1706,
+              "sha256": "5ff3fb9be9ef1016364752db451fdc89f658edda7dadaa8dffc79ebe26588db3",
+              "alpha_bbox": [
+                18,
+                49,
+                77,
+                127
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "boypunk/illustrated/playeranim-idle-001.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 1727,
+              "sha256": "ddcf003c80fffaab5629891337701b9cbf8ae501c68fb0d10774b3c99c0e85cc",
+              "alpha_bbox": [
+                18,
+                50,
+                77,
+                127
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "boypunk/illustrated/playeranim-idle-002.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 1726,
+              "sha256": "0ed530054cdd22b38206ceb33d4d1e2c062cb21af28590da44948a9d199c5f5c",
+              "alpha_bbox": [
+                18,
+                49,
+                77,
+                127
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "boypunk/illustrated/playeranim-idle-003.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 1695,
+              "sha256": "1049008b2363e07ccd53641109be995ceab22acffca9a8ca10db68c4dbade963",
+              "alpha_bbox": [
+                18,
+                50,
+                77,
+                127
+              ],
+              "below_ground_opaque_pixels": 0
+            }
+          ]
+        },
+        "illustrated:walk": {
+          "frame_count": 4,
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "file": "boypunk/illustrated/playeranim-walk-000.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 1805,
+              "sha256": "713fb4ffd7034abb6350f6d30d8783fd29b5d614f7d50c68e5e1c3adf09862a2",
+              "alpha_bbox": [
+                13,
+                50,
+                77,
+                127
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "boypunk/illustrated/playeranim-walk-001.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 1695,
+              "sha256": "5677cea12a6c75a40483c7d709d6b7db4c603aa134de72828b2c83b0f57bdc4a",
+              "alpha_bbox": [
+                19,
+                48,
+                77,
+                127
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "boypunk/illustrated/playeranim-walk-002.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 1815,
+              "sha256": "24c75b19edf15ea111054d44a3885d0aea101c7f4fbd0885446c24e8cf2e4f02",
+              "alpha_bbox": [
+                13,
+                50,
+                77,
+                127
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "boypunk/illustrated/playeranim-walk-003.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 1701,
+              "sha256": "213424781180441eb19922bdadb3b6bc1acfe39b083ebda7c87a506ef71660d8",
+              "alpha_bbox": [
+                19,
+                48,
+                77,
+                127
+              ],
+              "below_ground_opaque_pixels": 0
+            }
+          ]
+        },
+        "illustrated:jump": {
+          "frame_count": 1,
+          "fps": 1,
+          "loop": false,
+          "frames": [
+            {
+              "file": "boypunk/illustrated/playeranim-jump-000.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 1857,
+              "sha256": "20e83cab766708e65f494bc5a0374d4079b50b65b98b7244a00cf3aa58b30dbe",
+              "alpha_bbox": [
+                17,
+                44,
+                77,
+                119
+              ],
+              "below_ground_opaque_pixels": 0
+            }
+          ]
+        },
+        "illustrated:fall": {
+          "frame_count": 1,
+          "fps": 1,
+          "loop": false,
+          "frames": [
+            {
+              "file": "boypunk/illustrated/playeranim-fall-000.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 1836,
+              "sha256": "52a72339b2c80bb8453178bbc1b7f48a07408cb6f19ad6835acf8bca4c5cfb68",
+              "alpha_bbox": [
+                16,
+                46,
+                77,
+                121
+              ],
+              "below_ground_opaque_pixels": 0
+            }
+          ]
+        },
+        "illustrated:attack1": {
+          "frame_count": 4,
+          "fps": 22,
+          "loop": true,
+          "frames": [
+            {
+              "file": "boypunk/illustrated/playeranim-attack1-000.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 1728,
+              "sha256": "5499840a1a09060cf72a813346c7a938eaaebeb0820626a64df0511f5f34f4fe",
+              "alpha_bbox": [
+                18,
+                49,
+                81,
+                127
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "boypunk/illustrated/playeranim-attack1-001.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 1852,
+              "sha256": "d7ebc6ea1dbc3ada4239f9b1207a887b3b081e05b0550e9eeee3dbdcc6aed77d",
+              "alpha_bbox": [
+                18,
+                49,
+                89,
+                127
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "boypunk/illustrated/playeranim-attack1-002.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 1967,
+              "sha256": "09afa27e4c60b444603f86ad1868c6e93e4afd4d64426d51bf7053e4df201723",
+              "alpha_bbox": [
+                18,
+                49,
+                98,
+                127
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "boypunk/illustrated/playeranim-attack1-003.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 1710,
+              "sha256": "50a53aa37077466c6fa8bd506a9d384974802e8407d759e0d97fc3f1ca921399",
+              "alpha_bbox": [
+                18,
+                49,
+                80,
+                127
+              ],
+              "below_ground_opaque_pixels": 0
+            }
+          ]
+        },
+        "illustrated:hurt": {
+          "frame_count": 3,
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "file": "boypunk/illustrated/playeranim-hurt-000.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 1894,
+              "sha256": "a8c122470fdc996490fe9a240c00747e17162d3e44733621e08c8504ca554ae0",
+              "alpha_bbox": [
+                14,
+                49,
+                71,
+                127
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "boypunk/illustrated/playeranim-hurt-001.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 1478,
+              "sha256": "b3064d0838f706eb3863e50b12d7e2f95be3071a76e77b0b525580849537cf46",
+              "alpha_bbox": [
+                14,
+                49,
+                71,
+                127
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "boypunk/illustrated/playeranim-hurt-002.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 1894,
+              "sha256": "a8c122470fdc996490fe9a240c00747e17162d3e44733621e08c8504ca554ae0",
+              "alpha_bbox": [
+                14,
+                49,
+                71,
+                127
+              ],
+              "below_ground_opaque_pixels": 0
+            }
+          ]
+        },
+        "illustrated:die": {
+          "frame_count": 4,
+          "fps": 10,
+          "loop": false,
+          "frames": [
+            {
+              "file": "boypunk/illustrated/playeranim-die-000.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 1894,
+              "sha256": "a8c122470fdc996490fe9a240c00747e17162d3e44733621e08c8504ca554ae0",
+              "alpha_bbox": [
+                14,
+                49,
+                71,
+                127
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "boypunk/illustrated/playeranim-die-001.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 1800,
+              "sha256": "e1b777945c8a7247620cb86e88fe4df251a48159b2f6c2ffb318d3412c596233",
+              "alpha_bbox": [
+                13,
+                60,
+                72,
+                127
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "boypunk/illustrated/playeranim-die-002.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 1598,
+              "sha256": "4bf60580efce731a6420a8eedd2828ec88e812fcaafa28512792c2e338eaf8ba",
+              "alpha_bbox": [
+                20,
+                70,
+                78,
+                127
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "boypunk/illustrated/playeranim-die-003.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 823,
+              "sha256": "17a537a77e49dad3fb81221b44cfee18183ac8fdf2d9278bdea826745a999c89",
+              "alpha_bbox": [
+                18,
+                111,
+                85,
+                127
+              ],
+              "below_ground_opaque_pixels": 0
+            }
+          ]
+        }
+      },
+      "files": [
+        {
+          "file": "boypunk/classic/playeranim-idle-000.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 923,
+          "sha256": "200d51a4071322e9e8e4222d43a64186dd5bf266890359c423cd315b81a87240",
+          "alpha_bbox": [
+            8,
+            34,
+            30,
+            63
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/classic/playeranim-idle-001.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 910,
+          "sha256": "3f295d050b657e173d30aa28061bddb9d1b625f5e93b8b92f3cd6b625b7ff21b",
+          "alpha_bbox": [
+            8,
+            35,
+            30,
+            63
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/classic/playeranim-idle-002.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 922,
+          "sha256": "80415db62cbf16dc7302860cbc8662521db5382831f3f2cc94c1896517877d7f",
+          "alpha_bbox": [
+            8,
+            34,
+            30,
+            63
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/classic/playeranim-idle-003.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 930,
+          "sha256": "8832428beeed7755972e48a5baaace8fcc91bc9ae7c5218eefe5532d542db655",
+          "alpha_bbox": [
+            8,
+            34,
+            30,
+            63
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/classic/playeranim-walk-000.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 907,
+          "sha256": "6d427b84162f60888571449ed2f3fc0a6ebb803c8000da3340ca77acce5fc0ad",
+          "alpha_bbox": [
+            7,
+            35,
+            31,
+            63
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/classic/playeranim-walk-001.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 917,
+          "sha256": "67dbaabf4a01149c822136d96abf938f7bed838953e0510f3e352d41dafdbb64",
+          "alpha_bbox": [
+            8,
+            34,
+            31,
+            63
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/classic/playeranim-walk-002.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 909,
+          "sha256": "e79934dd31ad505ff975cd4ab6057a3e949f109c3e30e7095f5db687ceb61c45",
+          "alpha_bbox": [
+            7,
+            35,
+            30,
+            63
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/classic/playeranim-walk-003.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 929,
+          "sha256": "c887d2b5901bdd93c36b94e3888ed86f74963cae8b2efa44c24ebd258decd0ad",
+          "alpha_bbox": [
+            8,
+            34,
+            30,
+            63
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/classic/playeranim-jump-000.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 917,
+          "sha256": "f5cb9e98a8e9a1167e5e839d1897c1939c7fbef17fbf4dead4500bbb7379a498",
+          "alpha_bbox": [
+            8,
+            32,
+            30,
+            59
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/classic/playeranim-fall-000.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 914,
+          "sha256": "2f2b024949eb307a464faf7950a8cd15aa916dba55e0b5fb7a76a0034e81e629",
+          "alpha_bbox": [
+            7,
+            33,
+            30,
+            60
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/classic/playeranim-attack1-000.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 904,
+          "sha256": "f7befcfaa42ada75df0ec1d61eb1532184e2cd86516430f92b951122a8688b6c",
+          "alpha_bbox": [
+            8,
+            34,
+            37,
+            63
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/classic/playeranim-attack1-001.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 915,
+          "sha256": "2bdf33742daa8e973042794ddf7e08cde55da323016d0d48079be6659f95aeaf",
+          "alpha_bbox": [
+            8,
+            34,
+            44,
+            63
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/classic/playeranim-attack1-002.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 965,
+          "sha256": "cbcfd69128a925e8ddfd0161b36e7821470bd300b4463430b1d707a87efe21a7",
+          "alpha_bbox": [
+            8,
+            34,
+            47,
+            63
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/classic/playeranim-attack1-003.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 911,
+          "sha256": "89fac5e54c645622672d071fadd2bdeb77bba8a055198da1fbc2e05d40ece116",
+          "alpha_bbox": [
+            8,
+            34,
+            37,
+            63
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/classic/playeranim-hurt-000.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 927,
+          "sha256": "6704eaa842735ee6087050af4e8e519e7c27414ab26df9561af95d9991c7c6a4",
+          "alpha_bbox": [
+            6,
+            34,
+            26,
+            63
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/classic/playeranim-hurt-001.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 899,
+          "sha256": "ba9a1d1652bc4029b26d5f612c141ae164c7fbf6aaae140a61869ef251faf6ba",
+          "alpha_bbox": [
+            6,
+            34,
+            26,
+            63
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/classic/playeranim-hurt-002.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 924,
+          "sha256": "829be41bb809d960a1f791580e53887d1e37aedbb529d944e1800fd010f5b24a",
+          "alpha_bbox": [
+            7,
+            34,
+            29,
+            63
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/classic/playeranim-die-000.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 927,
+          "sha256": "6704eaa842735ee6087050af4e8e519e7c27414ab26df9561af95d9991c7c6a4",
+          "alpha_bbox": [
+            6,
+            34,
+            26,
+            63
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/classic/playeranim-die-001.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 818,
+          "sha256": "4c676ecfc2b263558c56395c6bb8ac34eb9c2b88adaac53c7366945c32b89004",
+          "alpha_bbox": [
+            7,
+            40,
+            30,
+            63
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/classic/playeranim-die-002.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 713,
+          "sha256": "b9836c7498cadfd890556069041079cd671386300a64f6a7602fe73476559a4a",
+          "alpha_bbox": [
+            8,
+            47,
+            31,
+            63
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/classic/playeranim-die-003.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 658,
+          "sha256": "e6b20f677a91841be49f8bef78ecd9ae2b5fa1900ce7389567bf49b749ef52e7",
+          "alpha_bbox": [
+            6,
+            53,
+            41,
+            63
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/illustrated/playeranim-idle-000.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 1706,
+          "sha256": "5ff3fb9be9ef1016364752db451fdc89f658edda7dadaa8dffc79ebe26588db3",
+          "alpha_bbox": [
+            18,
+            49,
+            77,
+            127
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/illustrated/playeranim-idle-001.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 1727,
+          "sha256": "ddcf003c80fffaab5629891337701b9cbf8ae501c68fb0d10774b3c99c0e85cc",
+          "alpha_bbox": [
+            18,
+            50,
+            77,
+            127
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/illustrated/playeranim-idle-002.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 1726,
+          "sha256": "0ed530054cdd22b38206ceb33d4d1e2c062cb21af28590da44948a9d199c5f5c",
+          "alpha_bbox": [
+            18,
+            49,
+            77,
+            127
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/illustrated/playeranim-idle-003.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 1695,
+          "sha256": "1049008b2363e07ccd53641109be995ceab22acffca9a8ca10db68c4dbade963",
+          "alpha_bbox": [
+            18,
+            50,
+            77,
+            127
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/illustrated/playeranim-walk-000.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 1805,
+          "sha256": "713fb4ffd7034abb6350f6d30d8783fd29b5d614f7d50c68e5e1c3adf09862a2",
+          "alpha_bbox": [
+            13,
+            50,
+            77,
+            127
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/illustrated/playeranim-walk-001.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 1695,
+          "sha256": "5677cea12a6c75a40483c7d709d6b7db4c603aa134de72828b2c83b0f57bdc4a",
+          "alpha_bbox": [
+            19,
+            48,
+            77,
+            127
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/illustrated/playeranim-walk-002.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 1815,
+          "sha256": "24c75b19edf15ea111054d44a3885d0aea101c7f4fbd0885446c24e8cf2e4f02",
+          "alpha_bbox": [
+            13,
+            50,
+            77,
+            127
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/illustrated/playeranim-walk-003.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 1701,
+          "sha256": "213424781180441eb19922bdadb3b6bc1acfe39b083ebda7c87a506ef71660d8",
+          "alpha_bbox": [
+            19,
+            48,
+            77,
+            127
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/illustrated/playeranim-jump-000.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 1857,
+          "sha256": "20e83cab766708e65f494bc5a0374d4079b50b65b98b7244a00cf3aa58b30dbe",
+          "alpha_bbox": [
+            17,
+            44,
+            77,
+            119
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/illustrated/playeranim-fall-000.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 1836,
+          "sha256": "52a72339b2c80bb8453178bbc1b7f48a07408cb6f19ad6835acf8bca4c5cfb68",
+          "alpha_bbox": [
+            16,
+            46,
+            77,
+            121
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/illustrated/playeranim-attack1-000.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 1728,
+          "sha256": "5499840a1a09060cf72a813346c7a938eaaebeb0820626a64df0511f5f34f4fe",
+          "alpha_bbox": [
+            18,
+            49,
+            81,
+            127
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/illustrated/playeranim-attack1-001.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 1852,
+          "sha256": "d7ebc6ea1dbc3ada4239f9b1207a887b3b081e05b0550e9eeee3dbdcc6aed77d",
+          "alpha_bbox": [
+            18,
+            49,
+            89,
+            127
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/illustrated/playeranim-attack1-002.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 1967,
+          "sha256": "09afa27e4c60b444603f86ad1868c6e93e4afd4d64426d51bf7053e4df201723",
+          "alpha_bbox": [
+            18,
+            49,
+            98,
+            127
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/illustrated/playeranim-attack1-003.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 1710,
+          "sha256": "50a53aa37077466c6fa8bd506a9d384974802e8407d759e0d97fc3f1ca921399",
+          "alpha_bbox": [
+            18,
+            49,
+            80,
+            127
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/illustrated/playeranim-hurt-000.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 1894,
+          "sha256": "a8c122470fdc996490fe9a240c00747e17162d3e44733621e08c8504ca554ae0",
+          "alpha_bbox": [
+            14,
+            49,
+            71,
+            127
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/illustrated/playeranim-hurt-001.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 1478,
+          "sha256": "b3064d0838f706eb3863e50b12d7e2f95be3071a76e77b0b525580849537cf46",
+          "alpha_bbox": [
+            14,
+            49,
+            71,
+            127
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/illustrated/playeranim-hurt-002.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 1894,
+          "sha256": "a8c122470fdc996490fe9a240c00747e17162d3e44733621e08c8504ca554ae0",
+          "alpha_bbox": [
+            14,
+            49,
+            71,
+            127
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/illustrated/playeranim-die-000.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 1894,
+          "sha256": "a8c122470fdc996490fe9a240c00747e17162d3e44733621e08c8504ca554ae0",
+          "alpha_bbox": [
+            14,
+            49,
+            71,
+            127
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/illustrated/playeranim-die-001.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 1800,
+          "sha256": "e1b777945c8a7247620cb86e88fe4df251a48159b2f6c2ffb318d3412c596233",
+          "alpha_bbox": [
+            13,
+            60,
+            72,
+            127
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/illustrated/playeranim-die-002.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 1598,
+          "sha256": "4bf60580efce731a6420a8eedd2828ec88e812fcaafa28512792c2e338eaf8ba",
+          "alpha_bbox": [
+            20,
+            70,
+            78,
+            127
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/illustrated/playeranim-die-003.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 823,
+          "sha256": "17a537a77e49dad3fb81221b44cfee18183ac8fdf2d9278bdea826745a999c89",
+          "alpha_bbox": [
+            18,
+            111,
+            85,
+            127
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "boypunk/portraits/player-portrait-000.png",
+          "width": 32,
+          "height": 32,
+          "mode": "RGBA",
+          "bytes": 724,
+          "sha256": "25934f8f4dad129635f8ca6e3043920dd6f3c57afd6af95f6356fb31c81f45d5"
+        }
+      ],
+      "portrait": {
+        "file": "boypunk/portraits/player-portrait-000.png",
+        "width": 32,
+        "height": 32,
+        "mode": "RGBA",
+        "bytes": 724,
+        "sha256": "25934f8f4dad129635f8ca6e3043920dd6f3c57afd6af95f6356fb31c81f45d5"
+      }
+    },
+    "nilo": {
+      "label": "Nilo (Support)",
+      "prefix": "nilo",
+      "classic_count": 21,
+      "illustrated_count": 21,
+      "portrait_count": 1,
+      "states": {
+        "classic:idle": {
+          "frame_count": 4,
+          "fps": 5,
+          "loop": true,
+          "frames": [
+            {
+              "file": "nilo/classic/nilo-idle-000.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 924,
+              "sha256": "4d38933a20bc90e3c62ed0a8566f19cedea3c62961053701323f820526e787d6",
+              "alpha_bbox": [
+                10,
+                30,
+                35,
+                63
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "nilo/classic/nilo-idle-001.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 922,
+              "sha256": "c27e12a77617ca2b8adce98520c9854585302c3d1f4127284f1631c889deb04e",
+              "alpha_bbox": [
+                10,
+                30,
+                35,
+                63
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "nilo/classic/nilo-idle-002.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 929,
+              "sha256": "58e00510b848f9bea0e8d2cf3710aeb23c211e0a7bb911abe2b79106e190e97b",
+              "alpha_bbox": [
+                10,
+                31,
+                35,
+                63
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "nilo/classic/nilo-idle-003.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 924,
+              "sha256": "4d38933a20bc90e3c62ed0a8566f19cedea3c62961053701323f820526e787d6",
+              "alpha_bbox": [
+                10,
+                30,
+                35,
+                63
+              ],
+              "below_ground_opaque_pixels": 0
+            }
+          ]
+        },
+        "classic:walk": {
+          "frame_count": 4,
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "file": "nilo/classic/nilo-walk-000.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 970,
+              "sha256": "b8489f282488da88356115af4fbef6eda50c5931893d91af66f50fbffefc7c1a",
+              "alpha_bbox": [
+                8,
+                30,
+                35,
+                63
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "nilo/classic/nilo-walk-001.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 903,
+              "sha256": "13a939df953b2c093cfddce0612b5e960619908e920759a6f271d1ea41ea1691",
+              "alpha_bbox": [
+                10,
+                29,
+                35,
+                63
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "nilo/classic/nilo-walk-002.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 954,
+              "sha256": "ccd96ef7ca03c3290de60ec73196a7829d58bcec597a2c4bf74c31ff4c112fca",
+              "alpha_bbox": [
+                10,
+                30,
+                35,
+                63
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "nilo/classic/nilo-walk-003.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 911,
+              "sha256": "6f71d7bd6dddf23a645262c203b63cd82e7d2fa1bbc961f7bb97faa903258706",
+              "alpha_bbox": [
+                10,
+                29,
+                35,
+                63
+              ],
+              "below_ground_opaque_pixels": 0
+            }
+          ]
+        },
+        "classic:jump": {
+          "frame_count": 1,
+          "fps": 1,
+          "loop": false,
+          "frames": [
+            {
+              "file": "nilo/classic/nilo-jump-000.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 927,
+              "sha256": "3350bdd9fff187d3b45e8fa2708ff858fabf4b5aea01a853b1f6803e003788d0",
+              "alpha_bbox": [
+                10,
+                27,
+                35,
+                59
+              ],
+              "below_ground_opaque_pixels": 0
+            }
+          ]
+        },
+        "classic:fall": {
+          "frame_count": 1,
+          "fps": 1,
+          "loop": false,
+          "frames": [
+            {
+              "file": "nilo/classic/nilo-fall-000.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 974,
+              "sha256": "51ae3fcb65dd2a400e771610c3c0b709f19ef97e34a60c6049b2e91b9f16c4a3",
+              "alpha_bbox": [
+                10,
+                28,
+                35,
+                60
+              ],
+              "below_ground_opaque_pixels": 0
+            }
+          ]
+        },
+        "classic:attack1": {
+          "frame_count": 4,
+          "fps": 22,
+          "loop": true,
+          "frames": [
+            {
+              "file": "nilo/classic/nilo-attack1-000.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 987,
+              "sha256": "b76a3ae273a4a1a7c69d4f1c2d5b0cd7b16b1dafff6ad8182b95a2e399df6c41",
+              "alpha_bbox": [
+                9,
+                30,
+                38,
+                63
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "nilo/classic/nilo-attack1-001.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 966,
+              "sha256": "dc9a0d7abae091f748c549b8e4ff11acdd55c8f8261a0a5d8ac2660b408a03ec",
+              "alpha_bbox": [
+                9,
+                30,
+                37,
+                63
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "nilo/classic/nilo-attack1-002.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 1019,
+              "sha256": "8744d6fa240600220326d1a7e1bc996482fe985c845984eafa9cac630fdbc33c",
+              "alpha_bbox": [
+                9,
+                30,
+                42,
+                63
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "nilo/classic/nilo-attack1-003.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 993,
+              "sha256": "ecfd86472fe677f2147a7cb9e694472b8662a6f060bbd2d9bdc107f08a387220",
+              "alpha_bbox": [
+                9,
+                30,
+                40,
+                63
+              ],
+              "below_ground_opaque_pixels": 0
+            }
+          ]
+        },
+        "classic:hurt": {
+          "frame_count": 3,
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "file": "nilo/classic/nilo-hurt-000.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 953,
+              "sha256": "6513925cd7929e8a17be4f28a6a223329ade506827c0b4540f9a03559b8e272e",
+              "alpha_bbox": [
+                9,
+                30,
+                33,
+                63
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "nilo/classic/nilo-hurt-001.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 966,
+              "sha256": "0c470510e090b8c1077723645dd5e551579e8ba528ab9b45e6af40daf6e86f5b",
+              "alpha_bbox": [
+                8,
+                31,
+                31,
+                63
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "nilo/classic/nilo-hurt-002.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 953,
+              "sha256": "6513925cd7929e8a17be4f28a6a223329ade506827c0b4540f9a03559b8e272e",
+              "alpha_bbox": [
+                9,
+                30,
+                33,
+                63
+              ],
+              "below_ground_opaque_pixels": 0
+            }
+          ]
+        },
+        "classic:die": {
+          "frame_count": 4,
+          "fps": 10,
+          "loop": false,
+          "frames": [
+            {
+              "file": "nilo/classic/nilo-die-000.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 949,
+              "sha256": "edb89b1555a814e8782443b3e092ed03c162b78850bb53dfd0a117bc874318e8",
+              "alpha_bbox": [
+                9,
+                32,
+                33,
+                63
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "nilo/classic/nilo-die-001.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 889,
+              "sha256": "36ca7259d9621cda03c253a3becfd1e25e3d588fd41ad1e9963bb7e7e18140f2",
+              "alpha_bbox": [
+                9,
+                36,
+                33,
+                63
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "nilo/classic/nilo-die-002.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 872,
+              "sha256": "455bf85b9495803b6ae301cb398b3c028136910775d9ab7e2ede62dfc9ea406e",
+              "alpha_bbox": [
+                6,
+                40,
+                36,
+                63
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "nilo/classic/nilo-die-003.png",
+              "width": 64,
+              "height": 96,
+              "mode": "RGBA",
+              "bytes": 535,
+              "sha256": "2ddc83d9972f509fac976d65c61325c86747247433dcc084a705d3ec416d5394",
+              "alpha_bbox": [
+                9,
+                53,
+                37,
+                63
+              ],
+              "below_ground_opaque_pixels": 0
+            }
+          ]
+        },
+        "illustrated:idle": {
+          "frame_count": 4,
+          "fps": 5,
+          "loop": true,
+          "frames": [
+            {
+              "file": "nilo/illustrated/nilo-idle-000.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 1174,
+              "sha256": "31bf43abebfdb84a50eb47b067101b37551c47ed39c2554a159d91749cf22bf5",
+              "alpha_bbox": [
+                20,
+                60,
+                72,
+                127
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "nilo/illustrated/nilo-idle-001.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 1181,
+              "sha256": "ccb5ab4f2fa243bd6e9a176ff1d7cc5c8bca039567206acf00558890247c2095",
+              "alpha_bbox": [
+                20,
+                60,
+                72,
+                127
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "nilo/illustrated/nilo-idle-002.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 1164,
+              "sha256": "86029f76ef73e30e20dd1ae14796e86068b23d797149b3b80745144d8d462f73",
+              "alpha_bbox": [
+                20,
+                62,
+                72,
+                127
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "nilo/illustrated/nilo-idle-003.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 1174,
+              "sha256": "31bf43abebfdb84a50eb47b067101b37551c47ed39c2554a159d91749cf22bf5",
+              "alpha_bbox": [
+                20,
+                60,
+                72,
+                127
+              ],
+              "below_ground_opaque_pixels": 0
+            }
+          ]
+        },
+        "illustrated:walk": {
+          "frame_count": 4,
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "file": "nilo/illustrated/nilo-walk-000.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 1246,
+              "sha256": "ca2d63057fee9094bb68039b32cba2c22062673b82274e67bf79cf20a9d460e0",
+              "alpha_bbox": [
+                14,
+                60,
+                72,
+                127
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "nilo/illustrated/nilo-walk-001.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 1140,
+              "sha256": "d28262474a6222941f154cc52cf814df0d5c382d6fad181cccc9d500884584f3",
+              "alpha_bbox": [
+                20,
+                58,
+                72,
+                127
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "nilo/illustrated/nilo-walk-002.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 1217,
+              "sha256": "fc8795573ec3cf150eb9629cc0c4fccacfc639375ec2837c55a019f73bbc2846",
+              "alpha_bbox": [
+                18,
+                60,
+                72,
+                127
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "nilo/illustrated/nilo-walk-003.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 1160,
+              "sha256": "91de1a5fa9c4ea91c127304ae069ad05adcfc09b76d2ee5ed021fd7ddeb8af28",
+              "alpha_bbox": [
+                20,
+                58,
+                72,
+                127
+              ],
+              "below_ground_opaque_pixels": 0
+            }
+          ]
+        },
+        "illustrated:jump": {
+          "frame_count": 1,
+          "fps": 1,
+          "loop": false,
+          "frames": [
+            {
+              "file": "nilo/illustrated/nilo-jump-000.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 1225,
+              "sha256": "1312ab6c987de99385ea479d44edc38f7de4813944fcb7d5c4a99e94f8e04bb0",
+              "alpha_bbox": [
+                18,
+                54,
+                72,
+                118
+              ],
+              "below_ground_opaque_pixels": 0
+            }
+          ]
+        },
+        "illustrated:fall": {
+          "frame_count": 1,
+          "fps": 1,
+          "loop": false,
+          "frames": [
+            {
+              "file": "nilo/illustrated/nilo-fall-000.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 1230,
+              "sha256": "fae36088a09fe885c48b2f25e55b37ea3b2fe1acd4244df7d01beaaadbf192f3",
+              "alpha_bbox": [
+                18,
+                56,
+                72,
+                120
+              ],
+              "below_ground_opaque_pixels": 0
+            }
+          ]
+        },
+        "illustrated:attack1": {
+          "frame_count": 4,
+          "fps": 22,
+          "loop": true,
+          "frames": [
+            {
+              "file": "nilo/illustrated/nilo-attack1-000.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 1324,
+              "sha256": "d4564d2eab9b85727a091045a8f595f94e41cfc9564398b8550e7bc2177960bc",
+              "alpha_bbox": [
+                16,
+                60,
+                79,
+                127
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "nilo/illustrated/nilo-attack1-001.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 1312,
+              "sha256": "7d5ab488fc60bbd5cd1201ad7e54424286523cab488cce7bdeeea4c5dd368da1",
+              "alpha_bbox": [
+                16,
+                60,
+                77,
+                127
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "nilo/illustrated/nilo-attack1-002.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 1391,
+              "sha256": "1f530b21485139644107b165f0a8c96496991cedfdc5ccec8ed278ad2166d005",
+              "alpha_bbox": [
+                16,
+                60,
+                88,
+                127
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "nilo/illustrated/nilo-attack1-003.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 1273,
+              "sha256": "0440edfaf287760f0bb37ca46084b35adbf8dc0bc82a23c6e58670fcf6c7e0a4",
+              "alpha_bbox": [
+                16,
+                60,
+                82,
+                127
+              ],
+              "below_ground_opaque_pixels": 0
+            }
+          ]
+        },
+        "illustrated:hurt": {
+          "frame_count": 3,
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "file": "nilo/illustrated/nilo-hurt-000.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 1166,
+              "sha256": "6a4eb69a43597481b1ad0ff0a9aaef40610d2b62b97cf852ac4552b3bc36ded9",
+              "alpha_bbox": [
+                16,
+                60,
+                68,
+                127
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "nilo/illustrated/nilo-hurt-001.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 1198,
+              "sha256": "fa9a4a773ffd050b7e495cd298bf10b7f7d18d49196b21f1295beda3067c9f1a",
+              "alpha_bbox": [
+                14,
+                62,
+                64,
+                127
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "nilo/illustrated/nilo-hurt-002.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 1166,
+              "sha256": "6a4eb69a43597481b1ad0ff0a9aaef40610d2b62b97cf852ac4552b3bc36ded9",
+              "alpha_bbox": [
+                16,
+                60,
+                68,
+                127
+              ],
+              "below_ground_opaque_pixels": 0
+            }
+          ]
+        },
+        "illustrated:die": {
+          "frame_count": 4,
+          "fps": 10,
+          "loop": false,
+          "frames": [
+            {
+              "file": "nilo/illustrated/nilo-die-000.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 1131,
+              "sha256": "f028946b97ccc53d95c60b462b6a7de56e6303d95155de70e91eb87b680fb778",
+              "alpha_bbox": [
+                16,
+                64,
+                68,
+                127
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "nilo/illustrated/nilo-die-001.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 1102,
+              "sha256": "932c0144001a7cfc6e400aa9bc173b778b6819bb3f0dbf5882dc8df3bde66355",
+              "alpha_bbox": [
+                16,
+                72,
+                68,
+                127
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "nilo/illustrated/nilo-die-002.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 1037,
+              "sha256": "22ddf1aa106fddc6fbbd541ca2e83e0cc83d89322935df874022fbb9157ec2dd",
+              "alpha_bbox": [
+                10,
+                80,
+                72,
+                127
+              ],
+              "below_ground_opaque_pixels": 0
+            },
+            {
+              "file": "nilo/illustrated/nilo-die-003.png",
+              "width": 128,
+              "height": 192,
+              "mode": "RGBA",
+              "bytes": 655,
+              "sha256": "0e898cf2095f607444365478460f9ab37b9f6707d064fb40e7fb3d9a7a46676b",
+              "alpha_bbox": [
+                10,
+                105,
+                77,
+                127
+              ],
+              "below_ground_opaque_pixels": 0
+            }
+          ]
+        }
+      },
+      "files": [
+        {
+          "file": "nilo/classic/nilo-idle-000.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 924,
+          "sha256": "4d38933a20bc90e3c62ed0a8566f19cedea3c62961053701323f820526e787d6",
+          "alpha_bbox": [
+            10,
+            30,
+            35,
+            63
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/classic/nilo-idle-001.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 922,
+          "sha256": "c27e12a77617ca2b8adce98520c9854585302c3d1f4127284f1631c889deb04e",
+          "alpha_bbox": [
+            10,
+            30,
+            35,
+            63
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/classic/nilo-idle-002.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 929,
+          "sha256": "58e00510b848f9bea0e8d2cf3710aeb23c211e0a7bb911abe2b79106e190e97b",
+          "alpha_bbox": [
+            10,
+            31,
+            35,
+            63
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/classic/nilo-idle-003.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 924,
+          "sha256": "4d38933a20bc90e3c62ed0a8566f19cedea3c62961053701323f820526e787d6",
+          "alpha_bbox": [
+            10,
+            30,
+            35,
+            63
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/classic/nilo-walk-000.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 970,
+          "sha256": "b8489f282488da88356115af4fbef6eda50c5931893d91af66f50fbffefc7c1a",
+          "alpha_bbox": [
+            8,
+            30,
+            35,
+            63
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/classic/nilo-walk-001.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 903,
+          "sha256": "13a939df953b2c093cfddce0612b5e960619908e920759a6f271d1ea41ea1691",
+          "alpha_bbox": [
+            10,
+            29,
+            35,
+            63
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/classic/nilo-walk-002.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 954,
+          "sha256": "ccd96ef7ca03c3290de60ec73196a7829d58bcec597a2c4bf74c31ff4c112fca",
+          "alpha_bbox": [
+            10,
+            30,
+            35,
+            63
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/classic/nilo-walk-003.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 911,
+          "sha256": "6f71d7bd6dddf23a645262c203b63cd82e7d2fa1bbc961f7bb97faa903258706",
+          "alpha_bbox": [
+            10,
+            29,
+            35,
+            63
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/classic/nilo-jump-000.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 927,
+          "sha256": "3350bdd9fff187d3b45e8fa2708ff858fabf4b5aea01a853b1f6803e003788d0",
+          "alpha_bbox": [
+            10,
+            27,
+            35,
+            59
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/classic/nilo-fall-000.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 974,
+          "sha256": "51ae3fcb65dd2a400e771610c3c0b709f19ef97e34a60c6049b2e91b9f16c4a3",
+          "alpha_bbox": [
+            10,
+            28,
+            35,
+            60
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/classic/nilo-attack1-000.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 987,
+          "sha256": "b76a3ae273a4a1a7c69d4f1c2d5b0cd7b16b1dafff6ad8182b95a2e399df6c41",
+          "alpha_bbox": [
+            9,
+            30,
+            38,
+            63
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/classic/nilo-attack1-001.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 966,
+          "sha256": "dc9a0d7abae091f748c549b8e4ff11acdd55c8f8261a0a5d8ac2660b408a03ec",
+          "alpha_bbox": [
+            9,
+            30,
+            37,
+            63
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/classic/nilo-attack1-002.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 1019,
+          "sha256": "8744d6fa240600220326d1a7e1bc996482fe985c845984eafa9cac630fdbc33c",
+          "alpha_bbox": [
+            9,
+            30,
+            42,
+            63
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/classic/nilo-attack1-003.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 993,
+          "sha256": "ecfd86472fe677f2147a7cb9e694472b8662a6f060bbd2d9bdc107f08a387220",
+          "alpha_bbox": [
+            9,
+            30,
+            40,
+            63
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/classic/nilo-hurt-000.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 953,
+          "sha256": "6513925cd7929e8a17be4f28a6a223329ade506827c0b4540f9a03559b8e272e",
+          "alpha_bbox": [
+            9,
+            30,
+            33,
+            63
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/classic/nilo-hurt-001.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 966,
+          "sha256": "0c470510e090b8c1077723645dd5e551579e8ba528ab9b45e6af40daf6e86f5b",
+          "alpha_bbox": [
+            8,
+            31,
+            31,
+            63
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/classic/nilo-hurt-002.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 953,
+          "sha256": "6513925cd7929e8a17be4f28a6a223329ade506827c0b4540f9a03559b8e272e",
+          "alpha_bbox": [
+            9,
+            30,
+            33,
+            63
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/classic/nilo-die-000.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 949,
+          "sha256": "edb89b1555a814e8782443b3e092ed03c162b78850bb53dfd0a117bc874318e8",
+          "alpha_bbox": [
+            9,
+            32,
+            33,
+            63
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/classic/nilo-die-001.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 889,
+          "sha256": "36ca7259d9621cda03c253a3becfd1e25e3d588fd41ad1e9963bb7e7e18140f2",
+          "alpha_bbox": [
+            9,
+            36,
+            33,
+            63
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/classic/nilo-die-002.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 872,
+          "sha256": "455bf85b9495803b6ae301cb398b3c028136910775d9ab7e2ede62dfc9ea406e",
+          "alpha_bbox": [
+            6,
+            40,
+            36,
+            63
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/classic/nilo-die-003.png",
+          "width": 64,
+          "height": 96,
+          "mode": "RGBA",
+          "bytes": 535,
+          "sha256": "2ddc83d9972f509fac976d65c61325c86747247433dcc084a705d3ec416d5394",
+          "alpha_bbox": [
+            9,
+            53,
+            37,
+            63
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/illustrated/nilo-idle-000.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 1174,
+          "sha256": "31bf43abebfdb84a50eb47b067101b37551c47ed39c2554a159d91749cf22bf5",
+          "alpha_bbox": [
+            20,
+            60,
+            72,
+            127
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/illustrated/nilo-idle-001.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 1181,
+          "sha256": "ccb5ab4f2fa243bd6e9a176ff1d7cc5c8bca039567206acf00558890247c2095",
+          "alpha_bbox": [
+            20,
+            60,
+            72,
+            127
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/illustrated/nilo-idle-002.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 1164,
+          "sha256": "86029f76ef73e30e20dd1ae14796e86068b23d797149b3b80745144d8d462f73",
+          "alpha_bbox": [
+            20,
+            62,
+            72,
+            127
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/illustrated/nilo-idle-003.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 1174,
+          "sha256": "31bf43abebfdb84a50eb47b067101b37551c47ed39c2554a159d91749cf22bf5",
+          "alpha_bbox": [
+            20,
+            60,
+            72,
+            127
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/illustrated/nilo-walk-000.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 1246,
+          "sha256": "ca2d63057fee9094bb68039b32cba2c22062673b82274e67bf79cf20a9d460e0",
+          "alpha_bbox": [
+            14,
+            60,
+            72,
+            127
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/illustrated/nilo-walk-001.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 1140,
+          "sha256": "d28262474a6222941f154cc52cf814df0d5c382d6fad181cccc9d500884584f3",
+          "alpha_bbox": [
+            20,
+            58,
+            72,
+            127
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/illustrated/nilo-walk-002.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 1217,
+          "sha256": "fc8795573ec3cf150eb9629cc0c4fccacfc639375ec2837c55a019f73bbc2846",
+          "alpha_bbox": [
+            18,
+            60,
+            72,
+            127
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/illustrated/nilo-walk-003.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 1160,
+          "sha256": "91de1a5fa9c4ea91c127304ae069ad05adcfc09b76d2ee5ed021fd7ddeb8af28",
+          "alpha_bbox": [
+            20,
+            58,
+            72,
+            127
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/illustrated/nilo-jump-000.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 1225,
+          "sha256": "1312ab6c987de99385ea479d44edc38f7de4813944fcb7d5c4a99e94f8e04bb0",
+          "alpha_bbox": [
+            18,
+            54,
+            72,
+            118
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/illustrated/nilo-fall-000.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 1230,
+          "sha256": "fae36088a09fe885c48b2f25e55b37ea3b2fe1acd4244df7d01beaaadbf192f3",
+          "alpha_bbox": [
+            18,
+            56,
+            72,
+            120
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/illustrated/nilo-attack1-000.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 1324,
+          "sha256": "d4564d2eab9b85727a091045a8f595f94e41cfc9564398b8550e7bc2177960bc",
+          "alpha_bbox": [
+            16,
+            60,
+            79,
+            127
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/illustrated/nilo-attack1-001.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 1312,
+          "sha256": "7d5ab488fc60bbd5cd1201ad7e54424286523cab488cce7bdeeea4c5dd368da1",
+          "alpha_bbox": [
+            16,
+            60,
+            77,
+            127
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/illustrated/nilo-attack1-002.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 1391,
+          "sha256": "1f530b21485139644107b165f0a8c96496991cedfdc5ccec8ed278ad2166d005",
+          "alpha_bbox": [
+            16,
+            60,
+            88,
+            127
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/illustrated/nilo-attack1-003.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 1273,
+          "sha256": "0440edfaf287760f0bb37ca46084b35adbf8dc0bc82a23c6e58670fcf6c7e0a4",
+          "alpha_bbox": [
+            16,
+            60,
+            82,
+            127
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/illustrated/nilo-hurt-000.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 1166,
+          "sha256": "6a4eb69a43597481b1ad0ff0a9aaef40610d2b62b97cf852ac4552b3bc36ded9",
+          "alpha_bbox": [
+            16,
+            60,
+            68,
+            127
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/illustrated/nilo-hurt-001.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 1198,
+          "sha256": "fa9a4a773ffd050b7e495cd298bf10b7f7d18d49196b21f1295beda3067c9f1a",
+          "alpha_bbox": [
+            14,
+            62,
+            64,
+            127
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/illustrated/nilo-hurt-002.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 1166,
+          "sha256": "6a4eb69a43597481b1ad0ff0a9aaef40610d2b62b97cf852ac4552b3bc36ded9",
+          "alpha_bbox": [
+            16,
+            60,
+            68,
+            127
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/illustrated/nilo-die-000.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 1131,
+          "sha256": "f028946b97ccc53d95c60b462b6a7de56e6303d95155de70e91eb87b680fb778",
+          "alpha_bbox": [
+            16,
+            64,
+            68,
+            127
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/illustrated/nilo-die-001.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 1102,
+          "sha256": "932c0144001a7cfc6e400aa9bc173b778b6819bb3f0dbf5882dc8df3bde66355",
+          "alpha_bbox": [
+            16,
+            72,
+            68,
+            127
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/illustrated/nilo-die-002.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 1037,
+          "sha256": "22ddf1aa106fddc6fbbd541ca2e83e0cc83d89322935df874022fbb9157ec2dd",
+          "alpha_bbox": [
+            10,
+            80,
+            72,
+            127
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/illustrated/nilo-die-003.png",
+          "width": 128,
+          "height": 192,
+          "mode": "RGBA",
+          "bytes": 655,
+          "sha256": "0e898cf2095f607444365478460f9ab37b9f6707d064fb40e7fb3d9a7a46676b",
+          "alpha_bbox": [
+            10,
+            105,
+            77,
+            127
+          ],
+          "below_ground_opaque_pixels": 0
+        },
+        {
+          "file": "nilo/portraits/nilo-portrait-000.png",
+          "width": 32,
+          "height": 32,
+          "mode": "RGBA",
+          "bytes": 792,
+          "sha256": "52314c2ae2fae9951372f4c77e6da384fd2fc997e15afba44171be530656ab86"
+        }
+      ],
+      "portrait": {
+        "file": "nilo/portraits/nilo-portrait-000.png",
+        "width": 32,
+        "height": 32,
+        "mode": "RGBA",
+        "bytes": 792,
+        "sha256": "52314c2ae2fae9951372f4c77e6da384fd2fc997e15afba44171be530656ab86"
+      }
+    }
+  },
+  "previews": [
+    {
+      "file": "previews/boypunk-all-states-animated.gif",
+      "width": 920,
+      "height": 420,
+      "format": "GIF",
+      "bytes": 136750,
+      "sha256": "84604cd4bbb67532e4443d1fbc9314fb115548517fbc9b2413bb513a6be66c18"
+    },
+    {
+      "file": "previews/boypunk-all-states-animated.webp",
+      "width": 920,
+      "height": 420,
+      "format": "WEBP",
+      "bytes": 264052,
+      "sha256": "d11ca9596a344b7809323df3c89a69cafa52abd48f57784b184b1c055195384b"
+    },
+    {
+      "file": "previews/boypunk-classic-attack1.gif",
+      "width": 408,
+      "height": 322,
+      "format": "GIF",
+      "bytes": 18075,
+      "sha256": "155063cb328bf32db496bb09367c5000a61890f8e4b643fd75d2c5c745675b3e"
+    },
+    {
+      "file": "previews/boypunk-classic-die.gif",
+      "width": 408,
+      "height": 322,
+      "format": "GIF",
+      "bytes": 18568,
+      "sha256": "bfbf3ee9109475bb10478d69a5f6e4574f2834620888f52df1f853f1e6aaac66"
+    },
+    {
+      "file": "previews/boypunk-classic-fall.gif",
+      "width": 408,
+      "height": 322,
+      "format": "GIF",
+      "bytes": 10533,
+      "sha256": "38e320b9654f529e43ab974502b00420cfceeadf7a98c1ea1cb2fffea299061f"
+    },
+    {
+      "file": "previews/boypunk-classic-hurt.gif",
+      "width": 408,
+      "height": 322,
+      "format": "GIF",
+      "bytes": 15278,
+      "sha256": "d726276af8bcf5b35cfe1fabbfb10ef3aba684ea4d70f70c6cd7149abfbc8cad"
+    },
+    {
+      "file": "previews/boypunk-classic-idle.gif",
+      "width": 408,
+      "height": 322,
+      "format": "GIF",
+      "bytes": 16537,
+      "sha256": "483ead2182eb57a6e25d54e092ef21e29ea6dca967407e14e3d27217228044fb"
+    },
+    {
+      "file": "previews/boypunk-classic-jump.gif",
+      "width": 408,
+      "height": 322,
+      "format": "GIF",
+      "bytes": 10530,
+      "sha256": "5171fc492b1de6d02527795bfcb10a578ef03aeb3d7a9bd354ce1cef9c7881a7"
+    },
+    {
+      "file": "previews/boypunk-classic-walk.gif",
+      "width": 408,
+      "height": 322,
+      "format": "GIF",
+      "bytes": 19559,
+      "sha256": "ff6ffb3f9c239388f2d88fcfe82f8d49608216fdde5eee6aa115c668c85172bc"
+    },
+    {
+      "file": "previews/boypunk-contact-sheet-classic-and-illustrated.png",
+      "width": 1520,
+      "height": 980,
+      "format": "PNG",
+      "bytes": 97540,
+      "sha256": "6c9c1428408ae2d94cdc5c4d151892568536c671c73a800f386f473faa6977be"
+    },
+    {
+      "file": "previews/boypunk-illustrated-attack1.gif",
+      "width": 536,
+      "height": 418,
+      "format": "GIF",
+      "bytes": 26519,
+      "sha256": "ecd0c1e1aa3ce8245143438a183272f9b5cfe2aa8b88f146aca47b62acf4ebf4"
+    },
+    {
+      "file": "previews/boypunk-illustrated-die.gif",
+      "width": 536,
+      "height": 418,
+      "format": "GIF",
+      "bytes": 28507,
+      "sha256": "57ab7e1bbd4abdab841610c161c67ba2df46e02acc4b65ab3f53fa34ae87fcfc"
+    },
+    {
+      "file": "previews/boypunk-illustrated-fall.gif",
+      "width": 536,
+      "height": 418,
+      "format": "GIF",
+      "bytes": 15734,
+      "sha256": "a5a005524ad8b00f90d7319563bf33db744294cd3fc6466f1459308e8d343ca6"
+    },
+    {
+      "file": "previews/boypunk-illustrated-hurt.gif",
+      "width": 536,
+      "height": 418,
+      "format": "GIF",
+      "bytes": 21514,
+      "sha256": "06ee2a81f0c0b4520f1a546d7481abe08c0b803884428d6cc5a1b900e9eff4f0"
+    },
+    {
+      "file": "previews/boypunk-illustrated-idle.gif",
+      "width": 536,
+      "height": 418,
+      "format": "GIF",
+      "bytes": 24041,
+      "sha256": "d6a97af4bbbcc5fcb2b75243e1aeff4ce0a0b9ea97827a9f885e4ff35f2e11cf"
+    },
+    {
+      "file": "previews/boypunk-illustrated-jump.gif",
+      "width": 536,
+      "height": 418,
+      "format": "GIF",
+      "bytes": 15821,
+      "sha256": "0416c2bf3c35a432a2ef4d1826c5d44a4364d072efec7db2b33dbffbe108c832"
+    },
+    {
+      "file": "previews/boypunk-illustrated-walk.gif",
+      "width": 536,
+      "height": 418,
+      "format": "GIF",
+      "bytes": 29854,
+      "sha256": "973e363b5b098514c9ebca744c51d785fc365b418047324ca4c8bd4fdb2dfc46"
+    },
+    {
+      "file": "previews/comparison-all-3-environments-classic-and-illustrated.png",
+      "width": 1960,
+      "height": 1720,
+      "format": "PNG",
+      "bytes": 2477801,
+      "sha256": "3cb1645d8fb5afb7f1d7eb9abddae3a177e6f740ec91d4e3d2f850ecf13131f2"
+    },
+    {
+      "file": "previews/nilo-all-states-animated.gif",
+      "width": 920,
+      "height": 420,
+      "format": "GIF",
+      "bytes": 107874,
+      "sha256": "cb1571a49fa771cca627c792b9557041dcedc7aded7747fbe7721a83d0404de0"
+    },
+    {
+      "file": "previews/nilo-all-states-animated.webp",
+      "width": 920,
+      "height": 420,
+      "format": "WEBP",
+      "bytes": 203742,
+      "sha256": "feb4195a9f11af2d9f4f8d7d08cea8fb73fdaf0ced84cf706d9aa309b317e906"
+    },
+    {
+      "file": "previews/nilo-classic-attack1.gif",
+      "width": 408,
+      "height": 322,
+      "format": "GIF",
+      "bytes": 14051,
+      "sha256": "c136a1041c018350ffba0e324836c8bcd466d6ef79bf6af5b14ad4aedae5ad2d"
+    },
+    {
+      "file": "previews/nilo-classic-die.gif",
+      "width": 408,
+      "height": 322,
+      "format": "GIF",
+      "bytes": 19279,
+      "sha256": "8bcc671f449f9bdfef8af8f51aa98768c3adc4aee09a450c0366ac6d3417e941"
+    },
+    {
+      "file": "previews/nilo-classic-fall.gif",
+      "width": 408,
+      "height": 322,
+      "format": "GIF",
+      "bytes": 10534,
+      "sha256": "eb00ce0189079a37d2c860d681196d5b3abb3954e1860df5fa06eff88e897db0"
+    },
+    {
+      "file": "previews/nilo-classic-hurt.gif",
+      "width": 408,
+      "height": 322,
+      "format": "GIF",
+      "bytes": 17104,
+      "sha256": "68e877b69cbef729638dcd83d0e58b8c65abd519cfbf9308f03575312b391011"
+    },
+    {
+      "file": "previews/nilo-classic-idle.gif",
+      "width": 408,
+      "height": 322,
+      "format": "GIF",
+      "bytes": 15850,
+      "sha256": "0883e98cd6208c0009add7493eb05123ffa53235a87854381b7563208ca2b067"
+    },
+    {
+      "file": "previews/nilo-classic-jump.gif",
+      "width": 408,
+      "height": 322,
+      "format": "GIF",
+      "bytes": 10545,
+      "sha256": "959c2c5c2ca0b46b6f06992aa2fd6c6624f8a9131ce1e61bf25cac614bb1eab8"
+    },
+    {
+      "file": "previews/nilo-classic-walk.gif",
+      "width": 408,
+      "height": 322,
+      "format": "GIF",
+      "bytes": 19821,
+      "sha256": "cefe280959017d3b85f49391752f492f94dcd25f1abcfc51a65d0afc52c8c1e1"
+    },
+    {
+      "file": "previews/nilo-contact-sheet-classic-and-illustrated.png",
+      "width": 1520,
+      "height": 980,
+      "format": "PNG",
+      "bytes": 85346,
+      "sha256": "0be306ce4541fa9c3dc57f64acee9dd8fce77c7c629b19b6eeabd097885a06db"
+    },
+    {
+      "file": "previews/nilo-illustrated-attack1.gif",
+      "width": 536,
+      "height": 418,
+      "format": "GIF",
+      "bytes": 18238,
+      "sha256": "3c84bd58eec4d935916b8d69c6aa86a99035a71ec1c1a2ffedcc184cc1ae2126"
+    },
+    {
+      "file": "previews/nilo-illustrated-die.gif",
+      "width": 536,
+      "height": 418,
+      "format": "GIF",
+      "bytes": 24630,
+      "sha256": "477fe8f12d2e7a859a7c66fb5f6b86290797203b5c3bdd3b153399c0631ce209"
+    },
+    {
+      "file": "previews/nilo-illustrated-fall.gif",
+      "width": 536,
+      "height": 418,
+      "format": "GIF",
+      "bytes": 14439,
+      "sha256": "c7e595893fddee461750f97440c9f170d73160fa98075aa4a36020c95bca1f8f"
+    },
+    {
+      "file": "previews/nilo-illustrated-hurt.gif",
+      "width": 536,
+      "height": 418,
+      "format": "GIF",
+      "bytes": 22686,
+      "sha256": "308190b9133e54d80ac319cbece1c934a62a80a6c23e153a9e1bd362ebc7307f"
+    },
+    {
+      "file": "previews/nilo-illustrated-idle.gif",
+      "width": 536,
+      "height": 418,
+      "format": "GIF",
+      "bytes": 20251,
+      "sha256": "737323905b3562c26bbab65e65d4bac128fe0e4adbeff08b0ff702990d59386a"
+    },
+    {
+      "file": "previews/nilo-illustrated-jump.gif",
+      "width": 536,
+      "height": 418,
+      "format": "GIF",
+      "bytes": 14501,
+      "sha256": "42ba95a44298592b8be8fc8201ff7fc088338653e41684a55a0d3d01bfa07583"
+    },
+    {
+      "file": "previews/nilo-illustrated-walk.gif",
+      "width": 536,
+      "height": 418,
+      "format": "GIF",
+      "bytes": 25877,
+      "sha256": "966d0b8d99f370a4c86d0cf394a8bf6306bbd61be0798db9615781d301bdaecf"
+    },
+    {
+      "file": "previews/scene-camara-energia-boypunk-and-nilo.png",
+      "width": 1940,
+      "height": 560,
+      "format": "PNG",
+      "bytes": 965193,
+      "sha256": "5fb1a24781daafb9b80008db465f90363bf1d9d8e5ab94ed526c880c8da7d965"
+    },
+    {
+      "file": "previews/scene-distrito-neon-boypunk-and-nilo.png",
+      "width": 1940,
+      "height": 560,
+      "format": "PNG",
+      "bytes": 658604,
+      "sha256": "4220a57a9a2b66232ab416514ba92117bf3398463bad94145b068739af1ccab9"
+    },
+    {
+      "file": "previews/scene-fabrica-sucata-boypunk-and-nilo.png",
+      "width": 1940,
+      "height": 560,
+      "format": "PNG",
+      "bytes": 864642,
+      "sha256": "5456b59377aef23ffdd669a4c9532b57ab9ba11d35d41a557f8ec4233e162175"
+    }
+  ],
+  "contracts_verified": {
+    "classic_frame_size": [
+      64,
+      96
+    ],
+    "illustrated_frame_size": [
+      128,
+      192
+    ],
+    "portrait_size": [
+      32,
+      32
+    ],
+    "ground_line_classic_y": 64,
+    "ground_line_illustrated_y": 128,
+    "pivot_classic_x": 16,
+    "pivot_illustrated_x": 32,
+    "collider_logical_wh": [
+      22,
+      32
+    ],
+    "boypunk_weapon_anchor": {
+      "forward": 27,
+      "y": 16,
+      "local_classic": [
+        43,
+        48
+      ],
+      "local_illustrated": [
+        86,
+        96
+      ]
+    },
+    "nilo_weapon_anchor": {
+      "forward": 21,
+      "y": 12,
+      "local_classic": [
+        37,
+        44
+      ],
+      "local_illustrated": [
+        74,
+        88
+      ]
+    }
+  }
+}

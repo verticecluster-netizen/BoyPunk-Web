@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#100d1f">
+    <meta name="description" content="BoyPunk! — primeira fase independente em HTML5 Canvas.">
+    <title>BoyPunk!</title>
+    <link rel="icon" href="assets/images/icon-32.png" type="image/png">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main id="app" class="app" aria-label="BoyPunk!">
+      <div class="game-frame">
+        <canvas id="game" width="480" height="270" aria-label="Área do jogo BoyPunk!" tabindex="0"></canvas>
+        <div id="damage-vignette" class="damage-vignette" aria-hidden="true"></div>
+        <div id="soul-pulse" class="soul-collect-pulse" aria-hidden="true"></div>
+        <div id="screen-transition" class="screen-transition" aria-hidden="true"></div>
+        <div id="speed-rush-overlay" class="speed-rush-overlay" aria-hidden="true" hidden></div>
+        <div id="boss-health-bar" class="boss-health-bar" aria-hidden="true" hidden>
+          <div class="boss-bar-header">
+            <span class="boss-name"><span class="boss-icon">☠</span>FACTORY OVERLORD</span>
+            <span class="boss-subtitle">FORJA DE SUCATA // MK.IV</span>
+          </div>
+          <div class="boss-bar-track">
+            <div class="boss-bar-ghost"></div>
+            <div class="boss-bar-fill"></div>
+            <div class="boss-bar-scan"></div>
+          </div>
+        </div>
+        <div id="hud-portrait" class="hud-portrait portrait-normal" aria-hidden="true">
+          <div class="portrait-display">
+            <div class="portrait-scanlines" aria-hidden="true"></div>
+            <div class="portrait-avatar boypunk-avatar">
+              <div class="avatar-hair"></div>
+              <div class="avatar-head">
+                <div class="avatar-eyewear"></div>
+                <div class="avatar-mouth"></div>
+              </div>
+            </div>
+            <div class="portrait-avatar nilo-avatar" hidden>
+              <div class="avatar-hair nilo-hair"></div>
+              <div class="avatar-head nilo-head">
+                <div class="avatar-eyewear nilo-visor"></div>
+                <div class="avatar-mouth nilo-mouth"></div>
+              </div>
+            </div>
+          </div>
+          <div class="portrait-status-dot" aria-hidden="true"></div>
+        </div>
+        <div id="victory-effects" class="victory-celebration" aria-hidden="true" hidden></div>
+        <div id="defeat-effects" class="defeat-decay" aria-hidden="true" hidden></div>
+        <div id="resource-warning" class="resource-warning" role="status" hidden></div>
+        <div id="demo-overlay" class="demo-overlay" aria-live="polite" hidden>
+          <strong data-i18n="demo.title">DEMONSTRAÇÃO</strong>
+          <span data-i18n="demo.prompt">Enter / Espaço, botão do controle ou toque para abrir o menu</span>
+        </div>
+        <p id="gamepad-status" class="gamepad-status" role="status" aria-live="polite" data-i18n="gamepad.checking">Controle: verificando suporte…</p>
+        <p id="game-status" class="visually-hidden" role="status" aria-live="assertive"></p>
+
+        <section id="loading" class="screen loading-screen" aria-live="polite">
+          <p class="eyebrow" data-i18n="loading.eyebrow">DISTRITO NEON // INICIALIZAÇÃO</p>
+          <h1>BoyPunk!</h1>
+          <div class="progress-track" aria-hidden="true"><span id="progress-bar"></span></div>
+          <p id="loading-status">Carregando recursos… 0%</p>
+          <div id="load-error" class="load-error" hidden></div>
+        </section>
+
+        <section id="screen-menu" class="screen" hidden>
+          <div class="panel menu-panel">
+            <p class="eyebrow" data-i18n="menu.eyebrow">PROTOCOLO DE RESISTÊNCIA</p>
+            <h1>Boy<span>Punk!</span></h1>
+            <p class="build-id"><span data-i18n="menu.buildId">Versão de teste</span> <span id="game-version">carregando…</span></p>
+            <p class="subtitle" id="menu-subtitle">Proteja BoyPunk e o altar: BoyPunk começa com <span data-player-max-life></span> pontos de vida e o altar com <span data-altar-max-life></span> de integridade. Se qualquer um chegar a zero, a partida termina. Recupere <span data-souls-goal></span> almas.</p>
+            <div class="character-select-group" role="radiogroup" aria-label="Seleção de personagem">
+              <div class="character-select-header">
+                <span data-i18n="menu.character.title">Personagem:</span>
+                <strong id="selected-character-name">BoyPunk</strong>
+              </div>
+              <div class="character-select-options">
+                <button type="button" class="character-option active" data-character="boypunk" role="radio" aria-checked="true">
+                  <span class="char-name" data-i18n="character.boypunk.name">BoyPunk</span>
+                </button>
+                <button type="button" class="character-option" data-character="support" role="radio" aria-checked="false">
+                  <span class="char-name" data-i18n="character.support.name">Nilo</span>
+                </button>
+              </div>
+              <div class="character-details" id="character-details">
+                <p class="character-desc" id="character-desc"></p>
+                <p class="character-tradeoff" id="character-tradeoff"></p>
+              </div>
+            </div>
+            <div class="button-stack">
+              <button type="button" data-ui="play" class="primary" data-i18n="menu.play">Jogar</button>
+              <button type="button" data-ui="survival" class="survival-entry" data-i18n="menu.survival">Modo Sobrevivência</button>
+              <button type="button" data-ui="demo" data-i18n="menu.demo">Assistir demonstração</button>
+              <button type="button" data-ui="options" data-i18n="menu.options">Opções</button>
+              <button type="button" data-ui="credits" data-i18n="menu.credits">Créditos</button>
+            </div>
+            <div class="level-progress" aria-label="Progresso dos níveis">
+              <div><span data-i18n="menu.district">Distrito Neon</span><strong id="district-level-status">Disponível</strong></div>
+              <button id="factory-level-button" type="button" data-ui="play-factory" class="level-entry" disabled>
+                <span data-i18n="menu.scrap">Fábrica de Sucata</span><strong id="scrap-level-status">Bloqueada</strong>
+              </button>
+            </div>
+            <p class="bonus-total"><span data-i18n="menu.bonusTotal">Pontos bônus totais:</span> <strong id="menu-bonus-total">0</strong></p>
+            <p id="menu-progression-warning" class="persistence-warning" role="status" hidden></p>
+            <p class="controls-summary">
+              <span class="keyboard-instructions" data-i18n="menu.controls.keyboard">Teclado: A/D ou setas movem · Espaço salta · J/X/F ataca · E deposita · Esc pausa</span>
+              <span class="touch-instructions" data-i18n="menu.controls.touch">Toque: setas movem · ↑ salta · ✦ ataca · E deposita · Ⅱ pausa</span>
+              <span class="gamepad-instructions" data-i18n="menu.controls.gamepad">Controle padrão: analógico/D-pad move · botão inferior pula/confirma · esquerdo ataca · superior deposita · direito volta · Start pausa</span>
+            </p>
+          </div>
+        </section>
+
+        <section id="screen-options" class="screen" hidden>
+          <div class="panel options-panel">
+            <p class="eyebrow" data-i18n="options.eyebrow">SINAL / ÁUDIO</p>
+            <h2 data-i18n="options.title">Opções</h2>
+            <div class="language-row">
+              <label for="language-select" data-i18n="options.language">Idioma</label>
+              <select id="language-select">
+                <option value="pt-BR">Português</option>
+                <option value="en">English</option>
+              </select>
+            </div>
+            <div class="language-row difficulty-row">
+              <label for="difficulty-select" data-i18n="options.difficulty">Dificuldade</label>
+              <select id="difficulty-select">
+                <option value="easy" data-i18n="options.difficulty.easy">Fácil</option>
+                <option value="normal" data-i18n="options.difficulty.normal">Normal</option>
+                <option value="hard" data-i18n="options.difficulty.hard">Difícil</option>
+              </select>
+            </div>
+            <label class="volume-row" for="volume"><span data-i18n="options.volume">Volume</span> <output id="volume-value">65%</output></label>
+            <input id="volume" type="range" min="0" max="100" step="5" value="65">
+            <button type="button" id="mute" data-ui="mute">Mudo: não</button>
+            <section class="controller-settings" aria-labelledby="controller-settings-title">
+              <h3 id="controller-settings-title" data-i18n="options.controller">Controle</h3>
+              <p id="controller-options-status" class="controller-status" role="status" data-i18n="options.controllerChecking">Verificando controles conectados…</p>
+              <label for="controller-device" data-i18n="options.controllerDevice">Dispositivo do jogador 1</label>
+              <select id="controller-device">
+                <option value="" data-i18n="options.controllerPrompt">Pressione um botão para ativar</option>
+              </select>
+              <p id="controller-live" class="controller-live" aria-live="polite">Botões: — · Eixos: —</p>
+              <label class="volume-row" for="controller-dead-zone"><span data-i18n="options.deadZone">Zona morta</span> <output id="controller-dead-zone-value">22%</output></label>
+              <input id="controller-dead-zone" type="range" min="8" max="60" step="1" value="22">
+              <div id="generic-controller-settings" class="generic-controller-settings" hidden>
+                <p class="fine-print" data-i18n="options.genericNote">Controle genérico: configure os botões e eixos sem presumir o modelo do aparelho.</p>
+                <div class="axis-settings">
+                  <label for="controller-axis-horizontal" data-i18n="options.axisH">Eixo horizontal</label>
+                  <select id="controller-axis-horizontal"><option value="">Não definido</option></select>
+                  <label><input id="controller-invert-horizontal" type="checkbox"> <span data-i18n="options.invertH">Inverter horizontal</span></label>
+                  <label for="controller-axis-vertical" data-i18n="options.axisV">Eixo vertical / menu</label>
+                  <select id="controller-axis-vertical"><option value="">Não definido</option></select>
+                  <label><input id="controller-invert-vertical" type="checkbox"> <span data-i18n="options.invertV">Inverter vertical</span></label>
+                </div>
+                <div class="controller-bindings" aria-label="Mapeamento de botões">
+                  <button type="button" data-gamepad-bind="left">Mover à esquerda: não definido</button>
+                  <button type="button" data-gamepad-bind="right">Mover à direita: não definido</button>
+                  <button type="button" data-gamepad-bind="menuUp">Menu para cima: não definido</button>
+                  <button type="button" data-gamepad-bind="menuDown">Menu para baixo: não definido</button>
+                  <button type="button" data-gamepad-bind="jump">Confirmar / pular: não definido</button>
+                  <button type="button" data-gamepad-bind="attack">Atacar: não definido</button>
+                  <button type="button" data-gamepad-bind="interact">Depositar: não definido</button>
+                  <button type="button" data-gamepad-bind="ability">Habilidade de Nilo: não definido</button>
+                  <button type="button" data-gamepad-bind="cancel">Cancelar / voltar: não definido</button>
+                  <button type="button" data-gamepad-bind="pause">Pausar / continuar: não definido</button>
+                </div>
+                <button type="button" data-controller-ui="guided-map" class="primary" data-i18n="options.guidedMap">Mapeamento guiado</button>
+              </div>
+              <button type="button" data-controller-ui="restore-defaults" data-i18n="options.restoreDefaults">Restaurar padrões do controle</button>
+              <p id="controller-mapping-status" class="persistence-warning" role="status" hidden></p>
+              <p class="fine-print" data-i18n="options.controllerDisclaimer">O remapeamento não habilita hardware que o sistema operacional ou o navegador não exponha.</p>
+            </section>
+            <div class="save-transfer" aria-labelledby="save-transfer-title">
+              <p id="save-transfer-title" class="fine-print" data-i18n="options.saveTransferNote">Mudou de endereço? Transfira somente progresso, recordes bônus e preferências de áudio/controle.</p>
+              <button type="button" data-ui="export-saves" data-i18n="options.exportSaves">Exportar dados do jogo</button>
+              <button type="button" data-ui="import-saves" data-i18n="options.importSaves">Importar dados do jogo</button>
+              <input id="save-import-file" type="file" accept="application/json,.json" hidden>
+              <p id="save-transfer-status" class="persistence-warning" role="status" hidden></p>
+            </div>
+            <button type="button" data-ui="back" class="primary" data-i18n="options.back">Voltar</button>
+            <p class="fine-print" data-i18n="options.prefsNote">As preferências ficam salvas neste navegador quando o armazenamento está disponível.</p>
+          </div>
+        </section>
+
+        <section id="screen-credits" class="screen" hidden>
+          <div class="panel credits-panel">
+            <p class="eyebrow" data-i18n="credits.eyebrow">ARQUIVO / CRÉDITOS</p>
+            <h2 data-i18n="credits.title">BoyPunk!</h2>
+            <p>Cluster Digital</p>
+            <p>OPJ STUDIO</p>
+            <p>GONZAGA PRODUÇÕES</p>
+            <p>B&amp;T Company</p>
+            <p data-i18n="credits.dev">Desenvolvedor: Renan Santos</p>
+            <p class="fine-print" data-i18n="credits.disclaimer">Arte, áudio e Pixelify Sans foram preservados do projeto-fonte. A comprovação de licença de alguns recursos ainda precisa ser consolidada antes de distribuição pública.</p>
+            <button type="button" data-ui="back" class="primary" data-i18n="credits.back">Voltar</button>
+          </div>
+        </section>
+
+        <section id="screen-coop-lobby" class="screen compact" hidden>
+          <div class="panel coop-panel">
+            <p class="eyebrow">COOP LOCAL // PREVIEW ISOLADO</p>
+            <h2>Distrito Neon em dupla</h2>
+            <p class="fine-print">P1 é BoyPunk; P2 é Nilo. Esta sessão não salva progresso, bônus ou recordes.</p>
+            <label for="coop-layout">Dispositivos</label>
+            <select id="coop-layout">
+              <option value="keyboard-gamepad">P1 teclado + P2 controle</option>
+              <option value="two-gamepads">P1 controle + P2 controle</option>
+            </select>
+            <div class="coop-device-grid" aria-live="polite">
+              <div><strong>P1 · BOYPUNK</strong><span id="coop-p1-device">Teclado pronto</span></div>
+              <div><strong>P2 · NILO</strong><span id="coop-p2-device">Pressione um botão no controle</span></div>
+            </div>
+            <p id="coop-lobby-status" class="persistence-warning" role="status">Pressione deliberadamente um botão para atribuir cada controle. Movimento de eixo não atribui dispositivos.</p>
+            <div class="modal-actions">
+              <button type="button" id="coop-start" data-ui="coop-start" class="primary" disabled>Iniciar coop</button>
+              <button type="button" data-ui="coop-clear">Limpar controles</button>
+            </div>
+            <p class="fine-print">Teclado permanece disponível para pausa e navegação. Touch de dois jogadores não é suportado nesta prévia.</p>
+          </div>
+        </section>
+
+        <section id="screen-coop-result" class="screen compact" hidden>
+          <div class="panel outcome coop-panel">
+            <p class="eyebrow">COOP LOCAL // RESULTADO</p>
+            <h2 id="coop-result-title">Sessão concluída</h2>
+            <p id="coop-result-reason"></p>
+            <dl class="run-stats">
+              <div><dt>Almas depositadas</dt><dd id="coop-result-souls">0/15</dd></div>
+              <div><dt>Integridade do altar</dt><dd id="coop-result-altar">0/4</dd></div>
+              <div><dt>P1 / P2</dt><dd id="coop-result-players">0 / 0</dd></div>
+            </dl>
+            <div class="modal-actions">
+              <button type="button" data-ui="coop-retry" class="primary">Tentar novamente</button>
+              <button type="button" data-ui="coop-lobby">Voltar ao lobby</button>
+            </div>
+          </div>
+        </section>
+
+        <section id="screen-paused" class="screen compact" hidden>
+          <div class="panel pause-panel">
+            <p class="eyebrow" data-i18n="pause.eyebrow">SISTEMA SUSPENSO</p>
+            <h2 data-i18n="pause.title">Pausa</h2>
+            <p id="coop-pause-warning" class="persistence-warning" role="status" hidden></p>
+            <p class="controls-summary" data-i18n="pause.controls">A/D ou setas: mover · Espaço: pular · J/X/F: atacar · E: depositar · Q: cura de Nilo</p>
+            <div class="modal-actions">
+              <button type="button" data-ui="resume" class="primary" data-i18n="pause.resume">Continuar</button>
+              <button type="button" data-ui="restart" data-i18n="pause.restart">Recomeçar</button>
+              <button type="button" data-ui="menu" data-i18n="pause.menu">Menu</button>
+            </div>
+          </div>
+        </section>
+
+        <section id="screen-victory" class="screen compact" hidden>
+          <div class="panel outcome victory-panel">
+            <p class="eyebrow" data-i18n="victory.eyebrow">ALTAR RESTAURADO</p>
+            <h2 id="victory-title">Distrito Neon concluído!</h2>
+            <dl class="run-stats" aria-label="Resumo da partida concluída">
+              <div><dt data-i18n="victory.statTime">Tempo ativo</dt><dd id="victory-duration">00:00</dd></div>
+              <div><dt data-i18n="victory.statSouls">Almas depositadas</dt><dd><span id="victory-souls">0</span>/<span data-souls-goal></span></dd></div>
+              <div><dt data-i18n="victory.statPlayerLife">Vida restante</dt><dd><span id="victory-player-life">0</span>/<span data-player-max-life></span></dd></div>
+              <div><dt data-i18n="victory.statAltarLife">Integridade do altar</dt><dd><span id="victory-altar-life">0</span>/<span data-altar-max-life></span></dd></div>
+            </dl>
+            <div id="next-level-card" class="next-level-card" aria-label="Próximo nível desbloqueado e disponível">
+              <span class="status-badge unlocked" data-i18n="victory.badgeUnlocked">Desbloqueada</span>
+              <span class="status-badge available" data-i18n="victory.badgeAvailable">Disponível</span>
+              <p data-i18n="victory.scrapUnlocked">Fábrica de Sucata desbloqueada — disponível para jogar</p>
+            </div>
+            <p id="victory-progression-warning" class="persistence-warning" role="status" hidden></p>
+            <div class="modal-actions">
+              <button id="continue-next" type="button" data-ui="continue-next" class="primary" data-i18n="victory.enterFactory">Entrar na Fábrica</button>
+              <button id="victory-restart" type="button" data-ui="restart" class="primary" data-i18n="victory.playAgain">Jogar novamente</button>
+              <button type="button" data-ui="menu" data-i18n="victory.menu">Menu</button>
+            </div>
+          </div>
+        </section>
+
+        <section id="screen-bonus-transition" class="screen compact bonus-transition" hidden>
+          <div class="panel outcome bonus-transition-panel">
+            <p class="eyebrow"><span data-i18n="bonus.trans.eyebrowPrefix">QUALIFICAÇÃO</span> <span id="bonus-qualification-points">0</span>/75</p>
+            <h2 data-i18n="bonus.trans.title">Bônus conquistado!</h2>
+            <p data-i18n="bonus.trans.starting">Câmara de Energia iniciando…</p>
+            <p class="fine-print" data-i18n="bonus.trans.note">20 segundos · 30 almas bônus · o resultado da campanha permanece preservado</p>
+            <button id="skip-bonus" type="button" data-ui="skip-bonus" data-i18n="bonus.trans.skip">Pular bônus</button>
+          </div>
+        </section>
+
+        <section id="screen-bonus-complete" class="screen compact" hidden>
+          <div class="panel outcome bonus-result-panel">
+            <p class="eyebrow" data-i18n="bonus.result.eyebrow">CÂMARA DE ENERGIA // RESULTADO</p>
+            <h2 id="bonus-result-title">Rodada concluída</h2>
+            <p id="bonus-origin-level" class="outcome-level"></p>
+            <dl class="run-stats" aria-label="Resumo da Câmara de Energia">
+              <div><dt data-i18n="bonus.result.souls">Almas bônus</dt><dd><span id="bonus-result-souls">0</span>/30</dd></div>
+              <div><dt data-i18n="bonus.result.runScore">Pontuação da rodada</dt><dd id="bonus-run-score">0</dd></div>
+              <div><dt data-i18n="bonus.result.savedBest">Melhor salva</dt><dd id="bonus-saved-best">0</dd></div>
+              <div><dt data-i18n="bonus.result.newPoints">Novos pontos</dt><dd id="bonus-new-points">+0</dd></div>
+            </dl>
+            <p id="bonus-progression-warning" class="persistence-warning" role="status" hidden></p>
+            <div class="modal-actions">
+              <button id="bonus-continue-next" type="button" data-ui="bonus-continue-next" class="primary" data-i18n="bonus.result.enterFactory">Continuar para a Fábrica</button>
+              <button id="bonus-replay" type="button" data-ui="bonus-replay" class="primary" data-i18n="bonus.result.replayOrigin">Repetir nível de origem</button>
+              <button type="button" data-ui="menu" data-i18n="bonus.result.menu">Menu</button>
+            </div>
+          </div>
+        </section>
+
+        <section id="screen-defeat" class="screen compact" hidden>
+          <div class="panel outcome defeat-panel">
+            <p class="eyebrow" data-i18n="defeat.eyebrow">SINAL INTERROMPIDO</p>
+            <h2 data-i18n="defeat.title">Game Over</h2>
+            <p id="defeat-level" class="outcome-level">Distrito Neon</p>
+            <p id="defeat-reason">O Distrito caiu.</p>
+            <dl class="run-stats defeat-stats" aria-label="Resumo da tentativa">
+              <div><dt data-i18n="defeat.statSouls">Almas depositadas</dt><dd><span id="defeat-souls">0</span>/<span id="defeat-souls-goal">15</span></dd></div>
+              <div><dt data-i18n="defeat.statLifeAltar">Vida / altar</dt><dd><span id="defeat-player-life">0</span>/<span data-player-max-life></span> · <span id="defeat-altar-life">0</span>/<span data-altar-max-life></span></dd></div>
+            </dl>
+            <div class="modal-actions">
+              <button type="button" data-ui="restart" class="primary" data-i18n="defeat.retry">Tentar novamente</button>
+              <button type="button" data-ui="menu" data-i18n="defeat.menu">Menu</button>
+            </div>
+          </div>
+        </section>
+
+        <section id="screen-survival-defeat" class="screen compact" hidden>
+          <div class="panel outcome survival-result-panel">
+            <p class="eyebrow" data-i18n="survival.eyebrow">PROTOCOLO DE SOBREVIVÊNCIA</p>
+            <h2 data-i18n="survival.gameOver">Game Over</h2>
+            <p id="survival-result-wave" class="outcome-level">Onda 1</p>
+            <dl class="run-stats" aria-label="Resumo do modo sobrevivência">
+              <div><dt data-i18n="survival.survivedTime">Tempo sobrevivido</dt><dd id="survival-result-time">00:00</dd></div>
+              <div><dt data-i18n="survival.enemiesDefeated">Inimigos derrotados</dt><dd id="survival-result-kills">0</dd></div>
+              <div class="survival-record"><dt data-i18n="survival.highScore">Recorde</dt><dd id="survival-high-score">Onda 1 · 00:00</dd></div>
+            </dl>
+            <div class="modal-actions">
+              <button type="button" data-ui="survival-retry" class="primary" data-i18n="survival.retry">Tentar novamente</button>
+              <button type="button" data-ui="menu" data-i18n="survival.menu">Menu</button>
+            </div>
+          </div>
+        </section>
+
+        <button id="pause-touch" class="pause-touch" type="button" aria-label="Pausar" hidden>Ⅱ</button>
+        <div id="touch-controls" class="touch-controls" hidden aria-label="Controles de toque">
+          <div class="touch-group move-group">
+            <button type="button" data-action="left" aria-label="Mover para esquerda">◀</button>
+            <button type="button" data-action="right" aria-label="Mover para direita">▶</button>
+          </div>
+          <div class="touch-group action-group">
+            <button type="button" data-action="ability" class="ability" aria-label="Habilidade de Nilo" hidden>✚</button>
+            <button type="button" data-action="interact" class="interact" aria-label="Depositar almas">E</button>
+            <button type="button" data-action="jump" aria-label="Pular">↑</button>
+            <button type="button" data-action="attack" class="attack" aria-label="Atacar">✦</button>
+          </div>
+        </div>
+      </div>
+      <p class="outside-note" data-i18n="outside.note">Versão web independente · Canvas 2D · sem runtime do Construct</p>
+    </main>
+    <noscript>BoyPunk! precisa de JavaScript habilitado.</noscript>
+    <script type="module" src="src/main.js"></script>
+  </body>
+</html>

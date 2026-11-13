@@ -1,0 +1,11 @@
+2d41fcd56a2036acef6f754080ff81e6278f0d633eb01b9c4a181d673fa2d58a  docs/checkpoints/survival-powerups-audio-2026-11-05-v2-pos-etapa-a-pre-audio/index.html
+3658f2f654d116551f62c2a49049f2342da117bbc95bee49920fe1462bf872ab  docs/checkpoints/survival-powerups-audio-2026-11-05-v2-pos-etapa-a-pre-audio/src/config.js
+bbd3082e7a7c2e1571a664c288fba9eb400dc045d7ac6b60daf899cc37e3d878  docs/checkpoints/survival-powerups-audio-2026-11-05-v2-pos-etapa-a-pre-audio/src/coop.js
+39d57114c8e94ab90d290951abbe42176c1c9a9bac16f0a4d8412af999d86c2b  docs/checkpoints/survival-powerups-audio-2026-11-05-v2-pos-etapa-a-pre-audio/src/core.js
+86358672c4a178e17461ef1b8bf708011ac2afb274d7d681981765ba3b7e0614  docs/checkpoints/survival-powerups-audio-2026-11-05-v2-pos-etapa-a-pre-audio/src/i18n.js
+6ce354b8eb3dcd939797e3d7a3a64e2dadb29a8fdec8c1084069e03d0d78818b  docs/checkpoints/survival-powerups-audio-2026-11-05-v2-pos-etapa-a-pre-audio/src/main.js
+86fbea49b8da1d45effdca826c9052080f18043d1b8dd193950f14f19f0b9efb  docs/checkpoints/survival-powerups-audio-2026-11-05-v2-pos-etapa-a-pre-audio/src/renderer.js
+cde570c18f82812082668e006d2d779b97dfc362e287dbfa3b65a7ca6b2085e0  docs/checkpoints/survival-powerups-audio-2026-11-05-v2-pos-etapa-a-pre-audio/tests/coop.test.mjs
+9ceacf28f92da09fc069401c1e826b8df96638df6ac1b4da7a75ac97ed2bea8f  docs/checkpoints/survival-powerups-audio-2026-11-05-v2-pos-etapa-a-pre-audio/tests/powerups.test.mjs
+8fa4fef2c453eb8203c8da706911adfc3dcc2f5fdd7feb8d1c06b6427336ff68  docs/checkpoints/survival-powerups-audio-2026-11-05-v2-pos-etapa-a-pre-audio/tests/renderer.test.mjs
+4d5d2adb2f99faaf0582f38a96e7c00e260805293d9e45a81dc2e5c0e85656b3  docs/checkpoints/survival-powerups-audio-2026-11-05-v2-pos-etapa-a-pre-audio/tests/survival-powerups.test.mjs

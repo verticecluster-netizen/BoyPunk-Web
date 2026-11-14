@@ -14,6 +14,11 @@ export const LEVEL_CATALOG = Object.freeze({
     id: BALANCE.levels.nextId,
     title: "Fábrica de Sucata",
     available: true
+  }),
+  [BALANCE.levels.thirdId]: Object.freeze({
+    id: BALANCE.levels.thirdId,
+    title: "Laboratório Cibernético",
+    available: true
   })
 });
 
@@ -113,6 +118,7 @@ export class ProgressionStore {
     }
     completed.add(levelId);
     if (levelId === BALANCE.levels.currentId) unlocked.add(BALANCE.levels.nextId);
+    if (levelId === BALANCE.levels.nextId) unlocked.add(BALANCE.levels.thirdId);
     this.state = {
       version: PROGRESSION_SCHEMA_VERSION,
       completedLevels: [...completed],

@@ -9,6 +9,11 @@ const EMPTY_INPUT = Object.freeze({
   pausePressed: false
 });
 
+// Idêntica à de src/core.js pelo mesmo motivo descrito em src/coop.js.
+function center(entity) {
+  return { x: entity.x + (entity.w ?? 0) / 2, y: entity.y + (entity.h ?? 0) / 2 };
+}
+
 export function createSeededRandom(seed) {
   let state = seed >>> 0;
   return () => {
@@ -44,9 +49,7 @@ export class MenuInactivityTimer {
   }
 }
 
-function center(entity) {
-  return { x: entity.x + entity.w / 2, y: entity.y + entity.h / 2 };
-}
+// center() é declarada uma única vez acima, com guardas `?? 0`.
 
 function closest(items, player) {
   const origin = center(player);

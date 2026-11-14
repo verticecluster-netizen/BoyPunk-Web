@@ -2,16 +2,20 @@ import { BALANCE, DEFAULT_DIFFICULTY, resolveCharacter } from "./config.js";
 import { GameModel, overlaps } from "./core.js";
 import { advanceAnimationClock, playerAnimationState } from "./animation.js";
 
+// distanceBetween() é declarada uma única vez acima, com guardas `?? 0`.
+
+// Mesma implementação defensiva de src/core.js. O empacotador achata os 18
+// módulos num escopo único, então nomes repetidos colidem e a última
+// declaração vence; manter as duas idênticas impede que uma versão sem as
+// guardas `?? 0` passe a valer para o jogo inteiro e produza NaN.
 function distanceBetween(a, b) {
-  const ax = a.x + a.w / 2;
-  const ay = a.y + a.h / 2;
-  const bx = b.x + b.w / 2;
-  const by = b.y + b.h / 2;
-  return Math.hypot(ax - bx, ay - by);
+  const dx = a.x + (a.w ?? 0) / 2 - b.x - (b.w ?? 0) / 2;
+  const dy = a.y + (a.h ?? 0) / 2 - b.y - (b.h ?? 0) / 2;
+  return Math.hypot(dx, dy);
 }
 
 function createAbility(character) {
-  if (!character.hasSelfHeal) return null;
+  if (!character.hasAbility) return null;
   return {
     id: character.ability.id,
     rechargeRemaining: character.ability.rechargeSeconds,

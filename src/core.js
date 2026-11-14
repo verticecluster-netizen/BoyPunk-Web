@@ -4,11 +4,154 @@ import { advanceAnimationClock, chaserAnimationState, playerAnimationState } fro
 import { BONUS_CANNON_RULES, BONUS_COMBAT_RULES, BONUS_RULES, calculateBonusScore } from "./bonus.js";
 
 const EPSILON = 0.01;
+
+/* --------------------------------------------------------------------------
+ * Remasterização v0.7.0 — parâmetros autoritativos de impacto e dinâmica.
+ * Todos os tempos em segundos e velocidades em px/s, no mesmo contrato das
+ * demais tabelas de balanceamento.
+ * ------------------------------------------------------------------------ */
+const HIT_STOP_STATES = new Set(["playing", "survival", "bonusPlaying"]);
+
+// Tempo máximo que um atirador pode ficar com a mira recusada antes de se
+// retirar, em vez de ocupar o orçamento do encontro para sempre.
+const SHOOTER_MAX_BLOCKED_AIM_SECONDS = 6;
+
+const REMASTER = Object.freeze({
+  hitStop: Object.freeze({
+    enemyHit: 0.035,      // Congelamento curto ao conectar dano em inimigo
+    enemyKill: 0.07,      // Congelamento mais longo na derrota confirmada
+    playerHit: 0.09,      // Congelamento ao jogador receber dano
+    maximum: 0.1          // Teto absoluto; impede acúmulo em multi-acerto
+  }),
+  knockback: Object.freeze({
+    hit: 118,             // Impulso horizontal por acerto não letal
+    kill: 215,            // Impulso na derrota (sem efeito de balanceamento)
+    decaySpeed: 980,      // Desaceleração do recuo (px/s²)
+    aiSuppress: 0.075     // Janela em que a IA não retoma o controle. Calibrada
+                          // para manter o acerto legível sem anular o ciclo de
+                          // contato do perseguidor.
+  }),
+  combo: Object.freeze({
+    windowSeconds: 3.2,   // Tempo máximo entre derrotas para manter a sequência
+    soulBonusEvery: 3,    // A cada N derrotas encadeadas, uma alma extra cai
+    shakeStep: 0.35,      // Incremento de tremor por elo da sequência
+    maxDisplay: 99
+  }),
+  dash: Object.freeze({
+    speed: 332,           // Velocidade da investida
+    duration: 0.16,       // ~53 px de deslocamento
+    // Tempo de espera calibrado para que a invulnerabilidade da esquiva fique
+    // em torno de 20% do tempo de jogo mesmo com o comando repetido sem pausa.
+    cooldown: 0.72,
+    // Janela do toque duplo. Medida em tempo de simulação, precisa cobrir com
+    // folga a duração de um quadro em aparelhos lentos: a 30 FPS (ou menos, em
+    // celular), dois toques legítimos caíam fora de uma janela de 0,22 s e a
+    // investida simplesmente não saía.
+    doubleTapWindow: 0.34,
+    // A esquiva cobre apenas os quadros iniciais da investida: a cauda do
+    // movimento é vulnerável. Isso transforma a investida numa janela de
+    // sincronia, e não num escudo contínuo — com o comando repetido sem pausa,
+    // a invulnerabilidade fica em ~17% do tempo, contra ~38% da calibragem
+    // anterior, que anulava a dificuldade do encontro.
+    invulnerability: 0.12,
+    ghostInterval: 0.022
+  }),
+  shake: Object.freeze({
+    decayPerSecond: 26,   // Decaimento por tempo real (antes era por quadro)
+    maximum: 7
+  }),
+  ai: Object.freeze({
+    advanceSpeedMultiplier: 0.62,  // Marcha sobre o altar: lenta o bastante
+                                   // para o jogador interceptar a tempo
+    huntSpeedMultiplier: 1.08,     // Caçadores vêm atrás e vêm com vontade
+    maxSiege: 2,                   // Quantos podem sitiar o altar ao mesmo
+                                   // tempo; o excedente caça o jogador
+    siegeDwellSeconds: 3.4,        // Parado junto ao objetivo por este tempo
+                                   // sem conseguir dano = vira caçador
+    siegeDwellRadius: 46,          // Distância do objetivo que conta como
+                                   // "já chegou"
+    aggressionRampSeconds: 22,     // Tempo de vida para atingir a agressão
+                                   // máxima; impede confronto estagnado
+    aggressionMaxBonus: 0.3,       // Acréscimo máximo de velocidade (+30%)
+    descentThreshold: 26,          // Desnível que caracteriza "alvo abaixo"
+    descentProbeSeconds: 0.3,      // Intervalo entre buscas de borda (custo)
+    descentProbeRange: 190,        // Alcance lateral da busca por borda
+    ascentThreshold: 26,           // Desnível que caracteriza "alvo acima"
+    routeCommitSeconds: 2.6,       // Compromisso com a rota escolhida. Sem ele
+                                   // o inimigo reavaliava na beira e oscilava.
+    ascentJumpCooldown: 0.45,      // Intervalo entre saltos de subida
+    stuckSeconds: 1.1,             // Sem progresso horizontal por este tempo…
+    stuckSpeed: 6,                 // …com velocidade abaixo disto = travado
+    unstickSeconds: 0.5,           // Duração da manobra de desencalhe
+    altarSpread: 26                // Dispersão lateral para não empilharem
+  }),
+  squash: Object.freeze({
+    landSpeed: 180,       // Velocidade de queda mínima para achatar no pouso
+    decayPerSecond: 7,
+    jumpStretch: -0.6
+  })
+});
 const FLOATING_POWER_UP_DEFINITIONS = Object.freeze([
   Object.freeze({ powerUpType: "rapid-fire", x: 96, y: 220, w: 20, h: 20, groundY: 240 }),
   Object.freeze({ powerUpType: "health", x: 264, y: 220, w: 20, h: 20, groundY: 240 }),
   Object.freeze({ powerUpType: "shield", x: 388, y: 220, w: 20, h: 20, groundY: 240 })
 ]);
+const WEAPON_DROP_PREFIX = "weapon-";
+
+const WEAPONS = Object.freeze({
+  "scatter-coil": Object.freeze({
+    id: "scatter-coil",
+    nameKey: "weapon.scatterCoil.name",
+    short: "DISPERSOR",
+    accent: "#ff9b38",
+    ammo: 8,                 // Disparos antes de quebrar
+    holdSeconds: 22,         // Tempo máximo empunhada, mesmo sem atirar
+    cooldown: 0.42,
+    mode: "spread",
+    pellets: 3,              // Três projéteis em leque
+    spreadDegrees: 13,
+    shotSpeed: 290,
+    damage: 1,
+    knockback: 190
+  }),
+  "rail-lance": Object.freeze({
+    id: "rail-lance",
+    nameKey: "weapon.railLance.name",
+    short: "LANÇA",
+    accent: "#37e6ee",
+    ammo: 5,
+    holdSeconds: 20,
+    cooldown: 0.72,
+    mode: "beam",            // Feixe instantâneo que atravessa a fileira
+    beamHeight: 10,
+    damage: 2,
+    knockback: 120
+  }),
+  "grav-maul": Object.freeze({
+    id: "grav-maul",
+    nameKey: "weapon.gravMaul.name",
+    short: "MARRETA",
+    accent: "#ae62ff",
+    ammo: 6,
+    holdSeconds: 24,
+    cooldown: 0.56,
+    mode: "slam",            // Corpo a corpo em área, sem projétil
+    radius: 46,
+    damage: 2,
+    knockback: 260
+  })
+});
+
+const WEAPON_IDS = Object.freeze(Object.keys(WEAPONS));
+
+const WEAPON_DROP_RULES = Object.freeze({
+  firstDropSeconds: 7,     // A primeira arma cai depois da fase de aprendizado
+  respawnSeconds: 16,      // Cada ponto repõe neste intervalo após ser pego
+  width: 18,
+  height: 18,
+  bobAmplitude: 2.5
+});
+
 const RAPID_FIRE_DURATION_SECONDS = 10;
 const RAPID_FIRE_COOLDOWN_MULTIPLIER = 0.5;
 const SURVIVAL_SUPPORT_PICKUPS = Object.freeze([
@@ -23,8 +166,12 @@ const BLOCKED_SHOT_FEEDBACK = Object.freeze({
 });
 export const CHASER_STATES = Object.freeze({
   PATROL: "patrol",
-  CHASE: "chase"
+  ADVANCE: "advance",   // Marcha sobre o altar
+  HUNT: "hunt",         // Procura o jogador em qualquer distância
+  CHASE: "chase"        // Jogador à vista e ao alcance
 });
+
+const CHASER_ROLES = Object.freeze({ SIEGE: "siege", HUNTER: "hunter" });
 
 export function overlaps(a, b) {
   return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
@@ -148,6 +295,16 @@ export class GameModel {
     this.activePowerUp = null;
     this.pendingPlayerShots = [];
     this.meleeHitbox = { x: 0, y: 0, w: 26, h: 20 };
+    // Remasterização v0.7.0: impacto, sequência de derrotas e pedido de tremor.
+    this.beamFlashes = [];
+    this.slamRings = [];
+    this.weaponDrops = [];
+    this.weaponSpawns = [];
+    this.hitStop = 0;
+    this.combo = 0;
+    this.comboTimer = 0;
+    this.comboBest = 0;
+    this.shakeRequest = 0;
     this.projectileStartRect = { x: 0, y: 0, w: 0, h: 0 };
     this.projectileImpactScratch = { time: 0, priority: 0, type: "", target: null };
     this.powerUpSpawnResolved = false;
@@ -271,12 +428,20 @@ export class GameModel {
     this.state = "playing";
     this.gameMode = "campaign";
     this.pausedFrom = null;
+    this.hitStop = 0;
+    this.beamFlashes = [];
+    this.slamRings = [];
+    this.combo = 0;
+    this.comboTimer = 0;
+    this.comboBest = 0;
+    this.shakeRequest = 0;
     this.demoMode = Boolean(demo);
+    this.initializeWeaponDrops();
     this.progressionEligible = Boolean(progressionEligible) && !this.demoMode;
     this.bonusQualificationEligible = Boolean(bonusQualificationEligible) && this.progressionEligible;
     this.characterId = this.demoMode ? DEFAULT_CHARACTER : normalizeCharacter(characterId);
     this.character = resolveCharacter(this.characterId, this.playerMaxLife);
-    this.ability = (!this.demoMode && this.character.hasSelfHeal)
+    this.ability = (!this.demoMode && this.character.hasAbility)
       ? {
           id: this.character.ability.id,
           rechargeRemaining: this.character.ability.rechargeSeconds,
@@ -414,7 +579,7 @@ export class GameModel {
     this.encounterPhaseId = "survival";
     this.characterId = normalizeCharacter(characterId);
     this.character = resolveCharacter(this.characterId, BALANCE.survival.playerMaxLife);
-    this.ability = this.character.hasSelfHeal
+    this.ability = this.character.hasAbility
       ? {
           id: this.character.ability.id,
           rechargeRemaining: this.character.ability.rechargeSeconds,
@@ -423,6 +588,7 @@ export class GameModel {
         }
       : null;
     this.playerMaxLife = BALANCE.survival.playerMaxLife;
+    this.initializeWeaponDrops();
     this.player = {
       id: this.createEntityId("player"),
       x: this.level.playerStart.x,
@@ -563,6 +729,13 @@ export class GameModel {
   update(dt, input = {}) {
     dt = Math.min(Math.max(dt, 0), 0.05);
     if (input.pausePressed) this.togglePause();
+    // Hit stop: congela a simulação por alguns quadros para dar peso ao
+    // impacto. Nunca roda em demonstração nem com movimento reduzido, para
+    // preservar o determinismo do modo atrativo.
+    if (this.hitStop > 0 && HIT_STOP_STATES.has(this.state)) {
+      this.hitStop = Math.max(0, this.hitStop - dt);
+      return;
+    }
     if (this.state === "bonusTransition") {
       this.updateBonusTransition(dt);
       return;
@@ -587,6 +760,7 @@ export class GameModel {
 
     this.elapsed += dt;
     this.updatePowerUpClocks(dt);
+    this.updateCombo(dt);
     this.updateAbility(dt);
     this.player.attackCooldown = Math.max(0, this.player.attackCooldown - dt);
     this.player.attackTimer = Math.max(0, this.player.attackTimer - dt);
@@ -608,6 +782,8 @@ export class GameModel {
     this.updatePresses(dt);
     if (this.resolveTerminalOutcome()) return;
     this.updateSpawning(dt);
+    this.updateWeaponDrops(dt);
+    this.updateWeaponPickup();
     this.updatePowerUpCollection();
     this.updateFloatingPowerUpCollection();
     this.updateEnemies(dt);
@@ -627,6 +803,7 @@ export class GameModel {
     this.elapsed += dt;
     this.updatePowerUpClocks(dt);
     this.updateSupportPickupRespawns(dt);
+    this.updateCombo(dt);
     this.updateAbility(dt);
     this.player.attackCooldown = Math.max(0, this.player.attackCooldown - dt);
     this.player.attackTimer = Math.max(0, this.player.attackTimer - dt);
@@ -643,6 +820,8 @@ export class GameModel {
     advanceAnimationClock(this.player, playerAnimationState(this.player), dt);
     if (this.resolveTerminalOutcome()) return;
     this.updatePendingPlayerShots(dt);
+    this.updateWeaponDrops(dt);
+    this.updateWeaponPickup([this.player]);
     this.updateSupportPickupCollection([this.player]);
     this.updateEnemies(dt);
     if (this.resolveTerminalOutcome()) return;
@@ -666,9 +845,47 @@ export class GameModel {
       ? Math.sign(input.horizontal)
       : Number(Boolean(input.right)) - Number(Boolean(input.left));
 
-    if (horizontal !== 0) {
-      if (player.vx * horizontal < 0) player.vx *= -1;
-      player.vx = approach(player.vx, horizontal * BALANCE.player.maxSpeed, BALANCE.player.acceleration * dt);
+    // ---- Investida por toque duplo direcional (não consome tecla nova, logo
+    // vale igualmente para teclado, controle e toque). ----
+    player.dashCooldown = Math.max(0, (player.dashCooldown ?? 0) - dt);
+    player.dashTapWindow = Math.max(0, (player.dashTapWindow ?? 0) - dt);
+    const previousHorizontal = player.prevHorizontal ?? 0;
+    // Fonte autoritativa: a borda de pressão da direção. O recuo pela transição
+    // do estado mantido atende quem alimenta o modelo com entradas sintéticas
+    // (demonstração, API de teste) e não envia bordas.
+    const dashEdge = input.leftPressed ? -1
+      : input.rightPressed ? 1
+      : (horizontal !== 0 && previousHorizontal === 0 ? horizontal : 0);
+    // Dois toques registrados no mesmo quadro já formam o par completo.
+    const edgeCount = dashEdge < 0 ? (input.leftPresses ?? 0)
+      : dashEdge > 0 ? (input.rightPresses ?? 0)
+      : 0;
+    if (edgeCount >= 2) {
+      player.dashTapDir = dashEdge;
+      player.dashTapWindow = 0;
+      this.tryDash(dashEdge);
+    } else if (dashEdge !== 0) {
+      if (player.dashTapDir === dashEdge && player.dashTapWindow > 0) this.tryDash(dashEdge);
+      else {
+        player.dashTapDir = dashEdge;
+        player.dashTapWindow = REMASTER.dash.doubleTapWindow;
+      }
+    }
+    player.prevHorizontal = horizontal;
+
+    if ((player.dashTimer ?? 0) > 0) {
+      player.dashTimer = Math.max(0, player.dashTimer - dt);
+      player.vx = (player.dashDir ?? player.facing) * REMASTER.dash.speed;
+      player.facing = player.dashDir ?? player.facing;
+    } else if (horizontal !== 0) {
+      // Inversão com atrito somado à aceleração. A versão anterior espelhava
+      // a velocidade (player.vx *= -1), o que teleportava o corpo para a
+      // velocidade máxima oposta em um único tique.
+      const turning = player.vx * horizontal < 0;
+      const rate = turning
+        ? BALANCE.player.acceleration + BALANCE.player.friction
+        : BALANCE.player.acceleration;
+      player.vx = approach(player.vx, horizontal * BALANCE.player.maxSpeed, rate * dt);
       player.facing = horizontal;
     } else {
       player.vx = approach(player.vx, 0, BALANCE.player.friction * dt);
@@ -685,19 +902,25 @@ export class GameModel {
     }
 
     if (player.jumpBuffer > 0) {
+      // Saltar cancela a investida para que o impulso vertical não seja
+      // anulado pela suspensão de gravidade abaixo.
       if (player.coyote > 0) {
+        player.dashTimer = 0;
         player.vy = -BALANCE.player.jumpSpeed;
         player.onGround = false;
         player.coyote = 0;
         player.jumpBuffer = 0;
         player.jumpsUsed = 1;
         player.variableJumpActive = Boolean(input.jumpHeld);
+        player.squash = REMASTER.squash.jumpStretch;
         this.emit("jump", { double: false });
       } else if (player.jumpsUsed < 2) {
+        player.dashTimer = 0;
         player.vy = -BALANCE.player.doubleJumpSpeed;
         player.jumpBuffer = 0;
         player.jumpsUsed = 2;
         player.variableJumpActive = Boolean(input.jumpHeld);
+        player.squash = REMASTER.squash.jumpStretch * 0.75;
         this.emit("jump", { double: true });
       }
     }
@@ -712,8 +935,21 @@ export class GameModel {
 
     if (input.attackPressed && player.attackCooldown <= 0) this.playerAttack();
 
-    player.vy = Math.min(player.vy + BALANCE.player.gravity * dt, BALANCE.player.maxFallSpeed);
+    // A investida é horizontal pura: a gravidade fica suspensa enquanto durar,
+    // dando a ela função de esquiva e de alcance sobre vãos curtos.
+    if ((player.dashTimer ?? 0) > 0) player.vy = 0;
+    else player.vy = Math.min(player.vy + BALANCE.player.gravity * dt, BALANCE.player.maxFallSpeed);
+
+    const wasAirborne = !player.onGround;
+    const impactSpeed = player.vy;
     this.moveBody(player, dt);
+
+    player.squash = approach(player.squash ?? 0, 0, REMASTER.squash.decayPerSecond * dt);
+    if (wasAirborne && player.onGround && impactSpeed > REMASTER.squash.landSpeed) {
+      player.squash = Math.min(1, impactSpeed / BALANCE.player.maxFallSpeed);
+      this.requestShake(Math.min(2.2, impactSpeed / 240));
+      this.emit("land", { speed: impactSpeed });
+    }
 
     if (player.attackTimer > 0) {
       const hitbox = this.meleeHitbox;
@@ -746,6 +982,23 @@ export class GameModel {
 
   playerAttack() {
     const player = this.player;
+
+    // Arma empunhada substitui integralmente o ataque padrão.
+    const equipped = this.heldWeapon(player);
+    if (equipped) {
+      const { config } = equipped;
+      player.attackCooldown = config.cooldown;
+      player.attackTimer = BALANCE.player.attackDuration;
+      player.meleeAttackId += 1;
+      const direction = player.facing >= 0 ? 1 : -1;
+      if (config.mode === "spread") this.fireScatter(player, config, direction);
+      else if (config.mode === "beam") this.fireBeam(player, config, direction);
+      else this.fireSlam(player, config, direction);
+      this.emit("attack");
+      this.consumeWeaponAmmo(player);
+      return;
+    }
+
     const baseAttackCooldown = this.character ? this.character.attackCooldown : BALANCE.player.attackCooldown;
     const rapidFireActive = this.powerUpsAllowed()
       && player.rapidFire
@@ -938,6 +1191,12 @@ export class GameModel {
     }
   }
 
+  clearHeldWeapons() {
+    for (const player of this.playerEntities()) player.weapon = null;
+    this.beamFlashes = [];
+    this.slamRings = [];
+  }
+
   clearTransientPowerUps() {
     this.powerUpPickup = null;
     this.activePowerUp = null;
@@ -976,10 +1235,11 @@ export class GameModel {
   }
 
   tryActivateAbility() {
-    if (!this.ability || !this.character?.hasSelfHeal) return false;
+    if (!this.ability || !this.character?.hasAbility) return false;
     if (!this.characterAbilityAllowed()) return false;
     if (!this.player || this.player.life <= 0) return false;
     if (this.ability.rechargeRemaining > 0 || !this.ability.ready) return false;
+    if (this.character.abilityId === "weapon-requisition") return this.activateRequisition();
     if (this.player.life >= this.playerMaxLife) return false;
 
     const healAmount = this.character.ability.healAmount;
@@ -995,6 +1255,36 @@ export class GameModel {
       life: this.player.life,
       maxLife: this.playerMaxLife
     });
+    return true;
+  }
+
+  // Requisição (Vex): sem arma na mão, materializa uma do arsenal; com arma,
+  // recarrega a munição. É a habilidade que dá controle sobre o sistema de
+  // armas temporárias, em vez de depender do que o nível larga no chão.
+  activateRequisition() {
+    const player = this.player;
+    const config = player.weapon ? WEAPONS[player.weapon.id] : null;
+    const refill = this.character.ability.refillAmmo;
+    let resultado;
+    if (config) {
+      const antes = player.weapon.ammo;
+      player.weapon.ammo = Math.min(config.ammo, antes + refill);
+      if (player.weapon.ammo === antes) return false;   // já cheia: não gasta
+      // O relógio de posse também é renovado, senão a recarga seria inútil
+      // numa arma prestes a expirar por tempo.
+      player.weapon.holdRemaining = config.holdSeconds;
+      resultado = { tipo: "recarga", weaponId: player.weapon.id, municao: player.weapon.ammo };
+    } else {
+      const escolha = WEAPON_IDS[Math.floor(this.random() * WEAPON_IDS.length) % WEAPON_IDS.length];
+      if (!this.equipWeapon(escolha)) return false;
+      resultado = { tipo: "requisicao", weaponId: escolha, municao: player.weapon?.ammo ?? 0 };
+    }
+    this.ability.ready = false;
+    this.ability.rechargeRemaining = this.ability.rechargeDuration;
+    const rotulo = resultado.tipo === "recarga" ? "RECARGA" : "REQUISIÇÃO";
+    this.addEffect("powerUpCollect", player.x + player.w / 2, player.y + player.h / 2, rotulo, 0.7);
+    this.requestShake(1.4);
+    this.emit("weaponRequisitioned", { characterId: this.characterId, ...resultado });
     return true;
   }
 
@@ -1139,6 +1429,12 @@ export class GameModel {
   activateFloatingPowerUp(powerUp, player = this.player) {
     const id = powerUp?.powerUpType ?? powerUp?.typeId;
     if (!player || !id) return false;
+    if (id.startsWith(WEAPON_DROP_PREFIX)) {
+      const weaponId = id.slice(WEAPON_DROP_PREFIX.length);
+      // Encostar numa arma sempre troca a que estiver em mãos, como na arena:
+      // pegar é uma decisão, não um acúmulo.
+      return this.equipWeapon(weaponId, player, powerUp);
+    }
     if (id === "rapid-fire") {
       player.rapidFire = true;
       player.rapidFireRemaining = RAPID_FIRE_DURATION_SECONDS;
@@ -1170,6 +1466,195 @@ export class GameModel {
     this.addEffect("powerUpCollect", x, y, id === "health" ? "+1" : id === "shield" ? "ESCUDO" : "RÁPIDO", 0.75);
     this.emit("powerUpCollected", { id, playerId: player.id });
     return true;
+  }
+
+  // ---- Quedas de arma no cenário ---------------------------------------
+
+  initializeWeaponDrops() {
+    const points = this.level?.weaponSpawns ?? [];
+    this.weaponSpawns = points.map((point, index) => ({
+      index,
+      x: point.x,
+      y: point.y,
+      // Pontos diferentes entram em cena escalonados, para a arena não encher
+      // de armas de uma vez.
+      timer: WEAPON_DROP_RULES.firstDropSeconds + index * 5,
+      activeId: null
+    }));
+    this.weaponDrops = [];
+  }
+
+  updateWeaponDrops(dt) {
+    if (!this.weaponSpawns?.length || !this.powerUpsAllowed()) return;
+    for (const spawn of this.weaponSpawns) {
+      if (spawn.activeId) continue;
+      spawn.timer -= dt;
+      if (spawn.timer > 0) continue;
+      spawn.timer = WEAPON_DROP_RULES.respawnSeconds;
+      const weaponId = WEAPON_IDS[Math.floor(this.random() * WEAPON_IDS.length) % WEAPON_IDS.length];
+      const drop = {
+        id: this.createEntityId(`weapon-drop-${weaponId}`),
+        weaponId,
+        spawnIndex: spawn.index,
+        x: spawn.x,
+        y: spawn.y,
+        w: WEAPON_DROP_RULES.width,
+        h: WEAPON_DROP_RULES.height,
+        bornAt: this.elapsed,
+        removed: false
+      };
+      spawn.activeId = drop.id;
+      this.weaponDrops.push(drop);
+      this.emit("weaponDropped", { id: weaponId, placementId: drop.id });
+    }
+  }
+
+  updateWeaponPickup(players = this.playerEntities({ livingOnly: true })) {
+    if (!this.weaponDrops?.length) return false;
+    let taken = false;
+    for (const drop of this.weaponDrops) {
+      if (drop.removed) continue;
+      const collector = players.find((player) => player && player.life > 0 && overlaps(player, drop));
+      if (!collector) continue;
+      if (!this.equipWeapon(drop.weaponId, collector, drop)) continue;
+      drop.removed = true;
+      const spawn = this.weaponSpawns?.find((candidate) => candidate.index === drop.spawnIndex);
+      if (spawn) spawn.activeId = null;
+      taken = true;
+    }
+    if (taken) this.weaponDrops = this.weaponDrops.filter((drop) => !drop.removed);
+    return taken;
+  }
+
+  // ---- Armas temporárias ------------------------------------------------
+
+  equipWeapon(weaponId, player = this.player, source = null) {
+    const config = WEAPONS[weaponId];
+    if (!config || !player) return false;
+    player.weapon = {
+      id: config.id,
+      ammo: config.ammo,
+      maxAmmo: config.ammo,
+      remaining: config.holdSeconds,
+      holdSeconds: config.holdSeconds
+    };
+    // Empunhar zera o tempo de recarga: a troca de arma é instantânea, como
+    // num pega-e-usa de arena.
+    player.attackCooldown = 0;
+    const x = source ? source.x + source.w / 2 : player.x + player.w / 2;
+    const y = source ? source.y + source.h / 2 : player.y + player.h / 2;
+    this.addEffect("weaponPickup", x, y, config.short, 0.8);
+    this.notice = { key: config.nameKey, time: 1.2 };
+    this.requestShake(1.6);
+    this.emit("weaponEquipped", { id: config.id, playerId: player.id, ammo: config.ammo });
+    return true;
+  }
+
+  breakWeapon(player = this.player, reason = "ammo") {
+    const held = player?.weapon;
+    if (!held) return false;
+    player.weapon = null;
+    player.attackCooldown = 0;
+    this.addEffect("weaponBreak", player.x + player.w / 2, player.y + player.h / 2, "", 0.6);
+    this.requestShake(2);
+    this.emit("weaponBroken", { id: held.id, playerId: player.id, reason });
+    return true;
+  }
+
+  heldWeapon(player = this.player) {
+    const held = player?.weapon;
+    if (!held) return null;
+    const config = WEAPONS[held.id];
+    return config ? { held, config } : null;
+  }
+
+  updateWeaponClock(dt) {
+    for (const player of this.playerEntities()) {
+      const held = player.weapon;
+      if (!held) continue;
+      held.remaining = Math.max(0, held.remaining - dt);
+      if (held.remaining <= 0) this.breakWeapon(player, "tempo");
+    }
+  }
+
+  consumeWeaponAmmo(player) {
+    const held = player?.weapon;
+    if (!held) return;
+    held.ammo -= 1;
+    this.emit("weaponAmmoSpent", { id: held.id, playerId: player.id, ammo: held.ammo });
+    if (held.ammo <= 0) this.breakWeapon(player, "munição");
+  }
+
+  // Leque de projéteis do Dispersor.
+  fireScatter(player, config, direction) {
+    const origin = this.playerShotOrigin(direction);
+    const middle = (config.pellets - 1) / 2;
+    for (let index = 0; index < config.pellets; index += 1) {
+      const angle = ((index - middle) * config.spreadDegrees * Math.PI) / 180;
+      this.projectiles.push({
+        id: this.createEntityId("projectile-scatter"),
+        team: "player",
+        weaponId: config.id,
+        x: origin.x,
+        y: origin.y,
+        w: 7,
+        h: 7,
+        vx: Math.cos(angle) * config.shotSpeed * direction,
+        vy: Math.sin(angle) * config.shotSpeed,
+        life: 0.72,
+        damage: config.damage,
+        knockback: config.knockback,
+        age: 0,
+        removed: false
+      });
+    }
+    this.emit("weaponFired", { id: config.id, mode: config.mode, direction });
+  }
+
+  // Feixe instantâneo: atinge todos os inimigos na faixa horizontal à frente.
+  fireBeam(player, config, direction) {
+    const origin = this.playerShotOrigin(direction);
+    const startX = direction > 0 ? origin.x : 0;
+    const endX = direction > 0 ? WORLD.width : origin.x + 8;
+    const band = { x: startX, y: origin.y - config.beamHeight / 2 + 4, w: Math.max(1, endX - startX), h: config.beamHeight };
+    let hits = 0;
+    for (const enemy of this.enemies) {
+      if (enemy.removed || !overlaps(band, enemy)) continue;
+      hits += 1;
+      this.damageEnemy(enemy, config.damage, {
+        type: "lanca-trilho", sourceId: player.id, knockbackDir: direction,
+        collision: { attack: { ...band }, target: { ...enemy } }
+      });
+    }
+    this.beamFlashes.push({ ...band, origin: origin.x, life: 0.22, duration: 0.22, accent: config.accent });
+    if (this.beamFlashes.length > 4) this.beamFlashes.shift();
+    this.requestShake(2.4);
+    this.pulseHitStop(REMASTER.hitStop.enemyHit);
+    this.emit("weaponFired", { id: config.id, mode: config.mode, direction, hits });
+  }
+
+  // Impacto em área da Marreta Gravitacional.
+  fireSlam(player, config, direction) {
+    const cx = player.x + player.w / 2 + direction * 14;
+    const cy = player.y + player.h / 2;
+    let hits = 0;
+    for (const enemy of this.enemies) {
+      if (enemy.removed) continue;
+      const ex = enemy.x + enemy.w / 2;
+      const ey = enemy.y + enemy.h / 2;
+      if (Math.hypot(ex - cx, ey - cy) > config.radius) continue;
+      hits += 1;
+      this.damageEnemy(enemy, config.damage, {
+        type: "marreta-gravitacional", sourceId: player.id,
+        knockbackDir: Math.sign(ex - cx) || direction,
+        collision: { attack: { x: cx - config.radius, y: cy - config.radius, w: config.radius * 2, h: config.radius * 2 }, target: { ...enemy } }
+      });
+    }
+    this.slamRings.push({ x: cx, y: cy, radius: config.radius, life: 0.3, duration: 0.3, accent: config.accent });
+    if (this.slamRings.length > 4) this.slamRings.shift();
+    this.requestShake(3.4);
+    this.pulseHitStop(REMASTER.hitStop.enemyKill);
+    this.emit("weaponFired", { id: config.id, mode: config.mode, direction, hits });
   }
 
   isValidPowerUpSpawn(definition) {
@@ -1239,6 +1724,11 @@ export class GameModel {
         this.emit("powerUpExpired", { id });
       }
     }
+    this.updateWeaponClock(dt);
+    for (const flash of this.beamFlashes) flash.life -= dt;
+    this.beamFlashes = this.beamFlashes.filter((flash) => flash.life > 0);
+    for (const ring of this.slamRings) ring.life -= dt;
+    this.slamRings = this.slamRings.filter((ring) => ring.life > 0);
     if (this.player?.rapidFire) {
       this.player.rapidFireRemaining = Math.max(0, (this.player.rapidFireRemaining ?? 0) - dt);
       if (this.player.rapidFireRemaining <= 0) {
@@ -1834,7 +2324,10 @@ export class GameModel {
       maxHp: this.encounter.chaserMaxHp,
       hp: this.encounter.chaserMaxHp,
       hurtFlash: 0,
-      aiState: CHASER_STATES.PATROL,
+      aiState: CHASER_STATES.ADVANCE,
+      chaserRole: null,
+      spawnedAt: this.elapsed,
+      siegeDwell: 0,
       spawnX: spawn.x,
       spawnY: spawn.y,
       patrolLeft: patrol.left,
@@ -2004,7 +2497,21 @@ export class GameModel {
     const targetPlayer = this.selectLivingPlayer(enemy);
     const enemyCenterX = enemy.x + (enemy.w ?? 0) / 2;
     const enemyCenterY = enemy.y + (enemy.h ?? 0) / 2;
-    const previousState = enemy.aiState ?? CHASER_STATES.PATROL;
+    if (!enemy.chaserRole) this.assignChaserRole(enemy);
+    // Permanência junto ao objetivo: quem chega ao altar e fica parado lá vira
+    // caçador, para que manter distância do altar deixe de ser abrigo seguro.
+    if (enemy.chaserRole === CHASER_ROLES.SIEGE && this.altar) {
+      const goal = this.chaserGoal(enemy);
+      const noObjetivo = Math.abs(goal.x - enemyCenterX) <= REMASTER.ai.siegeDwellRadius;
+      const golpeouRecente = this.elapsed - (enemy.lastAltarHitAt ?? -Infinity)
+        < REMASTER.ai.siegeDwellSeconds;
+      // Parado no objetivo E sem causar dano = cerco improdutivo.
+      enemy.siegeDwell = (noObjetivo && !golpeouRecente) ? (enemy.siegeDwell ?? 0) + dt : 0;
+      if (enemy.siegeDwell >= REMASTER.ai.siegeDwellSeconds) {
+        this.escalateToHunter(enemy, "cerco-improdutivo");
+      }
+    }
+    const previousState = enemy.aiState ?? CHASER_STATES.ADVANCE;
     let state = previousState;
     let playerCenterX = 0;
     let playerCenterY = 0;
@@ -2019,14 +2526,23 @@ export class GameModel {
       // intermediária, cada instância preserva seu estado atual.
       const enterDistance = this.encounter.chaserDetectionEnterDistance + EPSILON;
       const exitDistance = this.encounter.chaserDetectionExitDistance - EPSILON;
-      if (state === CHASER_STATES.PATROL && targetDistanceSq <= enterDistance * enterDistance) {
+      if (state !== CHASER_STATES.CHASE && targetDistanceSq <= enterDistance * enterDistance) {
         state = CHASER_STATES.CHASE;
       } else if (state === CHASER_STATES.CHASE && targetDistanceSq >= exitDistance * exitDistance) {
-        state = CHASER_STATES.PATROL;
+        // Fora do alcance de vista: o caçador continua atrás do jogador; o
+        // sitiante volta a marchar sobre o altar.
+        state = enemy.chaserRole === CHASER_ROLES.HUNTER
+          ? CHASER_STATES.HUNT
+          : CHASER_STATES.ADVANCE;
+      } else if (state !== CHASER_STATES.CHASE) {
+        state = enemy.chaserRole === CHASER_ROLES.HUNTER
+          ? CHASER_STATES.HUNT
+          : CHASER_STATES.ADVANCE;
       }
     } else {
-      state = CHASER_STATES.PATROL;
+      state = CHASER_STATES.ADVANCE;
     }
+    if (state === CHASER_STATES.PATROL) state = CHASER_STATES.ADVANCE;
     enemy.aiState = state;
     if (state !== previousState) {
       this.emit("chaserStateChanged", {
@@ -2041,8 +2557,22 @@ export class GameModel {
     const speedMultiplier = this.gameMode === "survival" ? this.survivalEnemySpeedMultiplier : 1;
     let direction;
     let speed = this.encounter.chaserSpeed;
-    if (state === CHASER_STATES.CHASE && targetPlayer) {
+    if (state === CHASER_STATES.HUNT && targetPlayer) {
+      // Caça: mesma navegação do perseguir, sem porta de distância. O inimigo
+      // atravessa o nível inteiro atrás do jogador.
       direction = Math.sign(playerCenterX - enemyCenterX) || enemy.facing || 1;
+      speed *= REMASTER.ai.huntSpeedMultiplier;
+      direction = this.resolveNavigation(enemy, dt, direction, playerCenterX, playerCenterY, enemyCenterX, enemyCenterY);
+    } else if (state === CHASER_STATES.ADVANCE) {
+      // Avanço sobre o objetivo. Cada inimigo mira um ponto levemente distinto
+      // do altar para que o grupo não se empilhe numa coluna só.
+      const goal = this.chaserGoal(enemy);
+      direction = Math.sign(goal.x - enemyCenterX) || enemy.facing || 1;
+      speed *= REMASTER.ai.advanceSpeedMultiplier;
+      direction = this.resolveNavigation(enemy, dt, direction, goal.x, goal.y, enemyCenterX, enemyCenterY);
+    } else if (state === CHASER_STATES.CHASE && targetPlayer) {
+      direction = Math.sign(playerCenterX - enemyCenterX) || enemy.facing || 1;
+      direction = this.resolveNavigation(enemy, dt, direction, playerCenterX, playerCenterY, enemyCenterX, enemyCenterY);
     } else {
       speed *= this.encounter.chaserPatrolSpeedMultiplier;
       const acceleration = this.encounter.chaserAcceleration * speedMultiplier;
@@ -2064,24 +2594,34 @@ export class GameModel {
     }
 
     enemy.facing = direction;
-    enemy.intendedVx = direction * speed * speedMultiplier;
-    enemy.vx = approach(
-      enemy.vx,
-      enemy.intendedVx,
-      this.encounter.chaserAcceleration * speedMultiplier * dt
-    );
+    enemy.intendedVx = direction * speed * speedMultiplier * this.chaserAggression(enemy);
+    enemy.knockback = Math.max(0, (enemy.knockback ?? 0) - dt);
+    if (enemy.knockback > 0) {
+      // Durante o recuo a IA não reassume a velocidade: o impulso de dano é
+      // autoritativo até decair, o que torna o acerto legível em tela.
+      enemy.vx = approach(enemy.vx, 0, REMASTER.knockback.decaySpeed * dt);
+    } else {
+      enemy.vx = approach(
+        enemy.vx,
+        enemy.intendedVx,
+        this.encounter.chaserAcceleration * speedMultiplier * dt
+      );
+    }
 
-    const playerAbove = targetPlayer && playerCenterY < enemyCenterY - 26;
-    if (state === CHASER_STATES.CHASE && enemy.onGround && playerAbove
-      && Math.abs(playerCenterX - enemyCenterX) < 118) {
+    // O salto é decidido pela navegação, que só o autoriza onde existe espaço
+    // livre acima. O gatilho anterior ("jogador está acima e perto") disparava
+    // mesmo embaixo de plataforma sólida: o perseguidor batia a cabeça e
+    // repetia o pulo no lugar, sem nunca andar até o vão por onde subir.
+    if (enemy.onGround && enemy.wantsAscend) {
       enemy.vy = -this.encounter.chaserJumpSpeed;
       enemy.onGround = false;
+      enemy.wantsAscend = false;
     }
 
     enemy.vy = Math.min(enemy.vy + BALANCE.player.gravity * dt, BALANCE.player.maxFallSpeed);
     const movement = this.moveBody(enemy, dt);
     if (movement.hitX && enemy.onGround) {
-      if (state === CHASER_STATES.CHASE) {
+      if (state === CHASER_STATES.CHASE || state === CHASER_STATES.ADVANCE || state === CHASER_STATES.HUNT) {
         enemy.vy = -this.encounter.chaserJumpSpeed * 0.86;
         enemy.onGround = false;
       } else if (enemy.blockedTurnCooldown <= 0) {
@@ -2091,6 +2631,11 @@ export class GameModel {
         enemy.blockedTurnCooldown = this.encounter.chaserBlockedTurnSeconds;
       }
     }
+
+    // Com a navegação agora buscando bordas para descer, a borda do MUNDO também
+    // passou a ser um candidato: sem este limite o perseguidor saía do mapa pela
+    // esquerda. O corpo fica contido como o do jogador.
+    enemy.x = Math.max(1, Math.min(WORLD.width - enemy.w - 1, enemy.x));
 
     if (targetPlayer && overlaps(enemy, targetPlayer) && enemy.attackCooldown <= 0) {
       enemy.attackCooldown = this.encounter.chaserAttackCooldown;
@@ -2105,7 +2650,11 @@ export class GameModel {
       });
     }
     if (targetPlayer && this.altar && overlaps(enemy, this.altar) && enemy.altarAttackCooldown <= 0) {
-      enemy.altarAttackCooldown = 1.7;
+      // Janela de resposta: com os inimigos agora marchando sobre o altar, um
+      // intervalo de 1,7 s destruía o altar em ~5 s de contato, sem tempo de
+      // o jogador voltar e limpar. 3,2 s dão ~13 s de contato até a queda.
+      enemy.altarAttackCooldown = 3.2;
+      enemy.lastAltarHitAt = this.elapsed;
       this.damageAltar(1, {
         origin: "contato",
         type: "perseguidor",
@@ -2115,13 +2664,212 @@ export class GameModel {
     }
   }
 
+  // Ponto que este perseguidor quer alcançar quando não está em perseguição.
+  // Sem altar (arena bônus, sobrevivência) ele cai de volta sobre o jogador.
+  // Quantos perseguidores exercem cada papel neste instante.
+  countChaserRole(role, excluding = null) {
+    let total = 0;
+    for (const enemy of this.enemies) {
+      if (enemy.removed || enemy.kind !== "chaser" || enemy === excluding) continue;
+      if (enemy.chaserRole === role) total += 1;
+    }
+    return total;
+  }
+
+  siegeCount(excluding = null) {
+    return this.countChaserRole(CHASER_ROLES.SIEGE, excluding);
+  }
+
+  // O papel é atribuído na entrada: as primeiras vagas sitiam o altar, o
+  // excedente já nasce caçando. Sem altar (sobrevivência, arena), todos caçam.
+  assignChaserRole(enemy) {
+    if (!this.altar || this.gameMode !== "campaign") {
+      enemy.chaserRole = CHASER_ROLES.HUNTER;
+      return enemy.chaserRole;
+    }
+    // Há sempre ao menos um caçador em campo, e no máximo `maxSiege` cercando
+    // o altar. Assim as duas pressões coexistem: o objetivo sob ataque e
+    // alguém vindo atrás do jogador, onde quer que ele esteja.
+    const hunters = this.countChaserRole(CHASER_ROLES.HUNTER, enemy);
+    const sieges = this.countChaserRole(CHASER_ROLES.SIEGE, enemy);
+    enemy.chaserRole = (hunters === 0 || sieges >= REMASTER.ai.maxSiege)
+      ? CHASER_ROLES.HUNTER
+      : CHASER_ROLES.SIEGE;
+    return enemy.chaserRole;
+  }
+
+  // Converte um sitiante estacionado em caçador. É isto que impede o jogador
+  // de se manter longe do altar atirando sem nunca ser procurado.
+  escalateToHunter(enemy, reason) {
+    if (enemy.chaserRole === CHASER_ROLES.HUNTER) return;
+    enemy.chaserRole = CHASER_ROLES.HUNTER;
+    enemy.siegeDwell = 0;
+    this.emit("chaserRoleChanged", { enemyId: enemy.id, to: CHASER_ROLES.HUNTER, reason });
+  }
+
+  // Multiplicador de agressão por tempo de vida: quanto mais tempo o inimigo
+  // sobrevive, mais rápido ele vem. Evita impasses longos.
+  chaserAggression(enemy) {
+    const age = Math.max(0, this.elapsed - (enemy.spawnedAt ?? this.elapsed));
+    const ramp = Math.min(1, age / REMASTER.ai.aggressionRampSeconds);
+    return 1 + ramp * REMASTER.ai.aggressionMaxBonus;
+  }
+
+  chaserGoal(enemy) {
+    if (enemy && enemy.chaserRole === CHASER_ROLES.HUNTER) {
+      const hunted = this.selectLivingPlayer(enemy);
+      if (hunted) return { x: hunted.x + hunted.w / 2, y: hunted.y + hunted.h / 2 };
+    }
+    const altar = this.altar;
+    if (altar) {
+      if (enemy.altarBias === undefined) {
+        enemy.altarBias = (this.random() * 2 - 1) * REMASTER.ai.altarSpread;
+      }
+      return { x: altar.x + altar.w / 2 + enemy.altarBias, y: altar.y + altar.h / 2 };
+    }
+    const target = this.selectLivingPlayer(enemy);
+    if (!target) return { x: enemy.x + enemy.w / 2, y: enemy.y + enemy.h / 2 };
+    return { x: target.x + target.w / 2, y: target.y + target.h / 2 };
+  }
+
+  // Procura o lado mais próximo onde o apoio acaba, para que o inimigo possa
+  // DESCER até um alvo abaixo. Sem isto o perseguidor só andava na horizontal
+  // e ficava preso em cima de plataformas ou contra paredes.
+  findDescentDirection(enemy, preferred) {
+    const dirs = preferred >= 0 ? [1, -1] : [-1, 1];
+    for (let distance = 4; distance <= REMASTER.ai.descentProbeRange; distance += 4) {
+      for (const dir of dirs) {
+        const probeX = enemy.x + dir * distance;
+        // Margem maior que o limite do corpo: a ausência de apoio junto à borda
+        // do mundo não é uma rota de descida, é uma queda para fora do mapa.
+        if (probeX < 6 || probeX > WORLD.width - enemy.w - 6) continue;
+        if (!this.hasChaserPatrolSupport(probeX, enemy.y, enemy.w, enemy.h)) return dir;
+      }
+    }
+    return 0;
+  }
+
+  // Há espaço livre acima para o salto subir sem bater em plataforma sólida?
+  hasHeadroom(x, y, width, height, clearance) {
+    const column = { x, y: y - clearance, w: width, h: height + clearance };
+    return !this.platforms.some((platform) => !platform.oneWay && overlaps(column, platform));
+  }
+
+  // Lado mais próximo onde o salto não bate em teto, para então SUBIR um andar.
+  // Com controle aéreo, saltar na borda e derivar coloca o corpo no andar de
+  // cima; sem isto o perseguidor batia a cabeça e voltava ao mesmo ponto.
+  findAscentDirection(enemy, preferred, clearance) {
+    const dirs = preferred >= 0 ? [1, -1] : [-1, 1];
+    for (let distance = 4; distance <= REMASTER.ai.descentProbeRange; distance += 4) {
+      for (const dir of dirs) {
+        const probeX = enemy.x + dir * distance;
+        if (probeX < 1 || probeX > WORLD.width - enemy.w - 1) continue;
+        if (this.hasHeadroom(probeX, enemy.y, enemy.w, enemy.h, clearance)) return dir;
+      }
+    }
+    return 0;
+  }
+
+  chaserJumpApex() {
+    const speed = this.encounter.chaserJumpSpeed;
+    return (speed * speed) / (2 * BALANCE.player.gravity);
+  }
+
+  // Decide a direção final do passo: desvia para a borda quando precisa descer
+  // e aplica a manobra de desencalhe quando o corpo para de progredir.
+  resolveNavigation(enemy, dt, direction, targetX, targetY, enemyCenterX, enemyCenterY) {
+    const ai = REMASTER.ai;
+
+    // --- desencalhe: sem progresso horizontal por tempo demais ---
+    if (enemy.onGround && Math.abs(enemy.vx) < ai.stuckSpeed
+      && Math.abs(targetX - enemyCenterX) > enemy.w) {
+      enemy.stuckClock = (enemy.stuckClock ?? 0) + dt;
+    } else {
+      enemy.stuckClock = 0;
+    }
+    if ((enemy.unstickTimer ?? 0) > 0) {
+      enemy.unstickTimer -= dt;
+      return enemy.unstickDir || direction;
+    }
+    if (enemy.stuckClock >= ai.stuckSeconds) {
+      enemy.stuckClock = 0;
+      enemy.unstickTimer = ai.unstickSeconds;
+      // Vai para a borda mais próxima; na falta dela, inverte e pula.
+      const escape = this.findDescentDirection(enemy, -Math.sign(direction) || 1);
+      enemy.unstickDir = escape || -direction;
+      if (enemy.onGround) {
+        enemy.vy = -this.encounter.chaserJumpSpeed * 0.9;
+        enemy.onGround = false;
+      }
+      return enemy.unstickDir;
+    }
+
+    enemy.ascentJumpClock = Math.max(0, (enemy.ascentJumpClock ?? 0) - dt);
+    enemy.wantsAscend = false;
+
+    if (!enemy.onGround) {
+      // No ar a rota não é reavaliada: o corpo segue para o alvo com controle
+      // aéreo, que é o que o coloca no andar de cima depois do salto de borda.
+      enemy.routeDir = 0;
+      enemy.routeCommit = 0;
+      return direction;
+    }
+
+    // --- descida deliberada quando o alvo está abaixo ---
+    if (targetY > enemyCenterY + ai.descentThreshold) {
+      if (!enemy.routeDir) {
+        enemy.routeDir = this.findDescentDirection(enemy, direction);
+        enemy.routeCommit = ai.routeCommitSeconds;
+      } else {
+        enemy.routeCommit = (enemy.routeCommit ?? 0) - dt;
+        if (enemy.routeCommit <= 0) enemy.routeDir = 0;
+      }
+      if (enemy.routeDir) return enemy.routeDir;
+      return direction;
+    }
+
+    // --- subida deliberada quando o alvo está acima ---
+    if (targetY < enemyCenterY - ai.ascentThreshold) {
+      const clearance = this.chaserJumpApex();
+      if (this.hasHeadroom(enemy.x, enemy.y, enemy.w, enemy.h, clearance)) {
+        enemy.routeDir = 0;
+        enemy.routeCommit = 0;
+        if (enemy.ascentJumpClock <= 0) {
+          enemy.wantsAscend = true;
+          enemy.ascentJumpClock = ai.ascentJumpCooldown;
+        }
+        return direction;
+      }
+      if (!enemy.routeDir) {
+        enemy.routeDir = this.findAscentDirection(enemy, direction, clearance);
+        enemy.routeCommit = ai.routeCommitSeconds;
+      } else {
+        enemy.routeCommit = (enemy.routeCommit ?? 0) - dt;
+        if (enemy.routeCommit <= 0) enemy.routeDir = 0;
+      }
+      if (enemy.routeDir) return enemy.routeDir;
+      return direction;
+    }
+
+    enemy.routeDir = 0;
+    enemy.routeCommit = 0;
+    return direction;
+  }
+
   updateShooter(enemy, dt) {
     enemy.phaseTime -= dt;
     if (enemy.phase === "telegraph" && enemy.phaseTime <= 0) {
       if (!this.fireEnemyShot(enemy)) {
+        enemy.blockedAim = (enemy.blockedAim ?? 0) + 0.12;
+        if (enemy.blockedAim >= SHOOTER_MAX_BLOCKED_AIM_SECONDS) {
+          enemy.removed = true;
+          this.emit("enemyExited", { kind: "shooter", reason: "mira-bloqueada" });
+          return;
+        }
         enemy.phaseTime = 0.12;
         return;
       }
+      enemy.blockedAim = 0;
       enemy.shots += 1;
       enemy.phase = "recovery";
       enemy.phaseTime = this.encounter.shooterRecovery;
@@ -2546,19 +3294,46 @@ export class GameModel {
       }
     }
     this.kills += 1;
+    const comboCount = this.registerComboKill();
+    this.applyKnockback(enemy, this.knockbackDirection(enemy, cause), REMASTER.knockback.kill);
+    this.pulseHitStop(REMASTER.hitStop.enemyKill);
+    this.requestShake(2.6 + comboCount * REMASTER.combo.shakeStep);
     this.addEffect("hit", enemy.x + enemy.w / 2, enemy.y + enemy.h / 2, "ACERTO", 0.42);
     if (this.gameMode === "campaign") {
-      this.souls.push({
-        x: enemy.x + enemy.w / 2 - 7.5,
-        y: enemy.y + enemy.h / 2 - 8,
-        w: 15,
-        h: 16,
-        bornAt: this.elapsed,
-        source: enemy.kind,
-        removed: false
-      });
+      // Recompensa de sequência: a cada N derrotas encadeadas dentro da janela
+      // de combo, a derrota libera uma alma extra. É o único multiplicador que
+      // altera o objetivo, e ele premia agressividade sem encurtar a meta.
+      const comboReward = comboCount > 0 && comboCount % REMASTER.combo.soulBonusEvery === 0;
+      const drops = comboReward ? 2 : 1;
+      const soulWidth = 15;
+      const soulHeight = 16;
+      const baseX = enemy.x + enemy.w / 2 - soulWidth / 2;
+      // A alma extra sai para o lado que tiver espaço: perto da borda direita
+      // do mundo, um deslocamento fixo a colocaria parcialmente fora da tela.
+      const spread = baseX + 12 + soulWidth <= WORLD.width - 2 ? 12 : -12;
+      for (let index = 0; index < drops; index += 1) {
+        const offsetX = index === 0 ? 0 : spread;
+        this.souls.push({
+          x: Math.max(2, Math.min(WORLD.width - soulWidth - 2, baseX + offsetX)),
+          y: Math.max(2, Math.min(WORLD.height - soulHeight - 2, enemy.y + enemy.h / 2 - soulHeight / 2)),
+          w: soulWidth,
+          h: soulHeight,
+          bornAt: this.elapsed,
+          source: index === 0 ? enemy.kind : "combo",
+          removed: false
+        });
+      }
+      if (comboReward) {
+        this.addEffect("comboReward", enemy.x + enemy.w / 2, enemy.y - 6, `COMBO x${comboCount}`, 0.75);
+        this.emit("comboReward", { combo: comboCount, souls: drops });
+      }
     }
     this.emit("enemyDefeated", { kind: enemy.kind, enemyId: enemy.id, cause });
+  }
+
+  // Projéteis de arma carregam o próprio dano e recuo.
+  projectileDamage(shot) {
+    return Number.isFinite(shot?.damage) ? shot.damage : BALANCE.player.shotDamage;
   }
 
   damageEnemy(enemy, amount, cause = {}) {
@@ -2578,6 +3353,9 @@ export class GameModel {
     const hpBefore = enemy.hp;
     enemy.hp = Math.max(0, enemy.hp - damage);
     enemy.hurtFlash = this.encounter.chaserHurtFlashSeconds;
+    this.applyKnockback(enemy, this.knockbackDirection(enemy, cause), REMASTER.knockback.hit);
+    this.pulseHitStop(REMASTER.hitStop.enemyHit);
+    this.requestShake(1.7);
     this.addEffect("enemyDamage", enemy.x + enemy.w / 2, enemy.y + enemy.h / 2, `-${damage}`, 0.32);
     this.renderer?.spawnFloatingText?.(`-${damage}`, enemy.x + enemy.w / 2, enemy.y + enemy.h / 2, "damage");
     this.emit("enemyDamaged", {
@@ -2595,6 +3373,90 @@ export class GameModel {
   createEntityId(type) {
     this.nextEntityNumber += 1;
     return `${this.runId}:${type}:${this.nextEntityNumber}`;
+  }
+
+  /* ----------------------------------------------------------------------
+   * Remasterização v0.7.0 — camada de impacto (hit stop, recuo, tremor),
+   * sequência de derrotas e investida direcional.
+   * -------------------------------------------------------------------- */
+
+  pulseHitStop(seconds) {
+    if (this.demoMode || this.reducedMotion) return;
+    this.hitStop = Math.min(REMASTER.hitStop.maximum, Math.max(this.hitStop, seconds));
+  }
+
+  requestShake(amount) {
+    if (this.reducedMotion) return;
+    this.shakeRequest = Math.min(REMASTER.shake.maximum, Math.max(this.shakeRequest, amount));
+  }
+
+  knockbackDirection(entity, cause = {}) {
+    if (Number.isFinite(cause.knockbackDir) && cause.knockbackDir !== 0) {
+      return Math.sign(cause.knockbackDir);
+    }
+    const targetX = entity.x + (entity.w ?? 0) / 2;
+    if (Number.isFinite(cause.originX)) return Math.sign(targetX - cause.originX) || 1;
+    const player = this.player;
+    if (!player) return 1;
+    return Math.sign(targetX - (player.x + (player.w ?? 0) / 2)) || player.facing || 1;
+  }
+
+  applyKnockback(enemy, direction, strength) {
+    if (!enemy || enemy.removed) return;
+    const dir = direction >= 0 ? 1 : -1;
+    enemy.vx = dir * strength;
+    enemy.knockback = REMASTER.knockback.aiSuppress;
+    if (enemy.onGround && strength >= REMASTER.knockback.kill) {
+      enemy.vy = -90;
+      enemy.onGround = false;
+    }
+  }
+
+  registerComboKill() {
+    this.combo = Math.min(REMASTER.combo.maxDisplay, this.combo + 1);
+    this.comboTimer = REMASTER.combo.windowSeconds;
+    if (this.combo > this.comboBest) this.comboBest = this.combo;
+    this.emit("comboAdvanced", { combo: this.combo, best: this.comboBest });
+    return this.combo;
+  }
+
+  updateCombo(dt) {
+    if (this.comboTimer <= 0) return;
+    this.comboTimer = Math.max(0, this.comboTimer - dt);
+    if (this.comboTimer > 0) return;
+    const ended = this.combo;
+    this.combo = 0;
+    if (ended >= 2) this.emit("comboEnded", { combo: ended, best: this.comboBest });
+  }
+
+  comboRatio() {
+    if (this.combo <= 0) return 0;
+    return Math.max(0, Math.min(1, this.comboTimer / REMASTER.combo.windowSeconds));
+  }
+
+  dashAllowed() {
+    const player = this.player;
+    if (!player || player.life <= 0) return false;
+    if (this.state !== "playing" && this.state !== "survival" && this.state !== "bonusPlaying") return false;
+    return (player.dashCooldown ?? 0) <= 0 && (player.dashTimer ?? 0) <= 0;
+  }
+
+  tryDash(direction) {
+    if (!this.dashAllowed()) return false;
+    const player = this.player;
+    player.dashTimer = REMASTER.dash.duration;
+    player.dashCooldown = REMASTER.dash.cooldown;
+    player.dashDir = direction >= 0 ? 1 : -1;
+    player.facing = player.dashDir;
+    player.dashTapWindow = 0;
+    player.dashTapDir = 0;
+    player.vy = 0;
+    // A investida é uma esquiva real: os i-frames cobrem toda a duração mais
+    // uma pequena folga de recuperação.
+    player.invulnerable = Math.max(player.invulnerable ?? 0, REMASTER.dash.invulnerability);
+    this.requestShake(1.1);
+    this.emit("dash", { direction: player.dashDir });
+    return true;
   }
 
   applyDamage(targetName, amount, cause = {}, direction = 0, playerTarget = null) {
@@ -2622,9 +3484,20 @@ export class GameModel {
       target.hurtFlash = 0.24;
       target.vx = (direction || -target.facing) * 115;
       target.vy = -145;
+      // Levar dano interrompe a investida e zera a sequência de derrotas: o
+      // combo passa a ser um recurso que se arrisca, não um acúmulo passivo.
+      target.dashTimer = 0;
+      target.squash = 0;
+      const brokenCombo = this.combo;
+      this.combo = 0;
+      this.comboTimer = 0;
+      if (brokenCombo >= 2) this.emit("comboBroken", { combo: brokenCombo });
+      this.pulseHitStop(REMASTER.hitStop.playerHit);
+      this.requestShake(4.2);
       this.addEffect("damage", target.x + target.w / 2, target.y + target.h / 2, "DANO", 0.72);
       this.renderer?.spawnFloatingText?.(`-${amount}`, target.x + target.w / 2, target.y + target.h / 2, "damage");
     } else {
+      this.requestShake(3);
       this.updateAltarPhase();
       this.addEffect("altarDamage", target.x + target.w / 2, target.y + 10, "ALTAR ATINGIDO", 0.82);
       if (target.life === 1) {

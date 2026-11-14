@@ -34,6 +34,13 @@ export function resolveHudNotice(notice) {
   return typeof resolved === "string" && resolved.trim() ? resolved : null;
 }
 
+// Identidade de cada habilidade no HUD: sigla curta, nome acessível e cor.
+const ABILITY_HUD = Object.freeze({
+  "self-heal": Object.freeze({ code: "CURA", label: "Cura própria", accent: "#2ee6a8" }),
+  "weapon-requisition": Object.freeze({ code: "REQ", label: "Requisição de arma", accent: "#ffb14a" }),
+  default: Object.freeze({ code: "HAB", label: "Habilidade", accent: "#2ee6a8" })
+});
+
 export function buildHudEffectIndicators(model) {
   const coopPlayers = model?.coopPreview && Array.isArray(model.players) ? model.players : null;
   const players = coopPlayers ?? (model?.player ? [model.player] : []);
@@ -62,18 +69,21 @@ export function buildHudEffectIndicators(model) {
       : player?.shield ? 1 : 0;
     if (powerUpsVisible && shieldCharges > 0) {
       indicators.push({
-        id: "shield", owner, code: "ES", label: "Escudo", charges: shieldCharges,
-        compact: `ES×${shieldCharges}`, accent: "#37e6ee"
+        id: "shield", owner, code: "◈", label: "Escudo", charges: shieldCharges,
+        compact: `◈×${shieldCharges}`, accent: "#37e6ee"
       });
     }
     const ability = player?.ability ?? (!coopPlayers && index === 0 ? model.ability : null);
     if (ability && !player?.inactive) {
       const ready = Boolean(ability.ready) || Number(ability.rechargeRemaining) <= 0;
+      // A sigla identifica a habilidade DAQUELE personagem; antes era sempre
+      // "HAB" com a descrição de cura, mesmo para quem não cura.
+      const meta = ABILITY_HUD[ability.id] ?? ABILITY_HUD.default;
       indicators.push({
-        id: ability.id ?? "ability", owner, code: "HAB", label: "Cura própria (habilidade)", ready,
+        id: ability.id ?? "ability", owner, code: meta.code, label: meta.label, ready,
         remaining: ready ? 0 : Math.max(0, Number(ability.rechargeRemaining) || 0),
-        compact: ready ? "HAB✓" : `HAB${hudSeconds(ability.rechargeRemaining)}`,
-        accent: ready ? "#2ee6a8" : "#8aa0b8"
+        compact: ready ? `${meta.code}✓` : `${meta.code}${hudSeconds(ability.rechargeRemaining)}`,
+        accent: ready ? meta.accent : "#8aa0b8"
       });
     }
   }
@@ -140,6 +150,14 @@ export const DISTRICT_PARALLAX = Object.freeze({
   smoothingRate: 6
 });
 
+function lifePips(current, maximum, filled = "◆", empty = "◇") {
+  // Satura a contagem: repeat() lança RangeError com valor negativo, e esse
+  // erro acontecia dentro do render, derrubando o laço de quadros inteiro.
+  const total = Math.max(0, Math.floor(Number(maximum) || 0));
+  const have = Math.max(0, Math.min(total, Math.floor(Number(current) || 0)));
+  return filled.repeat(have) + empty.repeat(total - have);
+}
+
 function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
 }
@@ -203,7 +221,33 @@ export class Renderer {
   }
 
   shake(amount = 3) {
-    this.screenShake = Math.max(this.screenShake, amount);
+    this.screenShake = Math.min(REMASTER.shake.maximum, Math.max(this.screenShake, amount));
+  }
+
+  // Silhuetas residuais da investida. Guardadas no renderer para não poluir o
+  // modelo com estado puramente visual.
+  spawnDashGhost(image, x, y, mirrored) {
+    if (!image) return;
+    this.dashGhosts ??= [];
+    if (this.dashGhosts.length >= 8) this.dashGhosts.shift();
+    this.dashGhosts.push({ image, x, y, mirrored, life: 0.2, duration: 0.2 });
+  }
+
+  drawDashGhosts(ctx) {
+    if (!this.dashGhosts?.length) return;
+    const dt = this.frameDelta ?? 0.016;
+    ctx.save();
+    for (let index = this.dashGhosts.length - 1; index >= 0; index -= 1) {
+      const ghost = this.dashGhosts[index];
+      ghost.life -= dt;
+      if (ghost.life <= 0) { this.dashGhosts.splice(index, 1); continue; }
+      const alpha = ghost.life / ghost.duration;
+      ctx.globalAlpha = alpha * 0.45;
+      ctx.shadowColor = "rgba(55, 230, 238, 0.8)";
+      ctx.shadowBlur = 6;
+      this.drawMirrored(ctx, ghost.image, ghost.x, ghost.y, 64, 96, ghost.mirrored);
+    }
+    ctx.restore();
   }
 
   recordAnimationSample(sample) {
@@ -219,6 +263,17 @@ export class Renderer {
 
   render(model, now = performance.now() / 1000) {
     const ctx = this.context;
+    // Delta real do quadro. Vários efeitos descontavam tempo por quadro
+    // renderizado, o que os encurtava em telas de 120/144 Hz e os alongava
+    // abaixo de 60 Hz.
+    this.frameDelta = this.lastRenderNow != null
+      ? Math.max(0, Math.min(0.1, now - this.lastRenderNow))
+      : 1 / 60;
+    this.lastRenderNow = now;
+    if (model && model.shakeRequest > 0) {
+      this.shake(model.shakeRequest);
+      model.shakeRequest = 0;
+    }
     if (this.motionHistoryRunId !== model?.runId) {
       this.playerMotionHistory.clear();
       this.motionHistoryRunId = model?.runId ?? null;
@@ -241,7 +296,7 @@ export class Renderer {
       ctx.save();
       if (this.screenShake > 0 && SCREEN_SHAKE_STATES.has(model.state)) {
         ctx.translate((Math.random() - 0.5) * this.screenShake, (Math.random() - 0.5) * this.screenShake);
-        this.screenShake = Math.max(0, this.screenShake - 0.45);
+        this.screenShake = Math.max(0, this.screenShake - REMASTER.shake.decayPerSecond * this.frameDelta);
       }
       this.drawWorld(ctx, model, now);
       ctx.restore();
@@ -394,7 +449,8 @@ export class Renderer {
     const isFactory = model.level?.theme === "scrap-factory";
     const isBonus = model.level?.theme === "energy-chamber";
     const isDistrict = model.level?.theme === "neon-district" || model.levelId === "district-neon";
-    const background = this.cyberlabPreview && isDistrict
+    const isCyberLab = model.level?.theme === "cyber-lab" || model.levelId === "cyber-lab";
+    const background = (isCyberLab || (this.cyberlabPreview && isDistrict))
       ? (this.images.get("world.background.cyberlab") || this.images.get("world.background"))
       : isBonus
       ? (this.images.get("world.background.bonus") || this.images.get("world.background.factory") || this.images.get("world.background"))
@@ -1224,6 +1280,8 @@ export class Renderer {
     } else {
       this.drawPlayer(ctx, model, now);
     }
+    this.drawWeaponDrops(ctx, model, now);
+    this.drawWeaponEffects(ctx, model);
     this.drawLandingParticles(ctx);
     this.drawPresses(ctx, model, now);
     this.drawEffects(ctx, model, now);
@@ -1813,7 +1871,8 @@ export class Renderer {
   drawPlatforms(ctx, model, now = 0) {
     const isBonus = model.level?.theme === "energy-chamber";
     const factory = model.level?.theme === "scrap-factory";
-    const tiles = this.cyberlabPreview && !isBonus && !factory
+    const cyberLab = model.level?.theme === "cyber-lab" || model.levelId === "cyber-lab";
+    const tiles = (cyberLab || (this.cyberlabPreview && !isBonus && !factory))
       ? (this.images.get("world.tiles.cyberlab") || this.images.get("world.tiles"))
       : isBonus
       ? (this.images.get("world.tiles.bonus") || this.images.get("world.tiles"))
@@ -2842,7 +2901,28 @@ export class Renderer {
     // Shift the generic full-canvas mirror so both facings retain that body anchor.
     const renderX = player.facing < 0 ? drawX - 32 : drawX;
 
+    if ((player.dashTimer ?? 0) > 0) {
+      this.dashGhostClock = (this.dashGhostClock ?? 0) - (this.frameDelta ?? 0.016);
+      if (this.dashGhostClock <= 0) {
+        this.dashGhostClock = REMASTER.dash.ghostInterval;
+        this.spawnDashGhost(image, renderX, drawY, player.facing < 0);
+      }
+    } else {
+      this.dashGhostClock = 0;
+    }
+    this.drawDashGhosts(ctx);
+
     ctx.save();
+    // Achatamento no pouso e alongamento no salto, ancorados nos pés para que
+    // o corpo nunca atravesse a plataforma.
+    const squash = player.squash ?? 0;
+    if (squash !== 0) {
+      const feetY = player.y + player.h;
+      const bodyX = player.x + player.w / 2;
+      ctx.translate(bodyX, feetY);
+      ctx.scale(1 + squash * 0.2, 1 - squash * 0.24);
+      ctx.translate(-bodyX, -feetY);
+    }
     if (player.life > 0 && player.invulnerable > 0 && Math.floor(time * 16) % 2 === 0) ctx.globalAlpha = 0.38;
     ctx.shadowColor = provisionalVisual ? "rgba(46, 230, 168, 0.55)" : "rgba(255,122,40,.45)";
     ctx.shadowBlur = 3;
@@ -2884,6 +2964,18 @@ export class Renderer {
     motionHistory.vy = player.vy;
     this.lastPlayerGrounded = player.onGround;
     this.lastPlayerVy = player.vy;
+
+    // Arma empunhada: desenhada na âncora da arma do personagem, para que o
+    // jogador veja de relance o que está em mãos.
+    const heldWeapon = player.weapon ? WEAPONS[player.weapon.id] : null;
+    if (heldWeapon && player.life > 0) {
+      const anchor = resolveWeaponAnchor(player, character, player.facing);
+      ctx.save();
+      ctx.shadowColor = heldWeapon.accent;
+      ctx.shadowBlur = 5;
+      this.drawWeaponGlyph(ctx, heldWeapon, anchor.x - player.facing * 6, anchor.y, player.facing);
+      ctx.restore();
+    }
 
     if (player.attackTimer > 0) {
       const progress = 1 - player.attackTimer / BALANCE.player.attackDuration;
@@ -2956,9 +3048,105 @@ export class Renderer {
     return true;
   }
 
+  // Queda de arma no cenário: caixa flutuante com a silhueta da arma.
+  drawWeaponDrops(ctx, model, now) {
+    if (!model.weaponDrops?.length) return;
+    ctx.save();
+    for (const drop of model.weaponDrops) {
+      if (drop.removed) continue;
+      const config = WEAPONS[drop.weaponId];
+      if (!config) continue;
+      const bob = Math.sin((now + drop.bornAt) * 3) * WEAPON_DROP_RULES.bobAmplitude;
+      const x = drop.x;
+      const y = drop.y + bob;
+      ctx.fillStyle = "rgba(6, 5, 14, 0.8)";
+      ctx.fillRect(x, y, drop.w, drop.h);
+      ctx.strokeStyle = config.accent;
+      ctx.lineWidth = 1;
+      ctx.strokeRect(x + 0.5, y + 0.5, drop.w - 1, drop.h - 1);
+      ctx.shadowColor = config.accent;
+      ctx.shadowBlur = 7;
+      this.drawWeaponGlyph(ctx, config, x + drop.w / 2, y + drop.h / 2, 1);
+      ctx.shadowBlur = 0;
+      // Seta de atenção acima, para a arma ser notada no meio do combate.
+      ctx.fillStyle = config.accent;
+      ctx.globalAlpha = 0.55 + Math.sin(now * 6) * 0.35;
+      ctx.fillRect(x + drop.w / 2 - 2, y - 5, 4, 2);
+      ctx.globalAlpha = 1;
+    }
+    ctx.restore();
+  }
+
+  // Silhueta compacta de cada arma, usada na queda e na mão do personagem.
+  drawWeaponGlyph(ctx, config, cx, cy, facing) {
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.scale(facing >= 0 ? 1 : -1, 1);
+    ctx.fillStyle = config.accent;
+    if (config.mode === "spread") {
+      ctx.fillRect(-7, -2, 12, 4);
+      ctx.fillRect(4, -4, 4, 8);
+      ctx.fillRect(-8, 1, 5, 3);
+    } else if (config.mode === "beam") {
+      ctx.fillRect(-8, -1, 14, 3);
+      ctx.fillRect(2, -4, 3, 9);
+      ctx.fillStyle = "#fff5dc";
+      ctx.fillRect(6, -1, 3, 2);
+    } else {
+      ctx.fillRect(-2, -6, 3, 13);
+      ctx.fillRect(1, -7, 7, 6);
+      ctx.fillStyle = "#fff5dc";
+      ctx.fillRect(3, -6, 3, 2);
+    }
+    ctx.restore();
+  }
+
+  // Rastro do feixe e anel de impacto da marreta.
+  drawWeaponEffects(ctx, model) {
+    const dt = this.frameDelta ?? 0.016;
+    if (model.beamFlashes?.length) {
+      ctx.save();
+      for (const flash of model.beamFlashes) {
+        const alpha = Math.max(0, flash.life / flash.duration);
+        const midY = flash.y + flash.h / 2;
+        // O degradê anterior ficava transparente justamente no cano, que é
+        // onde o olho procura o disparo. Agora o feixe nasce sólido na boca da
+        // arma e se dissipa para longe.
+        const nearX = flash.origin ?? flash.x;
+        const grad = ctx.createLinearGradient(nearX, 0, flash.x + (nearX === flash.x ? flash.w : 0), 0);
+        grad.addColorStop(0, flash.accent);
+        grad.addColorStop(1, "rgba(55, 230, 238, 0.05)");
+        ctx.globalCompositeOperation = "lighter";
+        ctx.globalAlpha = alpha * 0.5;
+        ctx.fillStyle = grad;
+        ctx.fillRect(flash.x, flash.y - 2, flash.w, flash.h + 4);
+        ctx.globalAlpha = alpha;
+        ctx.fillRect(flash.x, midY - 2.5, flash.w, 5);
+        ctx.fillStyle = "#ffffff";
+        ctx.globalAlpha = alpha * 0.95;
+        ctx.fillRect(flash.x, midY - 1, flash.w, 2);
+        ctx.globalCompositeOperation = "source-over";
+      }
+      ctx.restore();
+    }
+    if (model.slamRings?.length) {
+      ctx.save();
+      for (const ring of model.slamRings) {
+        const progress = 1 - Math.max(0, ring.life / ring.duration);
+        ctx.globalAlpha = (1 - progress) * 0.85;
+        ctx.strokeStyle = ring.accent;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(ring.x, ring.y, Math.max(2, ring.radius * progress), 0, Math.PI * 2);
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+  }
+
   drawLandingParticles(ctx) {
     if (!this.landingParticles?.length) return;
-    const dt = 0.016;
+    const dt = this.frameDelta ?? 0.016;
     ctx.save();
     for (let index = this.landingParticles.length - 1; index >= 0; index -= 1) {
       const particle = this.landingParticles[index];
@@ -3506,6 +3694,15 @@ export class Renderer {
     ctx.restore();
   }
 
+  // Mantém um texto centralizado inteiramente dentro da área jogável.
+  clampTextX(ctx, text, x, margin = 3) {
+    const half = (ctx.measureText?.(text)?.width ?? 0) / 2;
+    const min = margin + half;
+    const max = WORLD.width - margin - half;
+    if (min > max) return WORLD.width / 2;
+    return Math.max(min, Math.min(max, x));
+  }
+
   drawEffects(ctx, model, now = 0) {
     if (Array.isArray(model.effects)) {
       this.processedEffects ??= new WeakSet();
@@ -3648,10 +3845,11 @@ export class Renderer {
           ? "bold 8px system-ui, sans-serif"
           : isPenalty ? "bold 10px 'Pixelify Sans'"
             : (isHit || isDamage || isHeal ? "bold 9px 'Pixelify Sans'" : "bold 8px 'Pixelify Sans'");
-        const textY = effect.y - 12 - progress * 10;
+        const textY = Math.max(10, effect.y - 12 - progress * 10);
+        const textX = this.clampTextX(ctx, displayText, effect.x);
         ctx.lineWidth = 2;
         ctx.strokeStyle = "#090711";
-        ctx.strokeText(displayText, effect.x, textY);
+        ctx.strokeText(displayText, textX, textY);
         ctx.fillStyle = isPenalty ? "#ff5f51"
           : isHit ? "#ffe090"
           : isDamage ? "#ff5f51"
@@ -3659,7 +3857,7 @@ export class Renderer {
           : isCollect ? "#37e6ee"
           : isDeposit ? "#ffb14a"
           : color;
-        ctx.fillText(displayText, effect.x, textY);
+        ctx.fillText(displayText, textX, textY);
         ctx.restore();
       }
     }
@@ -3716,17 +3914,27 @@ export class Renderer {
 
       const isSoul = item.style === "soul" || item.text.includes("SOUL");
       const isDamage = item.style === "damage" || item.text === "-1" || item.text === "−1";
-      // Styles: "HIT" or "-1" in amber/red for enemies; "+1 SOUL" in cyan for souls
-      const textColor = isSoul ? "#37e6ee" : isDamage ? "#ff5f51" : "#ffb14a";
+      const isCombo = item.style === "combo";
+      // Styles: "HIT" or "-1" in amber/red for enemies; "+1 SOUL" in cyan for
+      // souls; sequência em âmbar-ouro, com corpo crescente conforme o elo.
+      const textColor = isCombo ? "#ffd24a" : isSoul ? "#37e6ee" : isDamage ? "#ff5f51" : "#ffb14a";
+      if (isCombo) {
+        const magnitude = Math.min(5, Number(item.text.replace(/[^0-9]/g, "")) || 2);
+        ctx.font = `bold ${7 + magnitude}px 'Pixelify Sans'`;
+      } else {
+        ctx.font = "bold 8px 'Pixelify Sans'";
+      }
 
+      const drawX = Math.round(this.clampTextX(ctx, item.text, item.x));
+      const drawY = Math.round(Math.max(10, item.y));
       ctx.lineWidth = 2;
       ctx.strokeStyle = "#090714";
       if (typeof ctx.strokeText === "function") {
-        ctx.strokeText(item.text, Math.round(item.x), Math.round(item.y));
+        ctx.strokeText(item.text, drawX, drawY);
       }
       ctx.fillStyle = textColor;
       if (typeof ctx.fillText === "function") {
-        ctx.fillText(item.text, Math.round(item.x), Math.round(item.y));
+        ctx.fillText(item.text, drawX, drawY);
       }
     }
     ctx.restore();
@@ -3766,6 +3974,9 @@ export class Renderer {
     ctx.restore();
   }
 
+  // Medidor de sequência: só aparece a partir do segundo elo e esvazia em
+  // tempo real, para que o jogador leia quanto resta da janela de combo.
+  // Indicador da investida: recarrega junto do tempo de espera e acende em
   drawHudPanel(ctx, x, y, width, height, accent) {
     ctx.fillStyle = "rgba(5, 4, 10, 0.78)";
     ctx.fillRect(x + 3, y + 3, width, height);
@@ -3788,22 +3999,24 @@ export class Renderer {
   drawHudBanner(ctx, text, y, { danger = false, left = 0, right = WORLD.width } = {}) {
     if (typeof text !== "string" || !text.trim()) return false;
     ctx.save();
-    ctx.font = "bold 8px system-ui, sans-serif";
+    ctx.font = "bold 7px 'Pixelify Sans'";
     ctx.textBaseline = "top";
     const regionLeft = Math.max(0, Math.min(WORLD.width, left));
     const regionRight = Math.max(regionLeft, Math.min(WORLD.width, right));
-    const width = Math.min(regionRight - regionLeft, 300, Math.ceil(ctx.measureText(text).width) + 24);
+    const textWidth = Math.ceil(ctx.measureText(text).width);
+    const width = Math.min(regionRight - regionLeft, 250, textWidth + 16);
     const x = Math.round(regionLeft + (regionRight - regionLeft - width) / 2);
     const accent = danger ? "#ff5f51" : "#37e6ee";
-    ctx.fillStyle = "rgba(5, 4, 10, 0.72)";
-    ctx.fillRect(x + 2, y + 2, width, 17);
-    ctx.fillStyle = danger ? "rgba(48, 8, 16, 0.95)" : "rgba(8, 6, 18, 0.92)";
-    ctx.fillRect(x, y, width, 17);
-    ctx.strokeStyle = accent;
-    ctx.strokeRect(x + 0.5, y + 0.5, width - 1, 16);
+    const height = 12;
+    // Fundo discreto só sob o texto, sem moldura: o acento à esquerda carrega
+    // a leitura de urgência que o contorno fazia com muito mais tinta.
+    ctx.fillStyle = danger ? "rgba(40, 6, 14, 0.78)" : "rgba(6, 5, 14, 0.7)";
+    ctx.fillRect(x, y, width, height);
+    ctx.fillStyle = accent;
+    ctx.fillRect(x, y, 2, height);
     ctx.fillStyle = danger ? "#ffb14a" : "#fff5dc";
     ctx.textAlign = "center";
-    ctx.fillText(text, x + width / 2, y + 4);
+    ctx.fillText(text, x + 2 + (width - 2) / 2, y + 3);
     ctx.textAlign = "left";
     ctx.restore();
     return true;
@@ -3858,8 +4071,21 @@ export class Renderer {
       this.drawSurvivalHud(ctx, model);
       return;
     }
+    // ---------------------------------------------------------------------
+    // HUD compacto (v0.7). Princípios aplicados:
+    //  · Scrim no lugar de molduras: três painéis opacos viravam uma faixa de
+    //    45 px de cromo sobre uma tela de 270 px. Um degradê sutil dá o mesmo
+    //    contraste de leitura ocupando o espaço visual de quase nada.
+    //  · Razão dado/tinta: rótulos que o ícone já diz ("VIDA", "ALTAR",
+    //    "TEMPO") saem; ficam os próprios valores.
+    //  · Exibição progressiva: sequência, investida e efeitos só aparecem
+    //    quando estão acontecendo.
+    //  · Três zonas fixas — estado à esquerda, objetivo ao centro, integridade
+    //    à direita — para o olho sempre saber onde procurar.
+    // Altura total: 22 px contra 45 px (87 px com os medidores) da versão
+    // anterior.
+    // ---------------------------------------------------------------------
     ctx.save();
-    ctx.font = "bold 9px 'Pixelify Sans'";
     ctx.textBaseline = "top";
 
     const lowLife = model.player.life === 1;
@@ -3867,80 +4093,179 @@ export class Renderer {
     const isSupport = model.characterId === "support";
     const bossHudVisible = this.isBossHudVisible(model);
     const effectIndicators = buildHudEffectIndicators(model);
-    this.drawHudPanel(ctx, 8, 7, 148, 38, lowLife ? "#ff5f51" : (isSupport ? "#2ee6a8" : "#ae62ff"));
-    ctx.fillStyle = isSupport ? "#2ee6a8" : "#ff7a28";
-    const supportName = model.character?.provisionalVisual ? "NILO (PROV.)" : "NILO";
-    ctx.fillText(isSupport ? supportName : "BOYPUNK", 15, 12);
-    ctx.fillStyle = lowLife ? "#ff5f51" : "#fff5dc";
-    ctx.font = "bold 8px 'Pixelify Sans'";
-    ctx.fillText(`VIDA ${"◆".repeat(model.player.life)}${"◇".repeat(model.playerMaxLife - model.player.life)}`, 15, 22);
-    this.drawHudEffectLine(ctx, effectIndicators, 15, 34, 134, "P1");
+
+    this.drawHudScrim(ctx, 34);
+
+    // ---- Zona A: estado do jogador (esquerda) ----
+    ctx.textAlign = "left";
     ctx.font = "bold 9px 'Pixelify Sans'";
+    ctx.fillStyle = lowLife ? "#ff5f51" : "#fff5dc";
+    ctx.fillText(lifePips(model.player.life, model.playerMaxLife), 30, 7);
 
-    this.drawHudPanel(ctx, 162, 7, 194, 38, "#37e6ee");
-    ctx.fillStyle = "#37e6ee";
-    ctx.fillText("CARGA", 169, 12);
+    // ---- Zona B: objetivo (centro) — o número que decide a partida ----
+    const goal = model.objective.soulsGoal || 15;
+    const depositRatio = Math.max(0, Math.min(1, model.altar.deposited / goal));
+    const barX = 170;
+    const barW = 150;
+    ctx.font = "bold 7px 'Pixelify Sans'";
+    ctx.fillStyle = "rgba(255, 245, 220, 0.55)";
+    ctx.fillText(t("hud.souls"), barX, 5);
+    ctx.font = "bold 9px 'Pixelify Sans'";
     ctx.fillStyle = "#fff5dc";
-    ctx.fillText(String(model.carriedSouls), 206, 12);
-    ctx.fillStyle = "#ffb14a";
-    ctx.fillText("ALTAR", 244, 12);
-    ctx.fillStyle = "#fff5dc";
-    ctx.fillText(`${model.altar.deposited}/${model.objective.soulsGoal}`, 282, 12);
-
-    const depositRatio = Math.max(0, Math.min(1, model.altar.deposited / model.objective.soulsGoal));
-    ctx.fillStyle = "rgba(5, 4, 10, 0.88)";
-    ctx.fillRect(169, 27, 180, 7);
-    ctx.strokeStyle = "rgba(55, 230, 238, 0.45)";
-    ctx.strokeRect(168.5, 26.5, 181, 8);
-    if (depositRatio > 0) {
-      const fillW = Math.round(178 * depositRatio);
-      const fillGrad = ctx.createLinearGradient(170, 28, 170 + fillW, 28);
-      fillGrad.addColorStop(0, "#20b2aa");
-      fillGrad.addColorStop(0.7, "#37e6ee");
-      fillGrad.addColorStop(1, "#8cf5fa");
-      ctx.fillStyle = fillGrad;
-      ctx.fillRect(170, 28, fillW, 5);
-      ctx.fillStyle = "rgba(5, 4, 10, 0.55)";
-      const goal = model.objective.soulsGoal || 15;
-      const step = 178 / goal;
-      for (let s = 1; s < goal; s++) {
-        const tx = Math.round(170 + s * step);
-        if (tx < 170 + fillW) {
-          ctx.fillRect(tx, 28, 1, 5);
-        }
-      }
+    ctx.fillText(`${model.altar.deposited}/${goal}`, barX + 34, 4);
+    if (model.carriedSouls > 0) {
+      ctx.fillStyle = "#37e6ee";
+      ctx.fillText(`+${model.carriedSouls}`, barX + 74, 4);
     }
 
-    this.drawHudPanel(ctx, 362, 7, 110, 38, altarCritical ? "#ff5f51" : "#ae62ff");
-    ctx.fillStyle = altarCritical ? "#ff5f51" : "#fff5dc";
-    ctx.fillText(`ALTAR ${"▰".repeat(model.altar.life)}${"▱".repeat(model.objective.altarMaxLife - model.altar.life)}`, 369, 12);
-    ctx.fillStyle = "#ffb14a";
-    ctx.fillText(`TEMPO ${formatHudTime(model.elapsed)}`, 369, 25);
+    ctx.fillStyle = "rgba(5, 4, 10, 0.72)";
+    ctx.fillRect(barX, 15, barW, 4);
+    if (depositRatio > 0) {
+      const fillW = Math.max(1, Math.round(barW * depositRatio));
+      const fillGrad = ctx.createLinearGradient(barX, 0, barX + fillW, 0);
+      fillGrad.addColorStop(0, "#20b2aa");
+      fillGrad.addColorStop(1, "#8cf5fa");
+      ctx.fillStyle = fillGrad;
+      ctx.fillRect(barX, 15, fillW, 4);
+    }
+    // Carga em mãos: prolonga a barra em ciano translúcido, mostrando o quanto
+    // o jogador ganha se chegar ao altar — informação que antes era só um
+    // número solto.
+    if (model.carriedSouls > 0 && depositRatio < 1) {
+      const pendingRatio = Math.min(1, (model.altar.deposited + model.carriedSouls) / goal);
+      const fromX = barX + barW * depositRatio;
+      const toX = barX + barW * pendingRatio;
+      ctx.fillStyle = "rgba(55, 230, 238, 0.38)";
+      ctx.fillRect(fromX, 15, Math.max(1, toX - fromX), 4);
+    }
+
+    // ---- Zona C: integridade do altar + tempo (direita) ----
+    ctx.textAlign = "right";
+    ctx.font = "bold 9px 'Pixelify Sans'";
+    const altarInk = altarCritical ? "#ff5f51" : "#ae62ff";
+    const pips = lifePips(model.altar.life, model.objective.altarMaxLife, "▰", "▱");
+    ctx.fillStyle = altarInk;
+    ctx.fillText(pips, 472, 6);
+    this.drawAltarGlyph(ctx, 472 - Math.ceil(ctx.measureText(pips).width) - 10, 6, altarInk, altarCritical, now);
+    // O tempo é referência, não decisão: menor e mais apagado que tudo ao redor.
+    ctx.font = "bold 6px 'Pixelify Sans'";
+    ctx.fillStyle = "rgba(255, 177, 74, 0.52)";
+    ctx.fillText(formatHudTime(model.elapsed), 472, 18);
+    ctx.textAlign = "left";
+
+    // ---- Linha secundária: só o que estiver ativo agora ----
+    let chipX = 30;
+    chipX = this.drawWeaponChip(ctx, model, now, chipX, 19);
+    chipX = this.drawComboChip(ctx, model, now, chipX, 19);
+    chipX = this.drawDashChip(ctx, model, chipX, 19);
+    if (effectIndicators.length) {
+      this.drawHudEffectLine(ctx, effectIndicators, chipX, 19, Math.max(20, 150 - chipX), "P1");
+    }
 
     const noticeText = resolveHudNotice(model.notice);
     if (noticeText || altarCritical) {
       const text = altarCritical
         ? "ALTAR EM PERIGO — 1 IMPACTO PARA CAIR"
         : noticeText;
-      // Notices occupy a stable lane to the right of the status-card column.
-      // Temporary power-up/ability cards never push authoritative messaging.
-      this.drawHudBanner(ctx, text, bossHudVisible ? 77 : 51, { danger: altarCritical, left: 152, right: 472 });
+      this.drawHudBanner(ctx, text, bossHudVisible ? 62 : 36, { danger: altarCritical, left: 152, right: 472 });
     } else if (model.elapsed < 7) {
-      this.drawHudBanner(
-        ctx,
-        "A/D MOVE · W/↑/ESPAÇO PULA · J/X/F ATACA · E ALTAR",
-        bossHudVisible ? 77 : 51,
-        { left: 152, right: 472 }
-      );
+      this.drawHudBanner(ctx, t("hud.tutorial"), bossHudVisible ? 62 : 36, { left: 152, right: 472 });
     } else if (model.canDeposit()) {
       ctx.textAlign = "center";
+      ctx.font = "bold 9px 'Pixelify Sans'";
       ctx.fillStyle = `rgba(255, 177, 74, ${0.72 + Math.sin(now * 5) * 0.2})`;
-      ctx.fillText("E / BOTÃO E: DEPOSITAR NO ALTAR", WORLD.width / 2, 251);
+      ctx.fillText(t("hud.deposit"), WORLD.width / 2, 251);
     }
     if (bossHudVisible) {
       this.drawBossHealthBar(ctx, model, now);
     }
     ctx.restore();
+  }
+
+  // Degradê de leitura no topo: substitui as três molduras opacas.
+  // Marca do altar: obelisco de 7x8 que identifica a zona de integridade sem
+  // gastar uma palavra. Pulsa apenas no estado crítico, onde o alarme importa.
+  drawAltarGlyph(ctx, x, y, color, critical, now = 0) {
+    ctx.save();
+    ctx.globalAlpha = critical ? 0.7 + Math.sin(now * 8) * 0.3 : 0.85;
+    ctx.fillStyle = color;
+    ctx.fillRect(x + 2, y, 3, 2);        // topo
+    ctx.fillRect(x + 1, y + 2, 5, 5);    // corpo
+    ctx.fillRect(x, y + 7, 7, 1);        // base
+    ctx.restore();
+  }
+
+  drawHudScrim(ctx, height = 34) {
+    const grad = ctx.createLinearGradient(0, 0, 0, height);
+    grad.addColorStop(0, "rgba(6, 5, 14, 0.82)");
+    grad.addColorStop(0.65, "rgba(6, 5, 14, 0.45)");
+    grad.addColorStop(1, "rgba(6, 5, 14, 0)");
+    ctx.save();
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, WORLD.width, height);
+    ctx.restore();
+  }
+
+  // Arma empunhada: nome curto + munição restante, com a cor da própria arma.
+  // Aparece apenas enquanto houver arma — exibição progressiva.
+  drawWeaponChip(ctx, model, now, x, y) {
+    const held = model.player?.weapon;
+    const config = held ? WEAPONS[held.id] : null;
+    if (!config) return x;
+    const label = `${config.short} ${held.ammo}`;
+    ctx.save();
+    ctx.font = "bold 8px 'Pixelify Sans'";
+    ctx.textBaseline = "top";
+    ctx.textAlign = "left";
+    const width = Math.ceil(ctx.measureText(label).width) + 8;
+    const low = held.ammo <= 1 || held.remaining <= 3;
+    ctx.globalAlpha = low ? 0.6 + Math.sin(now * 10) * 0.35 : 1;
+    ctx.fillStyle = "rgba(6, 5, 14, 0.7)";
+    ctx.fillRect(x, y, width, 10);
+    ctx.fillStyle = config.accent;
+    ctx.fillRect(x, y, 2, 10);
+    // Traço inferior = tempo de posse restante.
+    const ratio = Math.max(0, Math.min(1, held.remaining / held.holdSeconds));
+    ctx.fillRect(x, y + 9, Math.max(1, Math.round(width * ratio)), 1);
+    ctx.fillText(label, x + 5, y + 1);
+    ctx.restore();
+    return x + width + 4;
+  }
+
+  // Sequência: aparece só a partir do segundo elo. Retorna o X seguinte.
+  drawComboChip(ctx, model, now, x, y) {
+    const combo = model.combo ?? 0;
+    if (combo < 2) return x;
+    const ratio = typeof model.comboRatio === "function" ? model.comboRatio() : 0;
+    const label = `x${combo}`;
+    ctx.save();
+    ctx.font = "bold 8px 'Pixelify Sans'";
+    ctx.textBaseline = "top";
+    ctx.textAlign = "left";
+    const width = Math.max(16, Math.ceil(ctx.measureText(label).width) + 6);
+    ctx.fillStyle = "rgba(255, 210, 74, 0.16)";
+    ctx.fillRect(x, y, width, 10);
+    ctx.fillStyle = "rgba(255, 210, 74, 0.9)";
+    ctx.fillRect(x, y + 9, Math.max(1, Math.round(width * ratio)), 1);
+    ctx.fillStyle = combo % REMASTER.combo.soulBonusEvery === 0 ? "#fff5dc" : "#ffd24a";
+    ctx.fillText(label, x + 3, y + 1);
+    ctx.restore();
+    return x + width + 4;
+  }
+
+  // Investida: aparece só enquanto recarrega — pronta, não ocupa espaço.
+  drawDashChip(ctx, model, x, y) {
+    const cooldown = model.player?.dashCooldown ?? 0;
+    if (cooldown <= 0) return x;
+    const ratio = Math.max(0, Math.min(1, 1 - cooldown / REMASTER.dash.cooldown));
+    const width = 22;
+    ctx.save();
+    ctx.fillStyle = "rgba(55, 230, 238, 0.16)";
+    ctx.fillRect(x, y, width, 10);
+    ctx.fillStyle = "rgba(55, 230, 238, 0.85)";
+    ctx.fillRect(x + 2, y + 4, Math.max(1, Math.round((width - 4) * ratio)), 3);
+    ctx.restore();
+    return x + width + 4;
   }
 
   drawCoopHud(ctx, model, now) {
@@ -3959,7 +4284,7 @@ export class Renderer {
     ctx.fillStyle = p1.inactive ? "#ff5f51" : "#ff7a28";
     ctx.fillText("P1 BOYPUNK", 12, 10);
     ctx.fillStyle = "#fff5dc";
-    ctx.fillText(p1.inactive ? "INATIVO" : `VIDA ${"◆".repeat(p1.life)}${"◇".repeat(model.playerMaxLife - p1.life)}`, 12, 20);
+    ctx.fillText(p1.inactive ? "INATIVO" : `VIDA ${lifePips(p1.life, model.playerMaxLife)}`, 12, 20);
     ctx.fillText(`CARGA ${p1.carriedSouls}`, 12, 30);
     this.drawHudEffectLine(ctx, effectIndicators, 66, 30, 46, "P1");
 
@@ -3967,14 +4292,14 @@ export class Renderer {
     ctx.fillStyle = p2.inactive ? "#ff5f51" : "#2ee6a8";
     ctx.fillText("P2 NILO", 128, 10);
     ctx.fillStyle = "#fff5dc";
-    ctx.fillText(p2.inactive ? "INATIVO" : `VIDA ${"◆".repeat(p2.life)}${"◇".repeat(model.playerMaxLife - p2.life)}`, 128, 20);
+    ctx.fillText(p2.inactive ? "INATIVO" : `VIDA ${lifePips(p2.life, model.playerMaxLife)}`, 128, 20);
     ctx.fillText(`CARGA ${p2.carriedSouls}`, 128, 30);
     this.drawHudEffectLine(ctx, effectIndicators, 186, 30, 72, "P2");
 
     const altarCritical = model.altar.life === 1;
     this.drawHudPanel(ctx, 268, 6, 206, 37, altarCritical ? "#ff5f51" : "#37e6ee");
     ctx.fillStyle = altarCritical ? "#ff5f51" : "#37e6ee";
-    ctx.fillText(`ALTAR ${"▰".repeat(model.altar.life)}${"▱".repeat(model.objective.altarMaxLife - model.altar.life)}`, 274, 10);
+    ctx.fillText(`ALTAR ${lifePips(model.altar.life, model.objective.altarMaxLife, "▰", "▱")}`, 274, 10);
     ctx.fillStyle = "#fff5dc";
     ctx.fillText(`ALMAS ${model.altar.deposited}/${model.objective.soulsGoal}`, 274, 20);
     ctx.fillStyle = "#ffb14a";
@@ -4012,7 +4337,7 @@ export class Renderer {
     ctx.fillStyle = isSupport ? "#2ee6a8" : "#ff7a28";
     ctx.fillText(isSupport ? "NILO" : "BOYPUNK", 15, 10);
     ctx.fillStyle = lowLife ? "#ff5f51" : "#fff5dc";
-    ctx.fillText(`${t("survival.health")} ${"◆".repeat(model.player.life)}${"◇".repeat(model.playerMaxLife - model.player.life)}`, 15, 21);
+    ctx.fillText(`${t("survival.health")} ${lifePips(model.player.life, model.playerMaxLife)}`, 15, 21);
     this.drawHudEffectLine(ctx, effectIndicators, 15, 34, 130, "P1");
 
     this.drawHudPanel(ctx, 156, 7, 130, 38, "#37e6ee");
@@ -4046,14 +4371,14 @@ export class Renderer {
     ctx.fillStyle = p1.inactive ? "#ff5f51" : "#ff7a28";
     ctx.fillText("P1 BOYPUNK", 12, 10);
     ctx.fillStyle = "#fff5dc";
-    ctx.fillText(p1.inactive ? "INATIVO" : `VIDA ${"◆".repeat(p1.life)}${"◇".repeat(model.playerMaxLife - p1.life)}`, 12, 20);
+    ctx.fillText(p1.inactive ? "INATIVO" : `VIDA ${lifePips(p1.life, model.playerMaxLife)}`, 12, 20);
     this.drawHudEffectLine(ctx, indicators, 12, 32, 120, "P1");
 
     this.drawHudPanel(ctx, 142, 6, 132, 38, p2.inactive ? "#ff5f51" : "#2ee6a8");
     ctx.fillStyle = p2.inactive ? "#ff5f51" : "#2ee6a8";
     ctx.fillText("P2 NILO", 148, 10);
     ctx.fillStyle = "#fff5dc";
-    ctx.fillText(p2.inactive ? "INATIVO" : `VIDA ${"◆".repeat(p2.life)}${"◇".repeat(model.playerMaxLife - p2.life)}`, 148, 20);
+    ctx.fillText(p2.inactive ? "INATIVO" : `VIDA ${lifePips(p2.life, model.playerMaxLife)}`, 148, 20);
     this.drawHudEffectLine(ctx, indicators, 148, 32, 120, "P2");
 
     this.drawHudPanel(ctx, 278, 6, 196, 38, "#37e6ee");
@@ -4081,7 +4406,7 @@ export class Renderer {
     ctx.fillStyle = lowTime ? "#ff5f51" : "#fff5dc";
     ctx.fillText(`TEMPO ${Math.max(0, model.bonusRemaining).toFixed(1)}s`, 15, 22);
     ctx.fillStyle = lowLife ? "#ff5f51" : "#fff5dc";
-    ctx.fillText(`VIDA ${"◆".repeat(model.player.life)}${"◇".repeat(model.playerMaxLife - model.player.life)}`, 112, 22);
+    ctx.fillText(`VIDA ${lifePips(model.player.life, model.playerMaxLife)}`, 112, 22);
     this.drawHudEffectLine(ctx, effectIndicators, 15, 34, 200, "P1");
 
     this.drawHudPanel(ctx, 228, 7, 116, 38, "#37e6ee");

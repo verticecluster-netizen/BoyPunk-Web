@@ -45,6 +45,8 @@ const demoOverlay = document.querySelector("#demo-overlay");
 const districtLevelStatus = document.querySelector("#district-level-status");
 const scrapLevelStatus = document.querySelector("#scrap-level-status");
 const factoryLevelButton = document.querySelector("#factory-level-button");
+const labLevelStatus = document.querySelector("#lab-level-status");
+const labLevelButton = document.querySelector("#lab-level-button");
 const gameStatus = document.querySelector("#game-status");
 const menuProgressionWarning = document.querySelector("#menu-progression-warning");
 const victoryProgressionWarning = document.querySelector("#victory-progression-warning");
@@ -286,9 +288,36 @@ function showState(state, demoActive = false) {
   pauseTouch.classList.toggle("is-playing", touchPlaying);
   if (interactTouch) interactTouch.hidden = state === "survival";
   const abilityTouch = document.querySelector('[data-action="ability"]');
-  if (abilityTouch) abilityTouch.hidden = !playing || !["playing", "survival"].includes(state) || !activeGameModel?.character?.hasSelfHeal;
+  if (abilityTouch) abilityTouch.hidden = !playing || !["playing", "survival"].includes(state) || !activeGameModel?.character?.hasAbility;
   gamepadStatus.classList.toggle("is-playing", playing);
+  // O retrato acompanha o painel do jogador desenhado no canvas: aparece só na
+  // campanha e na sobrevivência em um jogador, nunca sobre menus ou no co-op,
+  // cujo HUD tem layout próprio.
+  const portrait = document.getElementById("hud-portrait");
+  if (portrait) {
+    portrait.hidden = !(["playing", "survival"].includes(state)
+      && !demoActive
+      && !activeGameModel?.coopPreview);
+  }
   demoOverlay.hidden = !demoActive;
+}
+
+// Mantém o retrato coerente com o personagem escolhido. Antes, o retrato do
+// Nilo estava marcado como oculto no HTML e nada o revelava.
+function syncPortraitCharacter(characterId) {
+  const avatars = {
+    boypunk: document.querySelector(".boypunk-avatar"),
+    support: document.querySelector(".nilo-avatar"),
+    scavenger: document.querySelector(".vex-avatar")
+  };
+  const active = Object.prototype.hasOwnProperty.call(avatars, characterId) ? characterId : "boypunk";
+  for (const [id, el] of Object.entries(avatars)) {
+    if (el) el.hidden = id !== active;
+  }
+  const portrait = document.getElementById("hud-portrait");
+  if (!portrait) return;
+  portrait.classList.toggle("portrait-support", active === "support");
+  portrait.classList.toggle("portrait-scavenger", active === "scavenger");
 }
 
 function updateAbilityTouchState(model = activeGameModel) {
@@ -326,6 +355,16 @@ function updateProgressionUi(progression) {
   scrapLevelStatus.classList.toggle("is-unavailable", !scrap.available);
   factoryLevelButton.disabled = !(scrap.unlocked && scrap.available);
   continueNext.disabled = !(scrap.unlocked && scrap.available);
+  const lab = progression.levelStatus(BALANCE.levels.thirdId);
+  if (labLevelStatus && labLevelButton && lab) {
+    labLevelStatus.textContent = lab.completed ? t("menu.statusCompleted")
+      : lab.unlocked ? t("menu.statusAvailable") : t("menu.statusLocked");
+    labLevelStatus.classList.toggle("is-unavailable", !lab.unlocked);
+    labLevelButton.disabled = !(lab.unlocked && lab.available);
+    labLevelButton.setAttribute("aria-label", lab.unlocked
+      ? (getLocale() === "en" ? "Play Cyber Lab" : "Jogar Laboratório Cibernético")
+      : (getLocale() === "en" ? "Cyber Lab locked; complete Scrap Factory" : "Laboratório Cibernético bloqueado; conclua a Fábrica de Sucata"));
+  }
   factoryLevelButton.setAttribute("aria-label", scrap.unlocked
     ? (getLocale() === "en" ? "Play Scrap Factory" : "Jogar Fábrica de Sucata")
     : (getLocale() === "en" ? "Scrap Factory locked; complete Neon District" : "Fábrica de Sucata bloqueada; conclua Distrito Neon"));
@@ -531,6 +570,7 @@ async function boot() {
       button.classList.toggle("active", active);
       button.setAttribute("aria-checked", active ? "true" : "false");
     }
+    syncPortraitCharacter(selectedCharacter);
   };
   updateCharacterUi();
 
@@ -1031,7 +1071,8 @@ async function boot() {
   }, true);
 
   const uiActionStates = Object.freeze({
-    play: ["menu"], survival: ["menu"], "survival-coop": ["menu"], "play-factory": ["menu"], demo: ["menu"],
+    play: ["menu"], survival: ["menu"], "survival-coop": ["menu"], "play-factory": ["menu"],
+    "play-lab": ["menu"], demo: ["menu"],
     options: ["menu"], credits: ["menu"], back: ["options", "credits"],
     resume: ["paused"], restart: ["paused", "victory", "defeat"],
     "coop-start": ["coopLobby"], "coop-clear": ["coopLobby"], "coop-exit": ["coopLobby"],
@@ -1061,6 +1102,7 @@ async function boot() {
       case "survival": startSurvival(); break;
       case "survival-coop": location.assign(`${location.pathname}?coop-survival=1`); break;
       case "play-factory": startGame(BALANCE.levels.nextId); break;
+      case "play-lab": startGame(BALANCE.levels.thirdId); break;
       case "demo": startDemo("manual"); break;
       case "options": model.showOptions(); break;
       case "credits": model.showCredits(); break;
@@ -1385,19 +1427,19 @@ async function boot() {
           break;
         case "bonusSoulCollected": audio.playSfx("collect", 0.5); break;
         case "bonusCannonWarning":
-          gameStatus.textContent = "Canhão de energia mirando. A direção será travada antes do disparo.";
+          gameStatus.textContent = t("status.bonusCannonWarning");
           audio.playSfx("button", 0.24);
           break;
         case "bonusCannonFired": audio.playSfx("attack", 0.3); break;
         case "bonusEnemyWarning":
-          gameStatus.textContent = "Sinal de entrada inimiga detectado.";
+          gameStatus.textContent = t("status.bonusEnemyWarning");
           audio.playSfx("button", 0.22);
           break;
         case "bonusEnemySpawned":
-          gameStatus.textContent = "Chaser entrou na Câmara; as almas continuam sendo o objetivo.";
+          gameStatus.textContent = t("status.bonusEnemySpawned");
           break;
         case "bonusCannonHit":
-          gameStatus.textContent = "Canhão atingiu BoyPunk: menos 1 segundo.";
+          gameStatus.textContent = t("status.bonusCannonHit");
           audio.playBonusPenalty();
           break;
         case "soulsDeposited": audio.playSfx("deposit", 0.8); break;
@@ -1406,12 +1448,62 @@ async function boot() {
         case "altarDamaged": audio.playSfx("damage", 0.78); renderer.shake(2); break;
         case "altarCritical": audio.playAltarWarning(); break;
         case "pressWarning":
-          gameStatus.textContent = "Atenção: prensa industrial prestes a fechar.";
+          gameStatus.textContent = t("status.pressWarning");
           audio.playSfx("button", 0.3);
           break;
-        case "pressClosing": gameStatus.textContent = "Prensa industrial fechando."; break;
+        case "pressClosing": gameStatus.textContent = t("status.pressClosing"); break;
         case "projectileBlocked": audio.playSfx("button", 0.24); break;
         case "enemyDefeated": audio.playSfx("collect", 0.28); break;
+
+        // ---- Remasterização v0.7.0 ----
+        case "weaponRequisitioned":
+          gameStatus.textContent = t(event.tipo === "recarga" ? "status.reload" : "status.requisition");
+          audio.playSfx("collect", 0.6);
+          break;
+        case "dash":
+          audio.playSfx("button", 0.2);
+          break;
+        case "weaponDropped":
+          gameStatus.textContent = t("weapon.dropped");
+          audio.playSfx("button", 0.26);
+          break;
+        case "weaponEquipped":
+          audio.playSfx("collect", 0.85);
+          renderer.spawnFloatingText?.(
+            WEAPONS[event.id]?.short ?? "",
+            model.player.x + model.player.w / 2,
+            model.player.y - 6,
+            "combo"
+          );
+          break;
+        case "weaponFired":
+          audio.playSfx("attack", event.mode === "slam" ? 0.6 : 0.4);
+          break;
+        case "weaponBroken":
+          gameStatus.textContent = t("weapon.broken");
+          audio.playSfx("damage", 0.4);
+          break;
+        case "land":
+          if (event.speed > 380) audio.playSfx("button", 0.12);
+          break;
+        case "comboAdvanced":
+          if (event.combo >= 2) {
+            renderer.spawnFloatingText?.(
+              `x${event.combo}`,
+              model.player.x + model.player.w / 2,
+              model.player.y - 4,
+              "combo"
+            );
+            audio.playSfx("collect", Math.min(0.6, 0.2 + event.combo * 0.06));
+          }
+          break;
+        case "comboReward":
+          gameStatus.textContent = t("status.comboReward", { combo: event.combo });
+          audio.playSfx("deposit", 0.55);
+          break;
+        case "comboBroken":
+          gameStatus.textContent = t("status.comboBroken", { combo: event.combo });
+          break;
         case "coopPlayerDefeated":
           gameStatus.textContent = `P${event.slot} ficou inativo até a próxima tentativa.`;
           audio.playSfx("damage", 0.9);
@@ -1529,6 +1621,10 @@ async function boot() {
             snapshot.interactPressed = false;
             snapshot.pausePressed = false;
             snapshot.abilityPressed = false;
+            snapshot.leftPressed = false;
+            snapshot.rightPressed = false;
+            snapshot.leftPresses = 0;
+            snapshot.rightPresses = 0;
           }
         }
         model.update(fixedStep, { players: { 1: p1, 2: p2 } });

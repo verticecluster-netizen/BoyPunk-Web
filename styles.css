@@ -252,6 +252,12 @@ canvas {
   background: linear-gradient(180deg, rgba(21, 90, 104, 0.9), rgba(10, 36, 46, 0.95));
   box-shadow: 0 0 8px rgba(55, 230, 238, 0.35), inset 0 0 6px rgba(55, 230, 238, 0.2);
 }
+.character-option[data-character="scavenger"].active {
+  border-color: #ffb14a;
+  color: #ffb14a;
+  box-shadow: 0 0 12px rgba(255, 177, 74, 0.35);
+}
+
 .character-option[data-character="support"].active {
   border-color: #2ee6a8;
   background: linear-gradient(180deg, rgba(20, 80, 60, 0.9), rgba(9, 36, 28, 0.95));
@@ -1125,10 +1131,13 @@ canvas {
 
 .hud-portrait {
   position: absolute;
-  top: clamp(8px, 2.5%, 16px);
-  left: clamp(8px, 2.5%, 16px);
-  width: 32px;
-  height: 32px;
+  /* Unidades de mundo convertidas em porcentagem do quadro: x=8/480, y=5/270,
+     18x18 px de mundo, encostado nas marcas de vida que começam em x=30. O
+     retrato acompanha a escala do canvas em qualquer tamanho de janela. */
+  top: 1.852%;
+  left: 1.667%;
+  width: 3.75%;
+  height: 6.667%;
   box-sizing: border-box;
   z-index: 5;
   pointer-events: none;
@@ -1174,10 +1183,10 @@ canvas {
 
 .boypunk-avatar .avatar-hair {
   position: absolute;
-  top: 3px;
-  left: 9px;
-  width: 14px;
-  height: 7px;
+  top: 9.375%;
+  left: 28.125%;
+  width: 43.75%;
+  height: 21.875%;
   background: #ae62ff;
   border-top: 2px solid #e0b0ff;
   box-shadow:
@@ -1187,31 +1196,91 @@ canvas {
 
 .boypunk-avatar .avatar-head {
   position: absolute;
-  top: 9px;
-  left: 8px;
-  width: 16px;
-  height: 15px;
+  top: 28.125%;
+  left: 25%;
+  width: 50%;
+  height: 46.875%;
   background: #e8a76e;
   border-bottom: 2px solid #b87333;
 }
 
 .boypunk-avatar .avatar-eyewear {
   position: absolute;
-  top: 3px;
-  left: 2px;
-  width: 12px;
-  height: 4px;
+  top: 20%;
+  left: 12.5%;
+  width: 75%;
+  height: 26.667%;
   background: #37e6ee;
   box-shadow: 0 0 4px #37e6ee;
 }
 
 .boypunk-avatar .avatar-mouth {
   position: absolute;
-  bottom: 2px;
-  left: 5px;
-  width: 6px;
-  height: 2px;
+  bottom: 13.333%;
+  left: 31.25%;
+  width: 37.5%;
+  height: 13.333%;
   background: #5a2c14;
+}
+
+/* Avatar da Vex: capuz âmbar e visor de sucateira */
+.vex-avatar {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.vex-avatar .vex-hair {
+  position: absolute;
+  top: 3.125%;
+  left: 18.75%;
+  width: 62.5%;
+  height: 28.125%;
+  background: #ffb14a;
+  border-top: 2px solid #ffd79a;
+  box-shadow:
+    -3px 5px 0 0 #c9741f,
+    3px 5px 0 0 #c9741f;
+}
+
+.vex-avatar .vex-head {
+  position: absolute;
+  top: 28.125%;
+  left: 25%;
+  width: 50%;
+  height: 46.875%;
+  background: #d99a6c;
+  border-bottom: 2px solid #8f5a2e;
+}
+
+.vex-avatar .vex-visor {
+  position: absolute;
+  top: 20%;
+  left: 6.25%;
+  width: 87.5%;
+  height: 26.667%;
+  background: #ff5f51;
+  box-shadow: 0 0 5px #ff5f51;
+}
+
+.vex-avatar .vex-mouth {
+  position: absolute;
+  bottom: 13.333%;
+  left: 31.25%;
+  width: 37.5%;
+  height: 13.333%;
+  background: #5a2c14;
+}
+
+.hud-portrait.portrait-scavenger {
+  border-color: #ffb14a;
+  box-shadow:
+    0 0 8px rgba(255, 177, 74, 0.4),
+    inset 0 0 6px rgba(0, 0, 0, 0.85);
+}
+.hud-portrait.portrait-scavenger .portrait-status-dot {
+  background: #ffb14a;
+  box-shadow: 0 0 4px #ffb14a;
 }
 
 /* Pixel-art avatar structure for Nilo */
@@ -1223,10 +1292,10 @@ canvas {
 
 .nilo-avatar .nilo-hair {
   position: absolute;
-  top: 2px;
-  left: 7px;
-  width: 18px;
-  height: 8px;
+  top: 6.25%;
+  left: 21.875%;
+  width: 56.25%;
+  height: 25%;
   background: #2ee6a8;
   border-top: 2px solid #a2ffd7;
   box-shadow:
@@ -1236,40 +1305,40 @@ canvas {
 
 .nilo-avatar .nilo-head {
   position: absolute;
-  top: 8px;
-  left: 8px;
-  width: 16px;
-  height: 16px;
+  top: 25%;
+  left: 25%;
+  width: 50%;
+  height: 50%;
   background: #f0be8c;
   border-bottom: 2px solid #a87242;
 }
 
 .nilo-avatar .nilo-visor {
   position: absolute;
-  top: 4px;
-  left: 1px;
-  width: 14px;
-  height: 5px;
+  top: 25%;
+  left: 6.25%;
+  width: 87.5%;
+  height: 31.25%;
   background: #ffb14a;
   box-shadow: 0 0 5px #ff9b38;
 }
 
 .nilo-avatar .nilo-mouth {
   position: absolute;
-  bottom: 2px;
-  left: 6px;
-  width: 4px;
-  height: 2px;
+  bottom: 12.5%;
+  left: 37.5%;
+  width: 25%;
+  height: 12.5%;
   background: #6e391b;
 }
 
 /* Status dot in corner */
 .hud-portrait .portrait-status-dot {
   position: absolute;
-  bottom: 2px;
-  right: 2px;
-  width: 4px;
-  height: 4px;
+  bottom: 6.25%;
+  right: 6.25%;
+  width: 12.5%;
+  height: 12.5%;
   border-radius: 50%;
   background: #37e6ee;
   box-shadow: 0 0 4px #37e6ee;
@@ -1277,6 +1346,17 @@ canvas {
 }
 
 /* Emotional States */
+
+.hud-portrait.portrait-support {
+  border-color: #2ee6a8;
+  box-shadow:
+    0 0 8px rgba(46, 230, 168, 0.4),
+    inset 0 0 6px rgba(0, 0, 0, 0.85);
+}
+.hud-portrait.portrait-support .portrait-status-dot {
+  background: #2ee6a8;
+  box-shadow: 0 0 4px #2ee6a8;
+}
 
 /* .portrait-normal: steady calm cyan glow */
 .portrait-normal {

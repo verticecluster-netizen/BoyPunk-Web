@@ -28,7 +28,7 @@
             <div class="boss-bar-scan"></div>
           </div>
         </div>
-        <div id="hud-portrait" class="hud-portrait portrait-normal" aria-hidden="true">
+        <div id="hud-portrait" class="hud-portrait portrait-normal" aria-hidden="true" hidden>
           <div class="portrait-display">
             <div class="portrait-scanlines" aria-hidden="true"></div>
             <div class="portrait-avatar boypunk-avatar">
@@ -36,6 +36,13 @@
               <div class="avatar-head">
                 <div class="avatar-eyewear"></div>
                 <div class="avatar-mouth"></div>
+              </div>
+            </div>
+            <div class="portrait-avatar vex-avatar" hidden>
+              <div class="avatar-hair vex-hair"></div>
+              <div class="avatar-head vex-head">
+                <div class="avatar-eyewear vex-visor"></div>
+                <div class="avatar-mouth vex-mouth"></div>
               </div>
             </div>
             <div class="portrait-avatar nilo-avatar" hidden>
@@ -84,6 +91,9 @@
                 <button type="button" class="character-option" data-character="support" role="radio" aria-checked="false">
                   <span class="char-name" data-i18n="character.support.name">Nilo</span>
                 </button>
+                <button type="button" class="character-option" data-character="scavenger" role="radio" aria-checked="false">
+                  <span class="char-name" data-i18n="character.scavenger.name">Vex</span>
+                </button>
               </div>
               <div class="character-details" id="character-details">
                 <p class="character-desc" id="character-desc"></p>
@@ -103,12 +113,15 @@
               <button id="factory-level-button" type="button" data-ui="play-factory" class="level-entry" disabled>
                 <span data-i18n="menu.scrap">Fábrica de Sucata</span><strong id="scrap-level-status">Bloqueada</strong>
               </button>
+              <button id="lab-level-button" type="button" data-ui="play-lab" class="level-entry" disabled>
+                <span data-i18n="menu.lab">Laboratório Cibernético</span><strong id="lab-level-status">Bloqueada</strong>
+              </button>
             </div>
             <p class="bonus-total"><span data-i18n="menu.bonusTotal">Pontos bônus totais:</span> <strong id="menu-bonus-total">0</strong></p>
             <p id="menu-progression-warning" class="persistence-warning" role="status" hidden></p>
             <p class="controls-summary">
-              <span class="keyboard-instructions" data-i18n="menu.controls.keyboard">Teclado: A/D ou ←/→ movem · W/↑/Espaço salta · J/X/F ou botão esquerdo ataca · E deposita · Q cura · Esc pausa</span>
-              <span class="touch-instructions" data-i18n="menu.controls.touch">Toque: setas movem · ↑ salta · ✦ ataca · E deposita · HAB cura · Ⅱ pausa</span>
+              <span class="keyboard-instructions" data-i18n="menu.controls.keyboard">Teclado: A/D ou ←/→ movem · toque duplo na direção faz a investida (esquiva com invulnerabilidade) · W/↑/Espaço salta · J/X/F ou botão esquerdo ataca · E deposita · Q cura · Esc pausa</span>
+              <span class="touch-instructions" data-i18n="menu.controls.touch">Toque: setas movem · dois toques na mesma seta fazem a investida · ↑ salta · ✦ ataca · E deposita · HAB cura · Ⅱ pausa</span>
               <span class="gamepad-instructions" data-i18n="menu.controls.gamepad">Controle padrão: analógico/D-pad move · botão inferior pula/confirma · esquerdo ataca · superior deposita · direito volta · Start pausa</span>
             </p>
           </div>

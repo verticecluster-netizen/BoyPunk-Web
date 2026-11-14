@@ -70,6 +70,29 @@ export const CHARACTERS = Object.freeze({
     weaponAnchor: Object.freeze({ forward: 27, y: 16 }),
     ability: null
   }),
+  scavenger: Object.freeze({
+    id: "scavenger",
+    publicName: "Vex",
+    nameKey: "character.scavenger.name",
+    descKey: "character.scavenger.desc",
+    tradeoffKey: "character.scavenger.tradeoff",
+    abilityKey: "character.scavenger.ability",
+    spritePrefix: "vex",
+    fallbackSpritePrefix: "player",
+    provisionalVisual: true,
+    // Cadência mais curta que a do BoyPunk: Vex vive de volume de disparo.
+    attackCooldownMultiplier: 0.86,
+    weaponAnchor: Object.freeze({ forward: 25, y: 15 }),
+    ability: Object.freeze({
+      id: "weapon-requisition",
+      publicName: "Requisição",
+      nameKey: "ability.requisition.name",
+      descKey: "ability.requisition.desc",
+      // Sem arma na mão: requisita uma. Com arma: recarrega a munição.
+      refillAmmo: 4,
+      rechargeSeconds: 26
+    })
+  }),
   support: Object.freeze({
     id: "support",
     publicName: "Nilo",
@@ -129,6 +152,8 @@ export function resolveCharacter(characterId, playerMaxLife = BALANCE.player.max
     attackCooldownMultiplier: char.attackCooldownMultiplier,
     maxLife: playerMaxLife,
     hasSelfHeal: Boolean(char.ability && char.ability.id === "self-heal"),
+    abilityId: char.ability?.id ?? null,
+    hasAbility: Boolean(char.ability),
     ability: char.ability ? Object.freeze({ ...char.ability }) : null
   });
 }
@@ -189,11 +214,14 @@ export const BALANCE = Object.freeze({
     chaserSpeed: 52,
     chaserPatrolSpeedMultiplier: 0.6,
     chaserPatrolRadius: 56,
-    chaserDetectionEnterDistance: 150,
-    chaserDetectionExitDistance: 180,
+    chaserDetectionEnterDistance: 190,
+    chaserDetectionExitDistance: 215,
     chaserAcceleration: 420,
     chaserBlockedTurnSeconds: 0.18,
-    chaserJumpSpeed: 300,
+    // Ápice = v²/(2·g) = 380²/(2·950) = 76 px. Os andares do cenário ficam a
+    // 64 px um do outro: com os 300 px/s anteriores o ápice era de 47 px e o
+    // perseguidor era FISICAMENTE incapaz de subir um andar atrás do jogador.
+    chaserJumpSpeed: 380,
     chaserAttackCooldown: 1.15,
     chaserHurtFlashSeconds: 0.14,
     shooterTelegraph: 0.82,
@@ -261,6 +289,7 @@ export const BALANCE = Object.freeze({
   levels: Object.freeze({
     currentId: "district-neon",
     nextId: "scrap-factory",
+    thirdId: "cyber-lab",
     bonusId: "energy-chamber"
   }),
   demo: Object.freeze({

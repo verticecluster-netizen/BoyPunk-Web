@@ -51,8 +51,72 @@ const district = Object.freeze({
   powerUpSpawns: freezeRects([
     { id: "district-double-burst", typeId: "double-burst", x: 180, y: 160, w: 16, h: 16 }
   ]),
+  // Pontos de queda de arma: um em cada altura do cenário, para que buscar a
+  // arma seja uma decisão de posicionamento e não um desvio trivial.
+  weaponSpawns: freezeRects([
+    { x: 118, y: 222 }, { x: 352, y: 222 }, { x: 236, y: 158 }, { x: 60, y: 94 }
+  ]),
   placedSouls: freezeRects([
     { x: 72, y: 88 }, { x: 396, y: 88 }, { x: 232, y: 148 }
+  ]),
+  encounter: Object.freeze({}),
+  presses: Object.freeze([])
+});
+
+const cyberLabPlatforms = freezeRects([
+  { x: -16, y: 240, w: 512, h: 32, oneWay: false },   // piso do laboratório
+  { x: -16, y: 0, w: 512, h: 16, oneWay: true },      // teto
+  { x: 0, y: 180, w: 16, h: 60, oneWay: false },      // pilares de contenção
+  { x: 464, y: 180, w: 16, h: 60, oneWay: false },
+  { x: 0, y: 60, w: 16, h: 60, oneWay: false },
+  { x: 464, y: 60, w: 16, h: 60, oneWay: false },
+  // Andar A (y=180): sólido, três blocos. O central sustenta o altar.
+  { x: -16, y: 180, w: 128, h: 14, oneWay: false },
+  { x: 176, y: 180, w: 128, h: 14, oneWay: false },
+  { x: 368, y: 180, w: 128, h: 14, oneWay: false },
+  // Andar B (y=120): travessia atravessável por baixo, única ligação entre as
+  // duas metades do mapa.
+  { x: 48, y: 120, w: 144, h: 12, oneWay: true },
+  { x: 272, y: 120, w: 144, h: 12, oneWay: true },
+  // Andar C (y=60): passarelas de observação, sem ligação direta entre si.
+  { x: -16, y: 60, w: 140, h: 12, oneWay: true },
+  { x: 356, y: 60, w: 140, h: 12, oneWay: true },
+  // Ponte central alta: prêmio de rota, alcançada pelo andar B.
+  { x: 200, y: 72, w: 96, h: 12, oneWay: true }
+]);
+
+const cyberLab = Object.freeze({
+  id: BALANCE.levels.thirdId,
+  title: "Laboratório Cibernético",
+  theme: "cyber-lab",
+  world: WORLD,
+  objective: sharedObjective,
+  platforms: cyberLabPlatforms,
+  playerStart: Object.freeze({ x: 36, y: 208 }),
+  // Altar elevado no patamar central: defender exige ocupar a altura.
+  altar: Object.freeze({ x: 224, y: 132, w: 32, h: 48 }),
+  chaserSpawns: freezeRects([
+    { x: 64, y: 208 }, { x: 404, y: 208 }, { x: 60, y: 28 }, { x: 404, y: 28 }
+  ]),
+  shooterSpawns: freezeRects([
+    { x: 28, y: 148 }, { x: 440, y: 148 }, { x: 28, y: 28 }, { x: 440, y: 28 }
+  ]),
+  patrolShooterSpawns: freezeRects([
+    { id: "lab-ground", x: 64, y: 208, patrolLeft: 24, patrolRight: 170 },
+    { id: "lab-catwalk-left", x: 50, y: 28, patrolLeft: 16, patrolRight: 106 },
+    { id: "lab-catwalk-right", x: 400, y: 28, patrolLeft: 366, patrolRight: 462 }
+  ]),
+  powerUpSpawns: freezeRects([
+    { id: "cyberlab-double-burst", typeId: "double-burst", x: 110, y: 104, w: 16, h: 16 }
+  ]),
+  // Uma arma por altura: descer até o piso é seguro mas lento, e a do alto
+  // custa a travessia pelo andar do meio.
+  weaponSpawns: freezeRects([
+    { x: 150, y: 222 }, { x: 330, y: 222 }, { x: 232, y: 162 },
+    { x: 60, y: 42 }, { x: 380, y: 102 }
+  ]),
+  placedSouls: freezeRects([
+    { x: 60, y: 36 }, { x: 400, y: 36 }, { x: 240, y: 48 }
   ]),
   encounter: Object.freeze({}),
   presses: Object.freeze([])
@@ -207,6 +271,7 @@ const energyChamber = Object.freeze({
 export const LEVELS = Object.freeze({
   [district.id]: district,
   [scrapFactory.id]: scrapFactory,
+  [cyberLab.id]: cyberLab,
   [energyChamber.id]: energyChamber
 });
 

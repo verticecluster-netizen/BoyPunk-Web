@@ -57,6 +57,7 @@ export class InputController {
     this.directionPressOrder = new Map();
     this.nextDirectionPressOrder = 1;
     this.pressed = new Set();
+    this.pressCounts = new Map();
     this.pointerActions = new Map();
     this.blockedUntilRelease = new Set();
     this.playerProviders = new Map();
@@ -73,7 +74,10 @@ export class InputController {
       if (this.heldCodes.has(event.code)) return;
       this.heldCodes.set(event.code, action);
       this.recordDirectionPress(`key:${event.code}`, action);
-      if (!this.held.has(action)) this.pressed.add(action);
+      if (!this.held.has(action)) {
+        this.pressed.add(action);
+        this.pressCounts.set(action, (this.pressCounts.get(action) ?? 0) + 1);
+      }
       this.held.add(action);
     };
     this.onKeyUp = (event) => {
@@ -115,7 +119,10 @@ export class InputController {
       this.pointerActions.set(event.pointerId, action);
       if (this.blockedUntilRelease.has(action)) return;
       this.recordDirectionPress(`pointer:${event.pointerId}`, action);
-      if (!this.held.has(action)) this.pressed.add(action);
+      if (!this.held.has(action)) {
+        this.pressed.add(action);
+        this.pressCounts.set(action, (this.pressCounts.get(action) ?? 0) + 1);
+      }
       this.held.add(action);
     };
     const release = (event) => {
@@ -197,6 +204,37 @@ export class InputController {
       pausePressed: ((keyboardEnabled || playerSlot === 1) && this.pressed.has("pause")) || providerPressed.has("pause")
     };
     Object.defineProperties(snap, {
+      // Bordas direcionais: não enumeráveis como as demais bordas, de modo que
+      // os passos fixos seguintes do mesmo quadro (criados por espalhamento)
+      // não as repitam e disparem a investida mais de uma vez.
+      leftPressed: {
+        value: (keyboardEnabled && this.pressed.has("left")) || providerPressed.has("left"),
+        enumerable: false,
+        configurable: true,
+        writable: true
+      },
+      rightPressed: {
+        value: (keyboardEnabled && this.pressed.has("right")) || providerPressed.has("right"),
+        enumerable: false,
+        configurable: true,
+        writable: true
+      },
+      // Quantidade de pressões no quadro: dois toques colapsados num só quadro
+      // continuam valendo como toque duplo.
+      leftPresses: {
+        value: (keyboardEnabled ? (this.pressCounts.get("left") ?? 0) : 0)
+          + (providerPressed.has("left") ? 1 : 0),
+        enumerable: false,
+        configurable: true,
+        writable: true
+      },
+      rightPresses: {
+        value: (keyboardEnabled ? (this.pressCounts.get("right") ?? 0) : 0)
+          + (providerPressed.has("right") ? 1 : 0),
+        enumerable: false,
+        configurable: true,
+        writable: true
+      },
       abilityPressed: {
         value: (keyboardEnabled && this.pressed.has("ability")) || providerPressed.has("ability"),
         enumerable: false,
@@ -221,8 +259,11 @@ export class InputController {
 
   consumeEdges(playerSlot = 1) {
     this.pressed.clear();
+    this.pressCounts.clear();
     this.playerProviders.get(playerSlot)?.consumeEdges?.();
   }
+
+  clearPressCounts() { this.pressCounts.clear(); }
 
   clear(notify = false) {
     this.held.clear();
